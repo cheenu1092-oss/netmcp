@@ -1,0 +1,21 @@
+{
+  "name": "@netmcp/threegpp-specs",
+  "version": "1.0.0",
+  "description": "MCP server for searching 3GPP specifications (5G/LTE/NR standards)",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test src/*.test.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1"
+  },
+  "keywords": ["mcp", "networking", "3gpp", "5g", "lte", "nr", "standards", "specifications"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jugaad-lab/netmcp",
+    "directory": "packages/threegpp-specs"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "actorSpecification": 1,
+  "name": "threegpp-specs",
+  "version": "1.0.0",
+  "title": "3GPP Specs — 5G/LTE Standards Search",
+  "description": "Search 3GPP specifications for 5G NR, LTE, core network, and security standards. Covers releases 8-19. MCP-compatible.",
+  "usesStandbyMode": true,
+  "minMemoryMbytes": 256,
+  "maxMemoryMbytes": 1024,
+  "webServerMcpPath": "/mcp"
+}

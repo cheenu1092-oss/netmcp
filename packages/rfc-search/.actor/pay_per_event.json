@@ -1,0 +1,16 @@
+[
+  {
+    "rfc-search": {
+      "eventTitle": "RFC Search",
+      "eventDescription": "Search RFCs by keyword",
+      "eventPriceUsd": 0.002
+    }
+  },
+  {
+    "rfc-get": {
+      "eventTitle": "RFC Lookup",
+      "eventDescription": "Get a specific RFC by number",
+      "eventPriceUsd": 0.001
+    }
+  }
+]

@@ -16,10 +16,11 @@ NetMCP fixes that by wrapping authoritative, free, public networking databases i
 
 | Package | Data Source | Records | Status |
 |---------|-----------|---------|--------|
-| [`oui-lookup`](./packages/oui-lookup) | IEEE OUI (MAC → Vendor) | 50K+ manufacturers | 🚧 Building |
-| [`rfc-search`](./packages/rfc-search) | IETF Datatracker | 153K+ documents | 🚧 Building |
-| [`nvd-network-cves`](./packages/nvd-network-cves) | NIST NVD | 1K+ networking CVEs | 📋 Planned |
-| [`iana-registries`](./packages/iana-registries) | IANA Assignments | Ports, protocols, DNS | 📋 Planned |
+| [`oui-lookup`](./packages/oui-lookup) | IEEE OUI (MAC → Vendor) | 38K+ manufacturers | ✅ Done |
+| [`rfc-search`](./packages/rfc-search) | IETF Datatracker | 153K+ documents | ✅ Done |
+| [`nvd-network-cves`](./packages/nvd-network-cves) | NIST NVD | 250K+ CVEs | ✅ Done |
+| [`fcc-devices`](./packages/fcc-devices) | FCC Equipment Auth | 20K+ grantees | ✅ Done |
+| [`threegpp-specs`](./packages/threegpp-specs) | 3GPP Archive | 5G/LTE standards | ✅ Done |
 
 ## Use it 3 ways
 
@@ -39,6 +40,22 @@ Add to your MCP client config:
     "oui-lookup": {
       "command": "node",
       "args": ["packages/oui-lookup/src/index.js"]
+    },
+    "rfc-search": {
+      "command": "node",
+      "args": ["packages/rfc-search/src/index.js"]
+    },
+    "nvd-network-cves": {
+      "command": "node",
+      "args": ["packages/nvd-network-cves/src/index.js"]
+    },
+    "fcc-devices": {
+      "command": "node",
+      "args": ["packages/fcc-devices/src/index.js"]
+    },
+    "threegpp-specs": {
+      "command": "node",
+      "args": ["packages/threegpp-specs/src/index.js"]
     }
   }
 }
@@ -50,7 +67,8 @@ No setup needed. Use via Apify Store:
 - [OUI Lookup →](https://apify.com/jugaad-lab/oui-lookup)
 - [RFC Search →](https://apify.com/jugaad-lab/rfc-search)
 - [NVD Network CVEs →](https://apify.com/jugaad-lab/nvd-network-cves)
-- [IANA Registries →](https://apify.com/jugaad-lab/iana-registries)
+- [FCC Devices →](https://apify.com/jugaad-lab/fcc-devices)
+- [3GPP Specs →](https://apify.com/jugaad-lab/threegpp-specs)
 
 ### 3. OpenClaw / Claude Code Skill
 
@@ -65,7 +83,8 @@ All data is **free, public, and authoritative**:
 - **IEEE OUI** — Official MAC address vendor registry
 - **IETF/RFC** — Every internet standard ever written
 - **NIST NVD** — US government vulnerability database
-- **IANA** — Official port/protocol/DNS assignments
+- **FCC EAS** — Official US wireless equipment certifications
+- **3GPP** — Global 5G/LTE/NR standards body
 
 No API keys needed. No rate limit issues. No scraping gray areas.
 

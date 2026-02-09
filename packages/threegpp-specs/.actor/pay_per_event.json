@@ -1,0 +1,23 @@
+[
+  {
+    "spec-search": {
+      "eventTitle": "3GPP Spec Search",
+      "eventDescription": "Search specifications by number or keyword",
+      "eventPriceUsd": 0.002
+    }
+  },
+  {
+    "spec-get": {
+      "eventTitle": "3GPP Spec Lookup",
+      "eventDescription": "Get details for a specific specification",
+      "eventPriceUsd": 0.001
+    }
+  },
+  {
+    "spec-releases": {
+      "eventTitle": "3GPP Release Listing",
+      "eventDescription": "List specs by 3GPP release",
+      "eventPriceUsd": 0.002
+    }
+  }
+]

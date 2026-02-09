@@ -1,0 +1,21 @@
+{
+  "name": "@netmcp/fcc-devices",
+  "version": "1.0.0",
+  "description": "MCP server for searching FCC equipment authorization database",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test src/*.test.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1"
+  },
+  "keywords": ["mcp", "networking", "fcc", "wireless", "equipment", "certification"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jugaad-lab/netmcp",
+    "directory": "packages/fcc-devices"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "actorSpecification": 1,
+  "name": "nvd-network-cves",
+  "version": "1.0.0",
+  "title": "NVD Network CVEs — Security Vulnerability Search",
+  "description": "Search the NIST National Vulnerability Database for networking-related CVEs. Get CVSS scores, affected products, and references. MCP-compatible.",
+  "usesStandbyMode": true,
+  "minMemoryMbytes": 256,
+  "maxMemoryMbytes": 1024,
+  "webServerMcpPath": "/mcp"
+}

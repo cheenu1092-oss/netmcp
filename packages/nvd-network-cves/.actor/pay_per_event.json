@@ -1,0 +1,23 @@
+[
+  {
+    "cve-search": {
+      "eventTitle": "CVE Keyword Search",
+      "eventDescription": "Search CVEs by keyword",
+      "eventPriceUsd": 0.002
+    }
+  },
+  {
+    "cve-get": {
+      "eventTitle": "CVE Lookup",
+      "eventDescription": "Get a specific CVE by ID",
+      "eventPriceUsd": 0.001
+    }
+  },
+  {
+    "cve-by-vendor": {
+      "eventTitle": "CVE Vendor Search",
+      "eventDescription": "Search CVEs by vendor/product",
+      "eventPriceUsd": 0.002
+    }
+  }
+]

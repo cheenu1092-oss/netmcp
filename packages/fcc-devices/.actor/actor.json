@@ -1,0 +1,11 @@
+{
+  "actorSpecification": 1,
+  "name": "fcc-devices",
+  "version": "1.0.0",
+  "title": "FCC Devices — Equipment Authorization Search",
+  "description": "Search the FCC Equipment Authorization database for certified wireless devices and their manufacturers. MCP-compatible.",
+  "usesStandbyMode": true,
+  "minMemoryMbytes": 256,
+  "maxMemoryMbytes": 1024,
+  "webServerMcpPath": "/mcp"
+}

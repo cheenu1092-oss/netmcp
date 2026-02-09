@@ -1,0 +1,23 @@
+[
+  {
+    "fcc-search": {
+      "eventTitle": "FCC Grantee Search",
+      "eventDescription": "Search grantees by name, code, or country",
+      "eventPriceUsd": 0.002
+    }
+  },
+  {
+    "fcc-get": {
+      "eventTitle": "FCC Grantee Lookup",
+      "eventDescription": "Get details for a specific grantee code",
+      "eventPriceUsd": 0.001
+    }
+  },
+  {
+    "fcc-recent": {
+      "eventTitle": "FCC Recent Grantees",
+      "eventDescription": "List recently registered grantees",
+      "eventPriceUsd": 0.002
+    }
+  }
+]

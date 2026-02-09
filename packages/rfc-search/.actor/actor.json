@@ -1,0 +1,11 @@
+{
+  "actorSpecification": 1,
+  "name": "rfc-search",
+  "version": "1.0.0",
+  "title": "RFC Search — IETF Standards & Protocol Lookup",
+  "description": "Search and retrieve IETF RFCs and Internet Standards. 153K+ documents covering all internet protocols. MCP-compatible.",
+  "usesStandbyMode": true,
+  "minMemoryMbytes": 256,
+  "maxMemoryMbytes": 1024,
+  "webServerMcpPath": "/mcp"
+}

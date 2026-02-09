@@ -1,15 +1,35 @@
 ---
 name: fcc-devices
-description: Search the FCC Equipment Authorization database for certified wireless devices and manufacturers. Use when identifying device manufacturers by FCC ID, looking up wireless equipment certifications, or tracking new device registrations in the US market.
+description: Search the FCC Equipment Authorization database for certified wireless devices and manufacturers via CLI scripts or MCP server. Use when identifying device manufacturers by FCC ID, looking up wireless equipment certifications, or tracking new device registrations in the US market.
 ---
 
 # FCC Devices — Equipment Authorization Search
 
-## Quick Start
+## CLI Usage (Quick & Easy)
+
+Simple bash wrapper scripts for direct command-line use:
+
+```bash
+cd ~/clawd/projects/netmcp/skills/fcc-devices/scripts
+
+# Search grantees by name
+./search.sh "Samsung" name 5
+
+# Get specific grantee by FCC ID
+./get.sh 2AY5N
+
+# Get recent registrations
+./recent.sh 30 5
+```
+
+## MCP Server Setup
 
 ```bash
 cd SKILL_DIR/../../packages/fcc-devices
 npm install && node src/index.js
+
+# Or install into Claude Code config
+./scripts/install-mcp.sh
 ```
 
 ## Tools Available

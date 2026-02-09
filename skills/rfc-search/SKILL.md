@@ -1,15 +1,35 @@
 ---
 name: rfc-search
-description: Search and retrieve IETF RFCs and Internet Standards. Use when looking up networking protocols, internet standards, RFC numbers, or protocol specifications. Covers 153K+ documents including WiFi (802.11), TCP/IP, BGP, TLS, HTTP, DNS, QUIC, and all IETF working group output.
+description: Search and retrieve IETF RFCs and Internet Standards via CLI scripts or MCP server. Use when looking up networking protocols, internet standards, RFC numbers, or protocol specifications. Covers 153K+ documents including WiFi (802.11), TCP/IP, BGP, TLS, HTTP, DNS, QUIC, and all IETF working group output.
 ---
 
 # RFC Search — IETF Standards & Protocol Lookup
 
-## Quick Start
+## CLI Usage (Quick & Easy)
+
+Simple bash wrapper scripts for direct command-line use:
+
+```bash
+cd ~/clawd/projects/netmcp/skills/rfc-search/scripts
+
+# Get a specific RFC by number
+./get.sh 8446
+
+# Search RFCs by keyword
+./search.sh "bgp" 5
+
+# Get recent RFCs
+./recent.sh 5
+```
+
+## MCP Server Setup
 
 ```bash
 cd SKILL_DIR/../../packages/rfc-search
 npm install && node src/index.js
+
+# Or install into Claude Code config
+./scripts/install-mcp.sh
 ```
 
 ## Tools Available

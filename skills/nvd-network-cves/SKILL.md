@@ -1,15 +1,35 @@
 ---
 name: nvd-network-cves
-description: Search the NIST National Vulnerability Database for networking-related CVEs. Use when looking up security vulnerabilities, CVSS scores, affected products, or CVE details for networking equipment (Cisco, Juniper, Fortinet), protocols (BGP, SSL, WiFi), or general cybersecurity topics.
+description: Search the NIST National Vulnerability Database for networking-related CVEs via CLI scripts or MCP server. Use when looking up security vulnerabilities, CVSS scores, affected products, or CVE details for networking equipment (Cisco, Juniper, Fortinet), protocols (BGP, SSL, WiFi), or general cybersecurity topics.
 ---
 
 # NVD Network CVEs — Security Vulnerability Search
 
-## Quick Start
+## CLI Usage (Quick & Easy)
+
+Simple bash wrapper scripts for direct command-line use:
+
+```bash
+cd ~/clawd/projects/netmcp/skills/nvd-network-cves/scripts
+
+# Search CVEs by keyword
+./search.sh "wifi" 5
+
+# Get specific CVE details
+./get.sh CVE-2023-44487
+
+# Search by vendor and product
+./vendor.sh cisco ios_xe 5
+```
+
+## MCP Server Setup
 
 ```bash
 cd SKILL_DIR/../../packages/nvd-network-cves
 npm install && node src/index.js
+
+# Or install into Claude Code config
+./scripts/install-mcp.sh
 ```
 
 ## Tools Available

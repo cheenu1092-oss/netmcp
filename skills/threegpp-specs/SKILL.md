@@ -1,15 +1,35 @@
 ---
 name: threegpp-specs
-description: Search 3GPP specifications for 5G NR, LTE, core network, and security standards. Use when looking up mobile network standards, 5G spec numbers, protocol specifications, 3GPP release contents, or any cellular technology standards (NR, E-UTRA, NAS, RRC, NGAP, etc.).
+description: Search 3GPP specifications for 5G NR, LTE, core network, and security standards via CLI scripts or MCP server. Use when looking up mobile network standards, 5G spec numbers, protocol specifications, 3GPP release contents, or any cellular technology standards (NR, E-UTRA, NAS, RRC, NGAP, etc.).
 ---
 
 # 3GPP Specs — 5G/LTE Standards Search
 
-## Quick Start
+## CLI Usage (Quick & Easy)
+
+Simple bash wrapper scripts for direct command-line use:
+
+```bash
+cd ~/clawd/projects/netmcp/skills/threegpp-specs/scripts
+
+# Get specific spec details
+./get.sh 23.501
+
+# Search specs by keyword
+./search.sh "5G" 5
+
+# List specs by release
+./releases.sh 18
+```
+
+## MCP Server Setup
 
 ```bash
 cd SKILL_DIR/../../packages/threegpp-specs
 npm install && node src/index.js
+
+# Or install into Claude Code config
+./scripts/install-mcp.sh
 ```
 
 ## Tools Available

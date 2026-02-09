@@ -1,11 +1,28 @@
 ---
 name: oui-lookup
-description: Resolve MAC addresses to device vendors using the IEEE OUI registry. Use when identifying unknown devices on a network, troubleshooting connectivity, or auditing device manufacturers. Supports lookup by MAC address, search by vendor name, and database stats.
+description: Resolve MAC addresses to device vendors using the IEEE OUI registry via CLI scripts or MCP server. Use when identifying unknown devices on a network, troubleshooting connectivity, or auditing device manufacturers. Supports lookup by MAC address, search by vendor name, and database stats.
 ---
 
 # OUI Lookup — IEEE MAC Address Vendor Resolution
 
-## Quick Start
+## CLI Usage (Quick & Easy)
+
+Simple bash wrapper scripts for direct command-line use:
+
+```bash
+cd ~/clawd/projects/netmcp/skills/oui-lookup/scripts
+
+# Lookup a MAC address
+./lookup.sh AA:BB:CC:DD:EE:FF
+
+# Search for vendor by name
+./search.sh "Cisco"
+
+# Get database statistics
+./stats.sh
+```
+
+## MCP Server Setup
 
 ```bash
 # Ensure the database exists
@@ -13,6 +30,9 @@ node SKILL_DIR/../../packages/oui-lookup/scripts/update-oui-db.js
 
 # Run as MCP server
 node SKILL_DIR/../../packages/oui-lookup/src/index.js
+
+# Or install into Claude Code config
+./scripts/install-mcp.sh
 ```
 
 ## Tools Available

@@ -26,14 +26,14 @@ async function fetchAndParse() {
   //				Address line 1
   //				City  State  ZIP
   //				Country
-  const hexLine = /^([0-9A-F]{2}-[0-9A-F]{2}-[0-9A-F]{2})\s+\(hex\)\s+(.+)$/;
+  const hexLine = /^([0-9A-Fa-f]{2}-[0-9A-Fa-f]{2}-[0-9A-Fa-f]{2})\s+\(hex\)\s+(.+)$/;
   const base16Line = /^([0-9A-F]{6})\s+\(base 16\)\s+(.+)$/;
 
   let currentPrefix = null;
   let currentEntry = null;
   const addressLines = [];
 
-  for (const line of text.split('\n')) {
+  for (const line of text.split(/\r?\n/)) {
     const hexMatch = line.match(hexLine);
     if (hexMatch) {
       // Save previous entry

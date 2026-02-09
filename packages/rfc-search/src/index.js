@@ -165,14 +165,37 @@ server.tool(
   async ({ limit, area }) => {
     try {
       const cap = Math.min(limit, 50);
-      let url = `${DATATRACKER_API}/doc/document/?format=json&limit=${cap}&type=rfc&order_by=-time`;
+      // IETF Datatracker doesn't support order_by on time or name numerically.
+      // Strategy: query recent RFC numbers by guessing the latest range.
+      // RFC numbers are sequential — as of early 2026, we're around RFC 9700-9900.
+      // Query specific 4-digit ranges descending to find the most recent ones.
+      const ranges = [];
+      for (let i = 9999; i >= 9000; i -= 100) {
+        const prefix = String(i).slice(0, 2); // not useful for 4-digit
+        ranges.push(i);
+        if (ranges.length >= 10) break;
+      }
 
+      // Use name__regex to find RFCs in the 9xxx range, sorted by document ID
+      let url = `${DATATRACKER_API}/doc/document/?format=json&limit=200&name__regex=^rfc9%5Cd%7B3%7D$&order_by=-id`;
       if (area) {
         url += `&group__parent__acronym=${encodeURIComponent(area)}`;
       }
 
       const data = await fetchJSON(url);
-      const results = (data.objects || []).map(formatRFC);
+      let allResults = data.objects || [];
+
+      // Sort by RFC number descending (highest = most recent)
+      allResults.sort((a, b) => {
+        const numA = parseInt(a.name.replace('rfc', '')) || 0;
+        const numB = parseInt(b.name.replace('rfc', '')) || 0;
+        return numB - numA;
+      });
+
+      const results = allResults.slice(0, cap).map(doc => {
+        const num = parseInt(doc.name.replace('rfc', '')) || null;
+        return formatRFC({ ...doc, rfc_number: num });
+      });
 
       return {
         content: [{

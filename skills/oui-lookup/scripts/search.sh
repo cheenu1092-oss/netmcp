@@ -8,7 +8,7 @@ PKG_DIR="$SCRIPT_DIR/../../../packages/oui-lookup"
 
 # Build JSON-RPC request
 VENDOR="${1:?Usage: search.sh <vendor_name>}"
-REQUEST='{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"oui_search","arguments":{"vendor":"'"$VENDOR"'"}}}'
+REQUEST='{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"oui_search","arguments":{"query":"'"$VENDOR"'"}}}'
 
 # Call MCP server and extract result
 echo "$REQUEST" | node "$PKG_DIR/src/index.js" 2>/dev/null | python3 -c "

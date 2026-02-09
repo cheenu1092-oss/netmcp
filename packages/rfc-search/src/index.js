@@ -60,6 +60,19 @@ server.tool(
     number: z.number().describe('RFC number (e.g. 791 for IP, 2616 for HTTP/1.1, 8446 for TLS 1.3)'),
   },
   async ({ number }) => {
+    // Validate RFC number (must be positive, reasonable range)
+    if (number < 1 || number > 15000) {
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify({ 
+            error: `Invalid RFC number: ${number}. Must be between 1 and ~15000.`,
+            hint: 'Use rfc_search to find the correct RFC number by keyword.'
+          }),
+        }],
+      };
+    }
+    
     try {
       const data = await fetchJSON(
         `${DATATRACKER_API}/doc/document/?format=json&name=rfc${number}`
@@ -85,7 +98,10 @@ server.tool(
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify({ error: err.message }),
+          text: JSON.stringify({ 
+            error: 'Failed to fetch RFC data from IETF Datatracker. Please try again.',
+            details: err.message.includes('HTTP') ? err.message : undefined
+          }),
         }],
       };
     }
@@ -128,7 +144,10 @@ server.tool(
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify({ error: err.message }),
+          text: JSON.stringify({ 
+            error: 'Failed to search RFC database. Please try again.',
+            details: err.message.includes('HTTP') ? err.message : undefined
+          }),
         }],
       };
     }
@@ -169,7 +188,10 @@ server.tool(
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify({ error: err.message }),
+          text: JSON.stringify({ 
+            error: 'Failed to fetch recent RFCs. Please try again.',
+            details: err.message.includes('HTTP') ? err.message : undefined
+          }),
         }],
       };
     }

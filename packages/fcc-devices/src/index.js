@@ -21,6 +21,16 @@ const FCC_SEARCH_URL = 'https://apps.fcc.gov/oetcf/eas/reports/GenericSearchResu
 
 // ── Helpers ────────────────────────────────────────────────────
 
+/**
+ * Sanitize user input for use in Socrata SoQL queries.
+ * Removes SQL metacharacters and wildcards to prevent injection.
+ */
+function sanitizeInput(input) {
+  // Allow only: alphanumeric, spaces, hyphens, dots, commas, parentheses
+  // Remove: SQL wildcards (%), operators, quotes, semicolons, etc.
+  return input.replace(/[^\w\s\-\.,()]/g, '').trim();
+}
+
 async function fetchJSON(url, timeoutMs = 15000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -90,13 +100,13 @@ server.tool(
       switch (search_type) {
         case 'code':
           data = await queryOpenData({
-            grantee_code: query.toUpperCase(),
+            grantee_code: sanitizeInput(query).toUpperCase(),
             '$limit': cap,
           });
           break;
         case 'country':
           data = await queryOpenData({
-            '$where': `upper(country) like '%${query.toUpperCase().replace(/'/g, "''")}%'`,
+            '$where': `upper(country) like '%${sanitizeInput(query).toUpperCase()}%'`,
             '$limit': cap,
             '$order': 'date_received DESC',
           });
@@ -104,7 +114,7 @@ server.tool(
         case 'name':
         default:
           data = await queryOpenData({
-            '$where': `upper(grantee_name) like '%${query.toUpperCase().replace(/'/g, "''")}%'`,
+            '$where': `upper(grantee_name) like '%${sanitizeInput(query).toUpperCase()}%'`,
             '$limit': cap,
             '$order': 'date_received DESC',
           });
@@ -144,7 +154,20 @@ server.tool(
   },
   async ({ grantee_code }) => {
     try {
-      const code = grantee_code.toUpperCase().trim();
+      const code = sanitizeInput(grantee_code).toUpperCase();
+      
+      // Validate grantee code format (3-5 alphanumeric characters)
+      if (!/^[A-Z0-9]{3,5}$/.test(code)) {
+        return {
+          content: [{
+            type: 'text',
+            text: JSON.stringify({
+              error: `Invalid grantee code format: "${grantee_code}". Must be 3-5 alphanumeric characters (e.g., "BCG", "A3L").`,
+            }),
+          }],
+        };
+      }
+      
       const data = await queryOpenData({
         grantee_code: code,
       });
@@ -201,7 +224,7 @@ server.tool(
       };
 
       if (country) {
-        params['$where'] = `upper(country) like '%${country.toUpperCase().replace(/'/g, "''")}%'`;
+        params['$where'] = `upper(country) like '%${sanitizeInput(country).toUpperCase()}%'`;
       }
 
       const data = await queryOpenData(params);

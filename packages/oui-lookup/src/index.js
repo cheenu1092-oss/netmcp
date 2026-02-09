@@ -41,9 +41,17 @@ loadDb();
 /**
  * Normalize a MAC address or OUI prefix to uppercase hex (no separators).
  * Accepts: AA:BB:CC:DD:EE:FF, AA-BB-CC-DD-EE-FF, AABB.CCDD.EEFF, AABBCC, etc.
+ * Throws an error if input contains non-hex characters.
  */
 function normalizeMAC(input) {
-  return input.replace(/[:\-.\s]/g, '').toUpperCase();
+  const normalized = input.replace(/[:\-.\s]/g, '').toUpperCase();
+  
+  // Validate that the result contains only hex characters
+  if (!/^[0-9A-F]+$/.test(normalized)) {
+    throw new Error(`Invalid MAC address format: contains non-hex characters. Input: "${input}"`);
+  }
+  
+  return normalized;
 }
 
 /**
@@ -69,7 +77,18 @@ server.tool(
     mac: z.string().describe('MAC address or OUI prefix (any common format)'),
   },
   async ({ mac }) => {
-    const normalized = normalizeMAC(mac);
+    let normalized;
+    try {
+      normalized = normalizeMAC(mac);
+    } catch (err) {
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify({ error: err.message }),
+        }],
+      };
+    }
+    
     if (normalized.length < 6) {
       return {
         content: [{
@@ -119,13 +138,27 @@ server.tool(
     limit: z.number().optional().default(20).describe('Max results to return (default 20)'),
   },
   async ({ query, limit }) => {
-    const q = query.toLowerCase();
+    // Sanitize query: allow only alphanumeric, spaces, hyphens, dots, and common punctuation
+    const sanitized = query.replace(/[^\w\s\-\.,&()]/g, '').trim();
+    if (sanitized.length === 0) {
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify({
+            error: 'Search query is empty after sanitization. Please use alphanumeric characters.',
+          }),
+        }],
+      };
+    }
+    
+    const q = sanitized.toLowerCase();
+    const cap = Math.min(limit, 100);  // Cap at 100 results
     const results = [];
 
     for (const [prefix, entry] of Object.entries(db)) {
       if (entry.vendor.toLowerCase().includes(q)) {
         results.push({ prefix, vendor: entry.vendor, address: entry.address || null });
-        if (results.length >= limit) break;
+        if (results.length >= cap) break;
       }
     }
 

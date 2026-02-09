@@ -113,9 +113,16 @@ function extractCVSS(metrics) {
 
 /**
  * Extract affected products from CPE configurations.
+ * Returns an object with products array, truncation flag, and total count.
  */
 function extractAffectedProducts(configurations) {
-  if (!configurations?.length) return [];
+  if (!configurations?.length) {
+    return {
+      products: [],
+      truncated: false,
+      total_count: 0
+    };
+  }
 
   const products = new Set();
   for (const config of configurations) {
@@ -137,13 +144,22 @@ function extractAffectedProducts(configurations) {
       }
     }
   }
-  return [...products].slice(0, 20);
+  
+  const totalCount = products.size;
+  const productArray = [...products].slice(0, 20);
+  
+  return {
+    products: productArray,
+    truncated: totalCount > 20,
+    total_count: totalCount
+  };
 }
 
 function formatCVE(vuln) {
   const cve = vuln.cve;
   const cvss = extractCVSS(cve.metrics);
   const enDesc = cve.descriptions?.find(d => d.lang === 'en');
+  const affectedInfo = extractAffectedProducts(cve.configurations);
 
   return {
     id: cve.id,
@@ -154,7 +170,9 @@ function formatCVE(vuln) {
     cvss_score: cvss.score,
     cvss_severity: cvss.severity,
     cvss_version: cvss.version,
-    affected_products: extractAffectedProducts(cve.configurations),
+    affected_products: affectedInfo.products,
+    affected_products_count: affectedInfo.total_count,
+    affected_products_truncated: affectedInfo.truncated,
     references: (cve.references || []).slice(0, 5).map(r => ({
       url: r.url,
       tags: r.tags || [],

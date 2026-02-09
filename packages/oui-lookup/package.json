@@ -1,0 +1,22 @@
+{
+  "name": "@netmcp/oui-lookup",
+  "version": "1.0.0",
+  "description": "MCP server for IEEE OUI MAC address vendor lookup",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "update-db": "node scripts/update-oui-db.js",
+    "test": "node --test src/*.test.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1"
+  },
+  "keywords": ["mcp", "networking", "oui", "mac-address", "ieee"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jugaad-lab/netmcp",
+    "directory": "packages/oui-lookup"
+  }
+}

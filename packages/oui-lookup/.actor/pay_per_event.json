@@ -1,0 +1,16 @@
+[
+  {
+    "oui-lookup": {
+      "eventTitle": "OUI Lookup",
+      "eventDescription": "Single MAC address to vendor resolution",
+      "eventPriceUsd": 0.001
+    }
+  },
+  {
+    "oui-search": {
+      "eventTitle": "OUI Vendor Search",
+      "eventDescription": "Search vendors by name",
+      "eventPriceUsd": 0.002
+    }
+  }
+]

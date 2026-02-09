@@ -1,0 +1,11 @@
+{
+  "actorSpecification": 1,
+  "name": "oui-lookup",
+  "version": "1.0.0",
+  "title": "IEEE OUI Lookup — MAC Address to Vendor",
+  "description": "Resolve any MAC address to its device manufacturer using the official IEEE OUI registry. 50K+ vendors. MCP-compatible.",
+  "usesStandbyMode": true,
+  "minMemoryMbytes": 256,
+  "maxMemoryMbytes": 1024,
+  "webServerMcpPath": "/mcp"
+}

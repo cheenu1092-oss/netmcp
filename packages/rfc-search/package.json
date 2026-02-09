@@ -1,0 +1,21 @@
+{
+  "name": "@netmcp/rfc-search",
+  "version": "1.0.0",
+  "description": "MCP server for searching IETF RFCs and Internet Standards",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test src/*.test.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1"
+  },
+  "keywords": ["mcp", "networking", "rfc", "ietf", "standards", "protocols"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jugaad-lab/netmcp",
+    "directory": "packages/rfc-search"
+  }
+}

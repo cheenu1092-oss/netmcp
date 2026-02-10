@@ -10,7 +10,7 @@ description: Search the FCC Equipment Authorization database for certified wirel
 Simple bash wrapper scripts for direct command-line use:
 
 ```bash
-cd ~/clawd/projects/netmcp/skills/fcc-devices/scripts
+cd ./skills/fcc-devices/scripts
 
 # Search grantees by name
 ./search.sh "Samsung" name 5

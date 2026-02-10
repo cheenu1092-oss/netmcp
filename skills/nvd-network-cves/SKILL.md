@@ -10,7 +10,7 @@ description: Search the NIST National Vulnerability Database for networking-rela
 Simple bash wrapper scripts for direct command-line use:
 
 ```bash
-cd ~/clawd/projects/netmcp/skills/nvd-network-cves/scripts
+cd ./skills/nvd-network-cves/scripts
 
 # Search CVEs by keyword
 ./search.sh "wifi" 5

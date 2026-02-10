@@ -9,6 +9,8 @@ echo ""
 PASS=0
 FAIL=0
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 test_tool() {
     local pkg=$1
     local tool=$2
@@ -16,7 +18,7 @@ test_tool() {
     local desc=$4
     
     echo -n "  $tool ($desc)... "
-    cd ~/clawd/projects/netmcp/packages/$pkg
+    cd "$SCRIPT_DIR/packages/$pkg"
     result=$(echo "$json" | node src/index.js 2>/dev/null)
     
     if echo "$result" | grep -q '"result"'; then

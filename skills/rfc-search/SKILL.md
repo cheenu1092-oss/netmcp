@@ -10,7 +10,7 @@ description: Search and retrieve IETF RFCs and Internet Standards via CLI script
 Simple bash wrapper scripts for direct command-line use:
 
 ```bash
-cd ~/clawd/projects/netmcp/skills/rfc-search/scripts
+cd ./skills/rfc-search/scripts
 
 # Get a specific RFC by number
 ./get.sh 8446

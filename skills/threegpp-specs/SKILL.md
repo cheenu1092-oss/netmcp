@@ -10,7 +10,7 @@ description: Search 3GPP specifications for 5G NR, LTE, core network, and securi
 Simple bash wrapper scripts for direct command-line use:
 
 ```bash
-cd ~/clawd/projects/netmcp/skills/threegpp-specs/scripts
+cd ./skills/threegpp-specs/scripts
 
 # Get specific spec details
 ./get.sh 23.501

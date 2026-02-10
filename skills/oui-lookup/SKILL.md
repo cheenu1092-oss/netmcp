@@ -10,7 +10,7 @@ description: Resolve MAC addresses to device vendors using the IEEE OUI registry
 Simple bash wrapper scripts for direct command-line use:
 
 ```bash
-cd ~/clawd/projects/netmcp/skills/oui-lookup/scripts
+cd ./skills/oui-lookup/scripts
 
 # Lookup a MAC address
 ./lookup.sh AA:BB:CC:DD:EE:FF

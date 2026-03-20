@@ -1,0 +1,47 @@
+{
+  "name": "netmcp",
+  "version": "1.0.0",
+  "description": "Monorepo of MCP servers for networking intelligence",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "bash test-all.sh",
+    "test:oui": "cd packages/oui-lookup && npm test",
+    "test:rfc": "cd packages/rfc-search && npm test",
+    "test:nvd": "cd packages/nvd-network-cves && npm test",
+    "test:fcc": "cd packages/fcc-devices && npm test",
+    "test:3gpp": "cd packages/threegpp-specs && npm test",
+    "update-oui": "cd packages/oui-lookup && npm run update-db",
+    "start:oui": "cd packages/oui-lookup && npm start",
+    "start:rfc": "cd packages/rfc-search && npm start",
+    "start:nvd": "cd packages/nvd-network-cves && npm start",
+    "start:fcc": "cd packages/fcc-devices && npm start",
+    "start:3gpp": "cd packages/threegpp-specs && npm start"
+  },
+  "keywords": [
+    "mcp",
+    "networking",
+    "security",
+    "oui",
+    "rfc",
+    "nvd",
+    "cve",
+    "fcc",
+    "3gpp",
+    "monorepo"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cheenu1092-oss/netmcp"
+  },
+  "author": "Cheenu (cheenu1092@gmail.com)",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "devDependencies": {}
+}

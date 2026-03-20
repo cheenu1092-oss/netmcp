@@ -8,9 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **npm workspaces configuration** for proper monorepo tooling
+  - Single `npm install` at root installs all package dependencies
+  - Hoisted shared dependencies (@modelcontextprotocol/sdk)
+  - Workspace-aware scripts for testing and running individual packages
 - GitHub Actions CI/CD workflow for automated testing across Node.js 18.x, 20.x, 22.x
+- **24-hour in-memory cache for nvd-network-cves** with automatic expiration
+  - Separate caches for CVE lookups and keyword/vendor searches
+  - New `cve_cache_stats` tool for monitoring cache performance
+  - Cache hits bypass rate limiting entirely (instant responses)
 - Network timeout protection in `rfc-search` (10s timeout)
 - Network timeout protection in `nvd-network-cves` (15s timeout)
+- Thread-safe rate limiter for `nvd-network-cves` (prevents race conditions)
 - Comprehensive improvement log tracking hourly development cycles
 - This CHANGELOG.md file to track project changes
 
@@ -23,8 +32,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Affected products truncation indicator in `nvd-network-cves`
 - Grantee code format validation in `fcc-devices`
 - GitHub Actions workflow cache configuration for monorepo structure
+- Race condition in NVD rate limiter under concurrent load
 
 ### Security
+- **Fixed 5 dependency vulnerabilities** (1 low, 1 moderate, 3 high)
+  - @hono/node-server: Authorization bypass in static paths
+  - ajv: ReDoS vulnerability with $data option
+  - express-rate-limit: IPv4-mapped IPv6 bypass
+  - hono: Multiple security issues (timing attacks, cookie injection, SSE injection, file access, prototype pollution)
+  - qs: arrayLimit bypass DoS vulnerability
 - Sanitized user input across all search queries to prevent injection attacks
 - Improved error messages to avoid exposing internal API details
 - Added request limit caps to prevent resource exhaustion (max 100 results)

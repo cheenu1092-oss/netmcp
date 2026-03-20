@@ -22,19 +22,30 @@ const NVD_API = 'https://services.nvd.nist.gov/rest/json/cves/2.0';
 const REQUEST_WINDOW = 30_000; // 30 seconds
 const MAX_REQUESTS = 5;
 const requestTimestamps = [];
+let rateLimitQueue = Promise.resolve();
 
+/**
+ * Thread-safe rate limiter using a promise queue.
+ * Prevents race conditions when multiple tools are called concurrently.
+ */
 async function rateLimitWait() {
-  const now = Date.now();
-  // Remove timestamps older than the window
-  while (requestTimestamps.length && requestTimestamps[0] < now - REQUEST_WINDOW) {
-    requestTimestamps.shift();
-  }
-  if (requestTimestamps.length >= MAX_REQUESTS) {
-    const waitMs = requestTimestamps[0] + REQUEST_WINDOW - now + 100;
-    console.error(`Rate limit: waiting ${waitMs}ms`);
-    await new Promise(r => setTimeout(r, waitMs));
-  }
-  requestTimestamps.push(Date.now());
+  // Queue this request to execute sequentially
+  return new Promise((resolve) => {
+    rateLimitQueue = rateLimitQueue.then(async () => {
+      const now = Date.now();
+      // Remove timestamps older than the window
+      while (requestTimestamps.length && requestTimestamps[0] < now - REQUEST_WINDOW) {
+        requestTimestamps.shift();
+      }
+      if (requestTimestamps.length >= MAX_REQUESTS) {
+        const waitMs = requestTimestamps[0] + REQUEST_WINDOW - now + 100;
+        console.error(`Rate limit: waiting ${waitMs}ms`);
+        await new Promise(r => setTimeout(r, waitMs));
+      }
+      requestTimestamps.push(Date.now());
+      resolve();
+    });
+  });
 }
 
 // ── Helpers ────────────────────────────────────────────────────

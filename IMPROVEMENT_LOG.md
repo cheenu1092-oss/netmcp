@@ -130,3 +130,70 @@
 
 ---
 
+
+### Cycle 3 — 2026-03-20 12:20 PM PST
+
+**What was inspected:**
+- Checked GitHub Actions CI status (Cycles 1-2 had added workflow)
+- Found ALL CI runs failing (4 consecutive failures)
+- Root cause: `cache: 'npm'` expects root-level package-lock.json, but monorepo has per-package lock files
+- Root cause 2: Workflow used `npm run build` but oui-lookup package has `npm run update-db` script
+
+**Findings:**
+- ❌ **CRITICAL:** GitHub Actions CI completely broken
+  - Error 1: "Dependencies lock file is not found" (cache misconfiguration)
+  - Error 2: "Missing script: build" (wrong script name for OUI database)
+- ✅ All 17 tools still pass locally
+- ✅ Security fixes from previous cycles verified as working
+- ⚠️ CI has been broken since introduction in Cycle 1 (never successfully ran)
+
+**What was built:**
+1. **Fixed GitHub Actions cache configuration**
+   - Removed `cache: 'npm'` from workflow (monorepo doesn't have root lock file)
+   - Alternative would be npm workspaces setup (deferred to future cycle)
+   
+2. **Fixed OUI database download step**
+   - Changed `npm run build` → `npm run update-db` (correct script name)
+   
+3. **Added CHANGELOG.md**
+   - Follows Keep a Changelog format
+   - Documents all improvements from Cycles 1-2
+   - Includes version history and roadmap
+   - Links to GitHub releases
+
+**Test results:**
+- ✅ **Local tests:** All 17 tools PASS (verified before commit)
+- ✅ **GitHub Actions CI:** All jobs PASS across Node.js 18.x, 20.x, 22.x
+  - Code Quality Check: PASS (5s)
+  - Run All Tools Test (18.x): PASS (46s)
+  - Run All Tools Test (20.x): PASS (42s)
+  - Run All Tools Test (22.x): PASS (43s)
+- ⚠️ Minor warnings (non-blocking):
+  - Node.js 20 actions deprecation (upgrade to v5 in future)
+  - Test result artifact uploads failed (test-results.txt not generated)
+
+**Git commits:**
+- `c7c7b07` — "fix: remove npm cache from CI workflow (monorepo has per-package lock files)"
+- `9ac312a` — "docs: add CHANGELOG.md following Keep a Changelog format"
+- `5e2be3c` — "fix: use correct npm script name for OUI database download (update-db not build)"
+
+**Impact:**
+- **CI/CD now fully functional** — automated testing on every push
+- Workflow tests across 3 Node.js versions (18.x, 20.x, 22.x)
+- CHANGELOG provides release hygiene for open source publishing
+- All 4 previous CI failures resolved
+
+**Next cycle priorities:**
+1. ✅ **CI/CD working** (completed this cycle)
+2. ✅ **CHANGELOG.md** (completed this cycle)
+3. Add caching layer for NVD API calls (reduce rate limit pressure)
+4. Add npm workspaces configuration for proper monorepo tooling
+5. Upgrade GitHub Actions to Node.js 24 (address deprecation warnings)
+6. Add proper test result artifact generation (address upload warnings)
+7. Consider adding TypeScript/JSDoc types for better DX
+8. Add integration tests beyond smoke tests
+
+**Status:** ✅ GitHub Actions CI fully operational, CHANGELOG added, all tests passing
+
+---
+

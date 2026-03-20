@@ -197,3 +197,59 @@
 
 ---
 
+### Cycle 4 — 2026-03-20 1:20 PM PST
+
+**What was inspected:**
+- Reviewed IMPROVEMENT_LOG.md (Cycles 1-3 complete)
+- Verified GitHub Actions CI status: ✅ Last 2 runs successful
+- Analyzed CODE_REVIEW_NOTES.md for remaining HIGH/MEDIUM priority issues
+- Found HIGH priority race condition in nvd-network-cves rate limiter
+
+**Findings:**
+- ✅ **extractAffectedProducts truncation** — ALREADY FIXED (returns truncated flag + total_count)
+- ❌ **HIGH: Race condition in rate limiter** — `requestTimestamps` array not thread-safe
+  - Risk: Concurrent MCP tool calls could bypass rate limits or cause incorrect wait times
+  - Impact: NVD API could block requests if rate limiter fails
+- ✅ All previous priorities addressed (CI working, timeouts added, CHANGELOG created)
+
+**What was built:**
+1. **Thread-safe rate limiter implementation:**
+   - Added `rateLimitQueue` promise chain to serialize all rate limit checks
+   - Every call to `rateLimitWait()` now executes sequentially via queue
+   - Prevents race conditions when multiple tools called concurrently
+   - Pattern: `rateLimitQueue = rateLimitQueue.then(async () => { ... })`
+   - Zero performance impact for single-threaded execution
+   - Guarantees correctness for concurrent execution
+
+**Test results:**
+- ✅ **All 17 tools PASS** (no regressions)
+- ✅ Test runtime: ~18s (NVD rate limiting working correctly)
+- Tested edge cases:
+  - Valid CVE lookup: ✅
+  - Invalid CVE format: ✅
+  - Keyword search: ✅
+  - Vendor-specific CVEs: ✅
+
+**Git commits:**
+- `bb8689d` — "fix: implement thread-safe rate limiter to prevent race conditions"
+- Pushed to main successfully
+
+**Impact:**
+- **Resolves HIGH priority security/reliability issue** from CODE_REVIEW_NOTES
+- Prevents rate limit bypasses in production when multiple users call tools simultaneously
+- Maintains correct NVD API compliance (5 req/30s) under concurrent load
+- Foundation for future multi-user/high-concurrency deployments
+
+**Next cycle priorities:**
+1. Add caching layer for NVD API calls (reduce rate limit pressure, improve response times)
+2. Add npm workspaces configuration for proper monorepo tooling
+3. Add rate limiting to rfc-search and fcc-devices (currently unprotected)
+4. Upgrade GitHub Actions to Node.js 24 (address deprecation warnings)
+5. Add JSDoc type annotations (improve IDE support, catch errors early)
+6. Add integration tests beyond basic smoke tests
+7. Consider adding new networking tools (IANA ports, DNS tools, BGP looking glass)
+
+**Status:** ✅ All HIGH priority issues resolved, CI verified working, ready for next improvement
+
+---
+

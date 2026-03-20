@@ -4,6 +4,7 @@
 
 **Self-host for free** or use the **[hosted version on Apify →](https://apify.com/jugaad-lab)**
 
+[![Test Suite](https://github.com/cheenu1092-oss/netmcp/actions/workflows/test.yml/badge.svg)](https://github.com/cheenu1092-oss/netmcp/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ## What is this?

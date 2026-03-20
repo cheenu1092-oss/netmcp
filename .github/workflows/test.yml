@@ -24,15 +24,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
       
-      - name: Install dependencies (all packages)
-        run: |
-          for pkg in packages/*/; do
-            echo "Installing dependencies for $(basename $pkg)..."
-            cd "$pkg"
-            npm install
-            cd ../..
-          done
+      - name: Install dependencies (workspaces)
+        run: npm install
       
       - name: Download OUI database
         run: |
@@ -69,6 +64,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
+          cache: 'npm'
       
       - name: Check for common issues
         run: |

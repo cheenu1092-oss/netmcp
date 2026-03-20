@@ -28,7 +28,7 @@ NetMCP fixes that by wrapping authoritative, free, public networking databases i
 
 ```bash
 # Clone and run locally
-git clone https://github.com/jugaad-lab/netmcp.git
+git clone https://github.com/cheenu1092-oss/netmcp.git
 cd netmcp/packages/oui-lookup
 npm install && npm start
 ```

@@ -37,7 +37,7 @@ jobs:
       - name: Download OUI database
         run: |
           cd packages/oui-lookup
-          npm run build
+          npm run update-db
           cd ../..
       
       - name: Run test suite

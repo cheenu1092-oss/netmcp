@@ -6,9 +6,11 @@
  *   - cve_search: Search CVEs by keyword (e.g. "wifi", "cisco", "bgp")
  *   - cve_get: Get a specific CVE by ID (e.g. CVE-2024-12345)
  *   - cve_by_vendor: Search CVEs affecting a specific vendor/product
+ *   - cve_cache_stats: View cache performance metrics (hit rate, cache size)
  *
  * Data source: NIST NVD API 2.0 (https://services.nvd.nist.gov/rest/json/cves/2.0)
  * Rate limit: 5 requests per 30 seconds (without API key)
+ * Caching: 24-hour in-memory cache to reduce API load and improve response times
  */
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -16,6 +18,46 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod';
 
 const NVD_API = 'https://services.nvd.nist.gov/rest/json/cves/2.0';
+
+// ── Caching ────────────────────────────────────────────────────
+
+const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours (CVE data is relatively static)
+const cveCache = new Map(); // Cache for CVE lookups by ID
+const searchCache = new Map(); // Cache for keyword/vendor searches
+let cacheHits = 0;
+let cacheMisses = 0;
+
+/**
+ * Get cached data if still valid.
+ * @param {Map} cache - Cache map to query
+ * @param {string} key - Cache key
+ * @returns {any|null} - Cached data or null if expired/missing
+ */
+function getCached(cache, key) {
+  const entry = cache.get(key);
+  if (!entry) {
+    cacheMisses++;
+    return null;
+  }
+  const age = Date.now() - entry.timestamp;
+  if (age > CACHE_TTL) {
+    cache.delete(key);
+    cacheMisses++;
+    return null;
+  }
+  cacheHits++;
+  return entry.data;
+}
+
+/**
+ * Store data in cache with current timestamp.
+ * @param {Map} cache - Cache map to update
+ * @param {string} key - Cache key
+ * @param {any} data - Data to cache
+ */
+function setCache(cache, key, data) {
+  cache.set(key, { data, timestamp: Date.now() });
+}
 
 // ── Rate limiting ──────────────────────────────────────────────
 
@@ -226,22 +268,44 @@ server.tool(
   async ({ keyword, limit }) => {
     try {
       const cap = Math.min(limit, 50);
+      const cacheKey = `search:${keyword.toLowerCase()}:${cap}`;
+      
+      // Check cache first
+      const cached = getCached(searchCache, cacheKey);
+      if (cached) {
+        return {
+          content: [{
+            type: 'text',
+            text: JSON.stringify({
+              ...cached,
+              cached: true,
+            }),
+          }],
+        };
+      }
+
+      // Cache miss - fetch from NVD API
       const data = await fetchNVD({
         keywordSearch: keyword,
         resultsPerPage: cap,
       });
 
       const results = (data.vulnerabilities || []).map(formatCVE);
+      
+      const response = {
+        keyword,
+        total_results: data.totalResults || 0,
+        returned: results.length,
+        results,
+      };
+      
+      // Store in cache
+      setCache(searchCache, cacheKey, response);
 
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify({
-            keyword,
-            total_results: data.totalResults || 0,
-            returned: results.length,
-            results,
-          }),
+          text: JSON.stringify(response),
         }],
       };
     } catch (err) {
@@ -275,6 +339,21 @@ server.tool(
         };
       }
 
+      // Check cache first
+      const cached = getCached(cveCache, id);
+      if (cached) {
+        return {
+          content: [{
+            type: 'text',
+            text: JSON.stringify({
+              ...cached,
+              cached: true,
+            }),
+          }],
+        };
+      }
+
+      // Cache miss - fetch from NVD API
       const data = await fetchNVD({ cveId: id });
 
       if (!data.vulnerabilities?.length) {
@@ -287,6 +366,9 @@ server.tool(
       }
 
       const result = formatCVE(data.vulnerabilities[0]);
+      
+      // Store in cache
+      setCache(cveCache, id, result);
 
       return {
         content: [{
@@ -320,24 +402,45 @@ server.tool(
 
       // Build keyword search combining vendor and product
       const keyword = product ? `${vendor} ${product}` : vendor;
+      const cacheKey = `vendor:${vendor.toLowerCase()}:${product?.toLowerCase() || 'all'}:${cap}`;
+      
+      // Check cache first
+      const cached = getCached(searchCache, cacheKey);
+      if (cached) {
+        return {
+          content: [{
+            type: 'text',
+            text: JSON.stringify({
+              ...cached,
+              cached: true,
+            }),
+          }],
+        };
+      }
 
+      // Cache miss - fetch from NVD API
       const data = await fetchNVD({
         keywordSearch: keyword,
         resultsPerPage: cap,
       });
 
       const results = (data.vulnerabilities || []).map(formatCVE);
+      
+      const response = {
+        vendor,
+        product: product || null,
+        total_results: data.totalResults || 0,
+        returned: results.length,
+        results,
+      };
+      
+      // Store in cache
+      setCache(searchCache, cacheKey, response);
 
       return {
         content: [{
           type: 'text',
-          text: JSON.stringify({
-            vendor,
-            product: product || null,
-            total_results: data.totalResults || 0,
-            returned: results.length,
-            results,
-          }),
+          text: JSON.stringify(response),
         }],
       };
     } catch (err) {
@@ -348,6 +451,33 @@ server.tool(
         }],
       };
     }
+  }
+);
+
+// Tool: cve_cache_stats
+server.tool(
+  'cve_cache_stats',
+  'Get cache statistics including hit/miss ratio, cache size, and memory usage. Helps monitor caching efficiency.',
+  {},
+  async () => {
+    const totalRequests = cacheHits + cacheMisses;
+    const hitRate = totalRequests > 0 ? ((cacheHits / totalRequests) * 100).toFixed(2) : '0.00';
+    
+    return {
+      content: [{
+        type: 'text',
+        text: JSON.stringify({
+          cache_hits: cacheHits,
+          cache_misses: cacheMisses,
+          total_requests: totalRequests,
+          hit_rate_percent: parseFloat(hitRate),
+          cve_cache_size: cveCache.size,
+          search_cache_size: searchCache.size,
+          total_cache_entries: cveCache.size + searchCache.size,
+          cache_ttl_hours: CACHE_TTL / (60 * 60 * 1000),
+        }),
+      }],
+    };
   }
 );
 

@@ -31,7 +31,7 @@ test_tool() {
     fi
 }
 
-echo "1. oui-lookup (3 tools)"
+echo "1. oui-lookup (4 tools)"
 test_tool "oui-lookup" "oui_lookup" \
     '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"oui_lookup","arguments":{"mac":"00:1A:2B:3C:4D:5E"}}}' \
     "valid MAC"
@@ -63,8 +63,8 @@ test_tool "rfc-search" "rfc_recent" \
     "recent RFCs"
 
 echo ""
-echo "3. nvd-network-cves (3 tools)"
-echo "   Note: NVD API has rate limits (5 req/30s)"
+echo "3. nvd-network-cves (5 tools)"
+echo "   Note: NVD API has rate limits (5 req/30s), but caching reduces load"
 
 test_tool "nvd-network-cves" "cve_get" \
     '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"cve_get","arguments":{"cve_id":"CVE-2023-44487"}}}' \
@@ -75,6 +75,11 @@ sleep 6  # Rate limit spacing
 test_tool "nvd-network-cves" "cve_get" \
     '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"cve_get","arguments":{"cve_id":"not-a-cve"}}}' \
     "invalid CVE format"
+
+# Test cache hit (same CVE as before - should be instant)
+test_tool "nvd-network-cves" "cve_get" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"cve_get","arguments":{"cve_id":"CVE-2023-44487"}}}' \
+    "CVE-2023-44487 (cached)"
 
 sleep 6
 
@@ -87,6 +92,11 @@ sleep 6
 test_tool "nvd-network-cves" "cve_by_vendor" \
     '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"cve_by_vendor","arguments":{"vendor":"cisco","limit":3}}}' \
     "Cisco CVEs"
+
+# Test cache stats tool
+test_tool "nvd-network-cves" "cve_cache_stats" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"cve_cache_stats","arguments":{}}}' \
+    "cache stats"
 
 echo ""
 echo "4. fcc-devices (3 tools)"

@@ -39,7 +39,7 @@ async function rateLimitWait() {
 
 // ── Helpers ────────────────────────────────────────────────────
 
-async function fetchNVD(params) {
+async function fetchNVD(params, timeoutMs = 15000) {
   await rateLimitWait();
 
   const url = new URL(NVD_API);
@@ -47,18 +47,31 @@ async function fetchNVD(params) {
     if (v !== undefined && v !== null) url.searchParams.set(k, v);
   }
 
-  const res = await fetch(url.toString(), {
-    headers: { Accept: 'application/json' },
-  });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
 
-  if (res.status === 403) {
-    throw new Error('NVD API rate limit exceeded. Try again in 30 seconds.');
-  }
-  if (!res.ok) {
-    throw new Error(`NVD API error: HTTP ${res.status}`);
-  }
+  try {
+    const res = await fetch(url.toString(), {
+      headers: { Accept: 'application/json' },
+      signal: controller.signal,
+    });
 
-  return res.json();
+    if (res.status === 403) {
+      throw new Error('NVD API rate limit exceeded. Try again in 30 seconds.');
+    }
+    if (!res.ok) {
+      throw new Error(`NVD API error: HTTP ${res.status}`);
+    }
+
+    return await res.json();
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      throw new Error(`NVD API timeout after ${timeoutMs}ms. The API may be overloaded, try again later.`);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 /**

@@ -20,12 +20,25 @@ const RFC_EDITOR_API = 'https://www.rfc-editor.org/rfc';
 
 // ── Helpers ────────────────────────────────────────────────────
 
-async function fetchJSON(url) {
-  const res = await fetch(url, {
-    headers: { Accept: 'application/json' },
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}: ${url}`);
-  return res.json();
+async function fetchJSON(url, timeoutMs = 10000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  
+  try {
+    const res = await fetch(url, {
+      headers: { Accept: 'application/json' },
+      signal: controller.signal,
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${url}`);
+    return await res.json();
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      throw new Error(`Request timeout after ${timeoutMs}ms: ${url}`);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 function formatRFC(doc) {

@@ -1621,3 +1621,84 @@
 
 ---
 
+### Cycle 21 — 2026-03-21 6:20 AM PST
+
+**What was inspected:**
+- Reviewed IMPROVEMENT_LOG.md (Cycles 1-20 complete)
+- Verified all infrastructure complete (CI/CD, workspaces, rate limiting, caching, JSDoc, ESLint, npm config, tests)
+- Checked README.md for documentation quality
+- Identified gap: No architecture diagram showing system overview and data flow
+- Analyzed remaining priorities: npm publishing requires manual auth (blocked), new tools high-effort, architecture diagram high-value/low-effort
+
+**Findings:**
+- ✅ All previous cycles complete (infrastructure, security, reliability, JSDoc, ESLint, npm config, tests, input validation)
+- ✅ All 19 smoke tests passing, 0 vulnerabilities, clean ESLint (0 errors, 0 warnings)
+- ✅ Comprehensive README with usage examples (Cycle 19)
+- ❌ **No architecture diagram** — users can't visualize how the system works
+- **Opportunity:** Add Mermaid diagram to README (renders natively on GitHub)
+- **Priority:** High value for documentation/onboarding, low effort, complements usage examples
+
+**What was built:**
+1. **Created comprehensive Mermaid architecture diagram:**
+   - 4 layers: AI Agents → MCP Protocol → NetMCP Servers → Data Sources
+   - Shows all 5 packages with their features (tools count, caching, rate limits, timeouts)
+   - Visualizes data flow from AI agents through MCP to external APIs/databases
+   - Color-coded by layer (agents=blue, MCP=orange, servers=purple, sources=green)
+   
+2. **Added "Key features" section below diagram:**
+   - ⚡ Rate limiting (thread-safe, prevents API blocks)
+   - 🔒 Input validation (max length, format checks, SQL injection protection)
+   - ⏱️ Timeouts (10-15s on all network calls)
+   - 💾 Caching (NVD 24hr cache)
+   - ✅ 100% JSDoc coverage
+   - 🧪 Comprehensive tests (37 total: 19 smoke + 18 integration)
+   - 🚀 Production-ready (CI/CD, ESLint, npm workspaces, all security issues resolved)
+   
+3. **Positioned diagram strategically:**
+   - Placed after "Packages" table, before "Use it 3 ways"
+   - Users see what packages exist, then how they fit together, then how to use them
+   - Logical documentation flow
+   
+4. **Updated CHANGELOG.md:**
+   - Documented architecture diagram addition with rationale
+   - Listed key features highlighted in diagram
+
+**Test results:**
+- ✅ **All 19 smoke tests PASS** (no code changes, README/CHANGELOG only)
+- ✅ Test runtime: ~18s (consistent with previous cycles)
+- ✅ ESLint: 0 errors, 0 warnings (clean lint maintained)
+- ✅ Mermaid diagram syntax validated (renders correctly on GitHub)
+
+**Git commits:**
+- `9e39edd` — "docs: add architecture diagram to README showing data flow and key features"
+- Pushed to main successfully
+
+**Impact:**
+- **Documentation quality improved** — visual representation of system architecture
+- **Onboarding enhanced** — new users/contributors can see the big picture at a glance
+- **Discoverability** — diagram showcases all technical improvements from 20 previous cycles
+- **Professional presentation** — matches quality of codebase (production-ready documentation)
+- **GitHub README optimization** — Mermaid renders natively, no external tools needed
+- **Marketing** — visual proof of maturity (rate limiting, caching, input validation, tests, etc.)
+
+**Mermaid diagram benefits:**
+- ✅ Renders natively on GitHub (no external tools needed)
+- ✅ Version-controlled alongside code (stays in sync)
+- ✅ Easy to update (plain text in Markdown)
+- ✅ Color-coded layers (clear visual hierarchy)
+- ✅ Shows 19 tools across 5 packages at a glance
+- ✅ Highlights production features (rate limiting, caching, timeouts)
+
+**Next cycle priorities:**
+1. ✅ **Architecture diagram** (completed this cycle)
+2. Consider publishing to npm once `npm login` is configured (all packages ready)
+3. Add performance monitoring across all packages (extend cache stats pattern from nvd)
+4. Explore new networking tools (IANA port lookup, DNS tools, BGP looking glass, Wireshark dissectors)
+5. Consider automated releases via GitHub Actions (semantic-release or similar)
+6. Add contribution guidelines (CONTRIBUTING.md) now that codebase is fully documented
+7. Consider adding OpenAPI/Swagger docs for HTTP mode (future enhancement)
+
+**Status:** ✅ Architecture diagram added, README fully enhanced, all tests passing, production-ready
+
+---
+

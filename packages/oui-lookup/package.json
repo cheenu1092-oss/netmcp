@@ -4,6 +4,13 @@
   "description": "MCP server for IEEE OUI MAC address vendor lookup",
   "main": "src/index.js",
   "type": "module",
+  "files": [
+    "src/",
+    "data/oui.json"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "start": "node src/index.js",
     "update-db": "node scripts/update-oui-db.js",

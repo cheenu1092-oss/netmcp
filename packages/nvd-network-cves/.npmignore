@@ -1,0 +1,28 @@
+# Test files
+test/
+*.test.js
+*.spec.js
+
+# Apify actor files (not needed for npm package)
+.actor/
+
+# Development files
+.DS_Store
+.env
+.env.*
+*.log
+*.swp
+*.swo
+*~
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# jsconfig is for local dev only
+jsconfig.json
+
+# Git files
+.git/
+.gitignore

@@ -4,6 +4,12 @@
   "description": "MCP server for searching IETF RFCs and Internet Standards",
   "main": "src/index.js",
   "type": "module",
+  "files": [
+    "src/"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "start": "node src/index.js",
     "test": "node --test src/*.test.js"

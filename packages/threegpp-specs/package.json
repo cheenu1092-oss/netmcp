@@ -4,6 +4,13 @@
   "description": "MCP server for searching 3GPP specifications (5G/LTE/NR standards)",
   "main": "src/index.js",
   "type": "module",
+  "files": [
+    "src/",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "start": "node src/index.js",
     "test": "node --test src/*.test.js"

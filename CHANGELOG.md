@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **npm publishing configuration** for all 5 packages
+  - Added `files` field to control which files are published to npm
+  - Added `publishConfig` with `access: "public"` for scoped packages
+  - Created `.npmignore` files to exclude dev/test files from npm packages
+  - Verified package contents with `npm pack --dry-run` for all packages
+  - Ready for publishing to npm registry
 - **ESLint with JSDoc type validation** for automated code quality checks
   - Modern flat config format (eslint.config.js)
   - Type-aware linting leveraging comprehensive JSDoc annotations

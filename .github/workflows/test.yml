@@ -35,10 +35,17 @@ jobs:
           npm run update-db
           cd ../..
       
-      - name: Run test suite
+      - name: Run smoke tests
         run: |
           chmod +x test-all.sh
           bash test-all.sh
+        env:
+          CI: true
+      
+      - name: Run integration tests
+        run: |
+          chmod +x test-integration.sh
+          bash test-integration.sh
         env:
           CI: true
       

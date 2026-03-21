@@ -1145,3 +1145,97 @@
 
 ---
 
+### Cycle 16 — 2026-03-21 1:20 AM PST
+
+**What was inspected:**
+- Reviewed IMPROVEMENT_LOG.md (Cycles 1-15 complete)
+- Verified GitHub Actions CI status: ✅ All previous runs successful
+- Checked package.json files for npm publishing configuration
+- Found **NO npm publishing configuration** — missing `files`, `publishConfig`, `.npmignore`
+
+**Findings:**
+- ✅ All previous cycles complete (infrastructure, security, reliability, JSDoc, ESLint)
+- ✅ All 19 tools passing, 0 vulnerabilities, working tree clean
+- ❌ **Packages cannot be published to npm** — missing critical fields:
+  - `files` field (controls which files are included in published package)
+  - `publishConfig` field (needed for scoped @netmcp/* packages to be public)
+  - `.npmignore` files (exclude dev/test files from npm package)
+- **Opportunity:** npm publishing configuration unlocks broader adoption
+  - Users can `npm install @netmcp/<package-name>` instead of git clone
+  - Enables version management (semver, npm update workflows)
+  - Makes packages discoverable on npmjs.com
+  - Foundation for automated releases via CI/CD (future enhancement)
+
+**What was built:**
+1. **Added `files` field to all 5 package.json files:**
+   - oui-lookup: `["src/", "data/oui.json"]` (includes 4.6MB database)
+   - rfc-search: `["src/"]` (API-based, no local data needed)
+   - nvd-network-cves: `["src/", "README.md"]` (includes package docs)
+   - fcc-devices: `["src/", "README.md"]` (includes package docs)
+   - threegpp-specs: `["src/", "README.md"]` (includes package docs)
+
+2. **Added `publishConfig` to all 5 packages:**
+   - `{"access": "public"}` — required for scoped @netmcp/* packages (default to private)
+   - Without this, `npm publish` would fail with "402 Payment Required" error
+
+3. **Created `.npmignore` files for all 5 packages:**
+   - Excludes: test/, *.test.js, .actor/, .env, .DS_Store, IDE files, jsconfig.json
+   - Ensures published packages are minimal (no dev/test cruft)
+   - Reduces package size and install time
+
+4. **Verified with `npm pack --dry-run`:**
+   - oui-lookup: 3 files (4.6MB) — package.json, src/index.js, data/oui.json ✅
+   - fcc-devices: 3 files (14.6kB) — package.json, src/index.js, README.md ✅
+   - All packages include only essential files (no .actor/, no jsconfig.json)
+
+5. **Updated CHANGELOG.md:**
+   - Documented npm publishing configuration
+   - Listed files included in each package
+   - Noted packages are ready for npm publish
+
+**Test results:**
+- ✅ **All 19 tools PASS** (no regressions)
+- ✅ Test runtime: ~18s (consistent with previous cycles)
+- ✅ ESLint: 0 errors, 6 warnings (stylistic JSDoc preferences)
+- ✅ npm pack dry-run: All packages include correct files, no cruft
+
+**Git commits:**
+- `c7f7f99` — "feat: add npm publishing configuration for all packages"
+- Pushed to main successfully
+
+**Impact:**
+- **npm publishing unlocked** — packages now ready for `npm publish`
+- **Broader distribution** — users can install via npm instead of git clone
+- **Version management** — enables semver, npm update workflows
+- **Discoverability** — packages will be findable on npmjs.com
+- **Professional packaging** — follows npm best practices (files field, .npmignore)
+- **Foundation for automation** — ready for CI/CD automated releases (future enhancement)
+
+**Package sizes (published tarball):**
+| Package | Size | Files | Notes |
+|---------|------|-------|-------|
+| oui-lookup | 1.2 MB | 3 | Includes 4.6MB database (compressed) |
+| rfc-search | ~5 kB | 2 | API-based, no local data |
+| nvd-network-cves | ~10 kB | 3 | API-based with README |
+| fcc-devices | ~5 kB | 3 | API-based with README |
+| threegpp-specs | ~15 kB | 3 | Hybrid curated + FTP with README |
+
+**Next steps for npm publishing (when ready):**
+1. Verify npm registry account: `npm whoami`
+2. Login if needed: `npm login`
+3. Publish each package: `cd packages/<name> && npm publish`
+4. Consider automating releases via GitHub Actions (semantic-release or similar)
+5. Add npm badges to README.md (version, downloads, etc.)
+
+**Next cycle priorities:**
+1. ✅ **npm publishing configuration** (completed this cycle)
+2. Consider adding GitHub Actions automated releases (semantic-release)
+3. Add integration tests beyond basic smoke tests (edge cases, error conditions)
+4. Improve README with architecture diagram and usage examples
+5. Consider adding performance monitoring across all packages (cache stats pattern from nvd)
+6. Explore new networking tools (IANA port lookup, DNS tools, BGP looking glass, Wireshark dissectors)
+
+**Status:** ✅ All 5 packages ready for npm publish, publishing configuration complete, all tests passing
+
+---
+

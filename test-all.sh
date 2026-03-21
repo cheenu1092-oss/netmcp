@@ -49,7 +49,7 @@ test_tool "oui-lookup" "oui_stats" \
     "stats"
 
 echo ""
-echo "2. rfc-search (3 tools)"
+echo "2. rfc-search (4 tools)"
 test_tool "rfc-search" "rfc_get" \
     '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"rfc_get","arguments":{"number":8446}}}' \
     "RFC 8446"
@@ -62,8 +62,12 @@ test_tool "rfc-search" "rfc_recent" \
     '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"rfc_recent","arguments":{"limit":3}}}' \
     "recent RFCs"
 
+test_tool "rfc-search" "rfc_stats" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"rfc_stats","arguments":{}}}' \
+    "stats"
+
 echo ""
-echo "3. nvd-network-cves (5 tools)"
+echo "3. nvd-network-cves (6 tools)"
 echo "   Note: NVD API has rate limits (5 req/30s), but caching reduces load"
 
 test_tool "nvd-network-cves" "cve_get" \
@@ -99,7 +103,7 @@ test_tool "nvd-network-cves" "cve_cache_stats" \
     "cache stats"
 
 echo ""
-echo "4. fcc-devices (3 tools)"
+echo "4. fcc-devices (4 tools)"
 
 test_tool "fcc-devices" "fcc_search" \
     '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"fcc_search","arguments":{"query":"Apple","search_type":"name","limit":3}}}' \
@@ -113,8 +117,12 @@ test_tool "fcc-devices" "fcc_recent" \
     '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"fcc_recent","arguments":{"limit":3}}}' \
     "recent grantees"
 
+test_tool "fcc-devices" "fcc_stats" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"fcc_stats","arguments":{}}}' \
+    "stats"
+
 echo ""
-echo "5. threegpp-specs (3 tools)"
+echo "5. threegpp-specs (4 tools)"
 
 test_tool "threegpp-specs" "spec_get" \
     '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"spec_get","arguments":{"spec_number":"23.501"}}}' \
@@ -127,6 +135,10 @@ test_tool "threegpp-specs" "spec_search" \
 test_tool "threegpp-specs" "spec_releases" \
     '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"spec_releases","arguments":{"release":18}}}' \
     "Release 18"
+
+test_tool "threegpp-specs" "spec_stats" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"spec_stats","arguments":{}}}' \
+    "stats"
 
 echo ""
 echo "========================================="

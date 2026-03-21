@@ -76,6 +76,10 @@ const requestTimestamps = [];
 /** @type {Promise<void>} */
 let rateLimitQueue = Promise.resolve();
 
+// Performance metrics
+let totalQueries = 0;
+let rateLimiterActivations = 0;
+
 /**
  * Thread-safe rate limiter using a promise queue.
  * Ensures requests respect the 10 req/10s limit even under concurrent tool calls.
@@ -95,6 +99,7 @@ async function rateLimitWait() {
       // If at limit, wait until oldest request expires
       if (requestTimestamps.length >= MAX_REQUESTS) {
         const waitMs = requestTimestamps[0] + REQUEST_WINDOW - now + 100; // +100ms buffer
+        rateLimiterActivations++;
         await new Promise(r => setTimeout(r, waitMs));
       }
       
@@ -129,6 +134,7 @@ function sanitizeInput(input) {
 async function fetchJSON(url, timeoutMs = 15000) {
   // Apply rate limiting before making request
   await rateLimitWait();
+  totalQueries++;
   
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -363,6 +369,30 @@ server.tool(
         }],
       };
     }
+  }
+);
+
+// Tool: fcc_stats
+server.tool(
+  'fcc_stats',
+  'Get runtime statistics and performance metrics for the FCC devices server.',
+  {},
+  async () => {
+    return {
+      content: [{
+        type: 'text',
+        text: JSON.stringify({
+          total_queries: totalQueries,
+          rate_limiter_activations: rateLimiterActivations,
+          current_queue_depth: requestTimestamps.length,
+          rate_limit: {
+            max_requests: MAX_REQUESTS,
+            window_ms: REQUEST_WINDOW,
+            window_seconds: REQUEST_WINDOW / 1000,
+          },
+        }),
+      }],
+    };
   }
 );
 

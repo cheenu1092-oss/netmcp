@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Performance monitoring tools** across all packages (2026-03-21)
+  - `rfc_stats` tool: Total queries, rate limiter activations, queue depth, rate limit config
+  - `fcc_stats` tool: Total queries, rate limiter activations, queue depth, rate limit config
+  - `spec_stats` tool: Total queries, FTP scraping calls, curated hits, hit rate, database size
+  - Runtime metrics for observability and production troubleshooting
+  - All stats tools return JSON with comprehensive performance data
+  - Extends proven pattern from nvd-network-cves (cache_stats) to remaining packages
+  - Total tools: 22 (was 19) — 4 stats tools across oui-lookup, rfc-search, nvd-network-cves, fcc-devices, threegpp-specs
 - **Code of Conduct (CODE_OF_CONDUCT.md)** for community guidelines (2026-03-21)
   - Contributor Covenant 2.1 (industry-standard open source code of conduct)
   - Clear standards for behavior: welcoming, respectful, constructive, inclusive

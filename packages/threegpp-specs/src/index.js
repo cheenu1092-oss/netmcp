@@ -60,6 +60,13 @@ import { z } from 'zod';
 const ARCHIVE_BASE = 'https://www.3gpp.org/ftp/Specs/archive';
 const LATEST_BASE = 'https://www.3gpp.org/ftp/Specs/latest';
 
+// ── Performance Metrics ────────────────────────────────────────
+
+// Performance metrics
+let totalQueries = 0;
+let ftpScrapingCalls = 0;
+let curatedHits = 0;
+
 // ── 3GPP Series Metadata ──────────────────────────────────────
 
 /**
@@ -182,6 +189,7 @@ const RELEASES = {
  * @throws {Error} If HTTP request fails or times out
  */
 async function fetchSpecList(seriesPath) {
+  ftpScrapingCalls++;
   const url = `${ARCHIVE_BASE}/${seriesPath}/`;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 15000);
@@ -255,6 +263,8 @@ server.tool(
       };
     }
     
+    totalQueries++;
+    
     try {
       const q = query.toLowerCase().trim();
       const cap = Math.min(limit, 100);
@@ -273,6 +283,10 @@ server.tool(
 
         return searchable.includes(q);
       });
+
+      if (results.length > 0) {
+        curatedHits++;
+      }
 
       // If the query looks like a series number (e.g. "38"), also try fetching from the FTP
       const seriesMatch = q.match(/^(\d{2})$/);
@@ -342,6 +356,8 @@ server.tool(
       };
     }
     
+    totalQueries++;
+    
     try {
       // Normalize: strip TS/TR prefix, trim
       const cleaned = spec_number.replace(/^(TS|TR)\s*/i, '').trim();
@@ -363,6 +379,7 @@ server.tool(
       const spec = KEY_SPECS.find(s => s.number === cleaned);
 
       if (spec) {
+        curatedHits++;
         const formatted = formatSpec(spec);
         return {
           content: [{
@@ -442,6 +459,8 @@ server.tool(
     release: z.number().describe('3GPP release number (e.g. 15, 16, 17, 18). Release 15 = first 5G, 18 = 5G-Advanced'),
   },
   async ({ release }) => {
+    totalQueries++;
+    
     try {
       const relInfo = RELEASES[release];
       if (!relInfo) {
@@ -502,6 +521,28 @@ server.tool(
         }],
       };
     }
+  }
+);
+
+// Tool: spec_stats
+server.tool(
+  'spec_stats',
+  'Get runtime statistics and performance metrics for the 3GPP specs server.',
+  {},
+  async () => {
+    return {
+      content: [{
+        type: 'text',
+        text: JSON.stringify({
+          total_queries: totalQueries,
+          ftp_scraping_calls: ftpScrapingCalls,
+          curated_hits: curatedHits,
+          ftp_fallbacks: totalQueries - curatedHits,
+          curated_hit_rate: totalQueries > 0 ? ((curatedHits / totalQueries) * 100).toFixed(1) + '%' : '0%',
+          curated_database_size: KEY_SPECS.length,
+        }),
+      }],
+    };
   }
 );
 

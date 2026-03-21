@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **GitHub issue and PR templates** for better contributor experience (2026-03-21)
+  - Bug report template (YAML form) with structured fields for package, tool, environment, etc.
+  - Feature request template (YAML form) with data source details, priority, willingness to contribute
+  - Pull request template (Markdown) with comprehensive checklist (14 items) covering code quality, testing, documentation, security
+  - Templates guide contributors through submission requirements from CONTRIBUTING.md
+  - Reduces maintainer burden by ensuring structured, complete submissions
+  - Professional open source project standard (aligns with production-ready infrastructure)
 - **Architecture diagram** added to README (2026-03-21)
   - Mermaid diagram showing AI agents → MCP protocol → NetMCP servers → data sources
   - Highlights key features: rate limiting, caching, timeouts, input validation, JSDoc, tests

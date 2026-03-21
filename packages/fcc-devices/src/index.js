@@ -19,6 +19,50 @@ import { z } from 'zod';
 const FCC_OPENDATA_API = 'https://opendata.fcc.gov/resource/3b3k-34jp.json';
 const FCC_SEARCH_URL = 'https://apps.fcc.gov/oetcf/eas/reports/GenericSearchResult.cfm';
 
+// ── Type Definitions ───────────────────────────────────────────
+
+/**
+ * @typedef {Object} SocrataGrantee
+ * @property {string} [grantee_code] - FCC grantee code (3-5 alphanumeric)
+ * @property {string} [grantee_name] - Company name
+ * @property {string} [mailing_address] - Mailing address
+ * @property {string} [city] - City
+ * @property {string} [state] - State
+ * @property {string} [country] - Country
+ * @property {string} [zip_code] - ZIP code
+ * @property {string} [contact_name] - Contact person
+ * @property {string} [date_received] - Registration date (ISO 8601)
+ */
+
+/**
+ * @typedef {Object} FCCGrantee
+ * @property {string|null} grantee_code - FCC grantee code
+ * @property {string|null} grantee_name - Company name
+ * @property {string|null} address - Mailing address
+ * @property {string|null} city - City
+ * @property {string|null} state - State
+ * @property {string|null} country - Country
+ * @property {string|null} zip_code - ZIP code
+ * @property {string|null} contact - Contact person
+ * @property {string|null} date_received - Registration date
+ * @property {string|null} fcc_search_url - URL to search FCC equipment
+ */
+
+/**
+ * @typedef {Object} FCCSearchResult
+ * @property {string} query - Search query
+ * @property {string} search_type - Type of search ("name", "code", "country")
+ * @property {number} returned - Number of results returned
+ * @property {FCCGrantee[]} results - Array of grantee records
+ */
+
+/**
+ * @typedef {Object} FCCRecentResult
+ * @property {number} count - Number of results
+ * @property {string} country_filter - Country filter applied (or "all")
+ * @property {FCCGrantee[]} results - Array of recent grantee registrations
+ */
+
 // ── Rate Limiting ──────────────────────────────────────────────
 
 // FCC Socrata API rate limit: 10 requests per 10 seconds (conservative)
@@ -26,12 +70,16 @@ const FCC_SEARCH_URL = 'https://apps.fcc.gov/oetcf/eas/reports/GenericSearchResu
 const MAX_REQUESTS = 10;
 const REQUEST_WINDOW = 10000; // 10 seconds in milliseconds
 
+/** @type {number[]} */
 const requestTimestamps = [];
+
+/** @type {Promise<void>} */
 let rateLimitQueue = Promise.resolve();
 
 /**
  * Thread-safe rate limiter using a promise queue.
  * Ensures requests respect the 10 req/10s limit even under concurrent tool calls.
+ * @returns {Promise<void>} Resolves when it's safe to make a request
  */
 async function rateLimitWait() {
   // Serialize all rate limit checks via a promise queue
@@ -62,6 +110,8 @@ async function rateLimitWait() {
 /**
  * Sanitize user input for use in Socrata SoQL queries.
  * Removes SQL metacharacters and wildcards to prevent injection.
+ * @param {string} input - User input string
+ * @returns {string} Sanitized string (alphanumeric, spaces, hyphens, dots, commas, parens only)
  */
 function sanitizeInput(input) {
   // Allow only: alphanumeric, spaces, hyphens, dots, commas, parentheses
@@ -69,6 +119,13 @@ function sanitizeInput(input) {
   return input.replace(/[^\w\s\-\.,()]/g, '').trim();
 }
 
+/**
+ * Fetch JSON from a URL with rate limiting and timeout.
+ * @param {string} url - URL to fetch
+ * @param {number} [timeoutMs=15000] - Timeout in milliseconds
+ * @returns {Promise<any>} Parsed JSON response
+ * @throws {Error} HTTP errors or timeout
+ */
 async function fetchJSON(url, timeoutMs = 15000) {
   // Apply rate limiting before making request
   await rateLimitWait();
@@ -90,6 +147,8 @@ async function fetchJSON(url, timeoutMs = 15000) {
 
 /**
  * Query the FCC Open Data (Socrata) API for grantee registrations.
+ * @param {Object<string, string|number>} params - Query parameters
+ * @returns {Promise<SocrataGrantee[]>} Array of grantee records
  */
 async function queryOpenData(params) {
   const url = new URL(FCC_OPENDATA_API);
@@ -99,6 +158,11 @@ async function queryOpenData(params) {
   return fetchJSON(url.toString());
 }
 
+/**
+ * Format a Socrata API grantee record into a standardized FCCGrantee object.
+ * @param {SocrataGrantee} g - Raw Socrata grantee record
+ * @returns {FCCGrantee} Formatted grantee object
+ */
 function formatGrantee(g) {
   return {
     grantee_code: g.grantee_code || null,

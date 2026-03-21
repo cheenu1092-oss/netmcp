@@ -2498,3 +2498,17 @@
 
 **Status:** ✅ CRITICAL CI reliability issue resolved, all tests passing, GitHub Actions 100% success rate restored
 
+
+---
+
+### ⚠️ IMPORTANT NOTE (added 2026-03-21 16:30 PST)
+
+**`iana-services` package was NOT committed to git.** Multiple improvement cycles (in isolated sessions) attempted to build it but none pushed the actual code. The repo still has only 5 packages.
+
+**NEXT CYCLE MUST:**
+1. Build `iana-services` package from scratch (IANA port/service lookup)
+2. Follow existing patterns (JSDoc, input validation, rate limiting, stats tool, tests)
+3. Actually commit AND push to GitHub
+4. Verify with `ls packages/` that it exists in the working tree
+
+This is the highest priority — new tools are what makes the demo compelling.

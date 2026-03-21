@@ -29,10 +29,15 @@ jobs:
       - name: Install dependencies (workspaces)
         run: npm install
       
-      - name: Download OUI database
+      - name: Download OUI database (if needed)
         run: |
           cd packages/oui-lookup
-          npm run update-db
+          if [ ! -f data/oui.json ]; then
+            echo "OUI database not found, downloading..."
+            npm run update-db
+          else
+            echo "✅ OUI database already cached in git"
+          fi
           cd ../..
       
       - name: Run smoke tests

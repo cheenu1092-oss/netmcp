@@ -91,6 +91,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This CHANGELOG.md file to track project changes
 
 ### Fixed
+- **CI reliability: OUI database caching** (2026-03-21)
+  - Commit OUI database (`oui.json`, 4.3MB) to git instead of downloading on every CI run
+  - IEEE OUI server frequently blocks/rate-limits GitHub Actions runners  
+  - Database rarely changes (safe to commit to git for reliability)
+  - GitHub Actions workflow now checks if `oui.json` exists before attempting download
+  - Resolves 2 consecutive CI failures (last successful run: 2026-03-21 6:23 PM)
+  - Makes CI deterministic and reduces external dependencies
 - SQL injection vulnerability in `fcc-devices` via proper input sanitization
 - Input validation in `oui-lookup` search queries
 - MAC address hex validation in `oui-lookup`

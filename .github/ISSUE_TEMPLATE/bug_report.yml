@@ -1,0 +1,163 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in NetMCP
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the form below.
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      description: Which NetMCP package is affected?
+      options:
+        - oui-lookup
+        - rfc-search
+        - nvd-network-cves
+        - fcc-devices
+        - threegpp-specs
+        - Other / Unsure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tool
+    attributes:
+      label: Tool
+      description: Which specific tool is affected?
+      options:
+        - oui_lookup
+        - oui_search
+        - oui_stats
+        - mac_normalize
+        - rfc_get
+        - rfc_search
+        - rfc_recent
+        - cve_get
+        - cve_search
+        - cve_by_vendor
+        - cve_recent
+        - cve_stats
+        - cve_cache_stats
+        - fcc_get
+        - fcc_search
+        - fcc_recent
+        - spec_get
+        - spec_search
+        - spec_by_release
+        - Other / Multiple
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear description of what the bug is.
+      placeholder: When I call oui_lookup with MAC "00:11:22:33:44:55", I get...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: I expected to get vendor information for the MAC address.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: I got an error "Database not found" even though the file exists.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce the issue?
+      placeholder: |
+        1. Install the package with `npm install`
+        2. Run `node packages/oui-lookup/src/index.js`
+        3. Call the tool with input...
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: input
+    attributes:
+      label: Input Data (if applicable)
+      description: What input did you provide to the tool?
+      placeholder: |
+        {
+          "mac": "00:11:22:33:44:55"
+        }
+      render: json
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Error Output / Response
+      description: What error message or unexpected output did you receive?
+      placeholder: Paste the full error message or unexpected response here.
+      render: text
+
+  - type: input
+    id: version
+    attributes:
+      label: Package Version
+      description: What version of the package are you using?
+      placeholder: e.g., 1.0.0 or "latest from GitHub"
+    validations:
+      required: true
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js Version
+      description: What version of Node.js are you running?
+      placeholder: e.g., 20.x, 22.x, 24.x
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: How are you using NetMCP?
+      options:
+        - MCP stdio mode (via Claude Desktop, Cline, etc.)
+        - MCP HTTP mode (via server)
+        - Apify Actor
+        - Direct Node.js API
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other context, screenshots, or logs that might help?
+      placeholder: This started happening after I upgraded from v0.9 to v1.0...
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm you've done the following before submitting.
+      options:
+        - label: I have searched existing issues to avoid duplicates
+          required: true
+        - label: I have tested with the latest version from GitHub
+          required: false
+        - label: I have checked the CHANGELOG for known issues
+          required: false

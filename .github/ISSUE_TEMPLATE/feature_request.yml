@@ -1,0 +1,152 @@
+name: Feature Request
+description: Suggest a new feature or improvement for NetMCP
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement! Please fill out the form below.
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Feature Type
+      description: What kind of feature are you requesting?
+      options:
+        - New networking data source / tool
+        - Enhancement to existing tool
+        - New package (data source not currently covered)
+        - Performance improvement
+        - Documentation improvement
+        - Developer experience improvement
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package (if applicable)
+      description: Which package does this feature relate to?
+      options:
+        - oui-lookup
+        - rfc-search
+        - nvd-network-cves
+        - fcc-devices
+        - threegpp-specs
+        - New package
+        - All packages / Monorepo-wide
+        - Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / Use Case
+      description: What problem would this feature solve? Why is it needed?
+      placeholder: As a network engineer, I often need to look up IANA port numbers, but there's no MCP tool for this...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: How would you like this feature to work?
+      placeholder: |
+        Add a new package `iana-ports` with tools:
+        - port_lookup: Get protocol/service for a port number
+        - service_lookup: Get port number for a service name
+        - port_range: List all ports in a range
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Have you considered any alternative solutions or workarounds?
+      placeholder: I could scrape the IANA website manually, but that's not ideal...
+
+  - type: textarea
+    id: data-source
+    attributes:
+      label: Data Source (if applicable)
+      description: If this requires a new data source, please provide details.
+      placeholder: |
+        - Source: IANA Service Name and Transport Protocol Port Number Registry
+        - URL: https://www.iana.org/assignments/service-names-port-numbers/
+        - Format: XML or CSV
+        - License: Public domain
+        - Update frequency: Monthly
+
+  - type: dropdown
+    id: breaking
+    attributes:
+      label: Breaking Change?
+      description: Would this feature require breaking changes to existing APIs?
+      options:
+        - No (backward compatible)
+        - Yes (breaking change required)
+        - Unsure
+    validations:
+      required: true
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Usage Examples
+      description: Show how you would use this feature (example queries, expected responses).
+      placeholder: |
+        **Query:** "What service uses port 443?"
+        **Tool:** port_lookup
+        **Input:** { "port": 443 }
+        **Output:** { "port": 443, "protocol": "tcp", "service": "https", "description": "HTTP over TLS/SSL" }
+      render: markdown
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority (your opinion)
+      description: How important is this feature to you?
+      options:
+        - Critical (blocker for my use case)
+        - High (very useful, would use often)
+        - Medium (nice to have)
+        - Low (minor improvement)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: contribute
+    attributes:
+      label: Willingness to Contribute
+      description: Would you be interested in implementing this feature yourself?
+      options:
+        - Yes, I can submit a PR with guidance
+        - Yes, I can submit a PR independently
+        - No, I cannot contribute code
+        - Unsure
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other context, mockups, or references?
+      placeholder: Similar tools exist in other ecosystems (links, screenshots, etc.)
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm you've done the following before submitting.
+      options:
+        - label: I have searched existing issues to avoid duplicates
+          required: true
+        - label: I have checked the CHANGELOG and roadmap
+          required: false
+        - label: I have reviewed CONTRIBUTING.md for data source policy
+          required: false

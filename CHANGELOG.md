@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Security policy (SECURITY.md)** for vulnerability reporting and security best practices (2026-03-21)
+  - Comprehensive vulnerability reporting guidelines (responsible disclosure process)
+  - Supported versions table (semver policy)
+  - Expected response timeline (24hr acknowledgment, 90-day disclosure)
+  - Security best practices for users (input validation, rate limiting, error handling, dependency management)
+  - Documents all built-in security features (input validation, rate limiting, timeouts, caching, error sanitization)
+  - Known limitations section (in-memory cache, single-threaded rate limiter, no authentication)
+  - Security audit history (automated review 2026-02-09, all HIGH/MEDIUM issues resolved)
+  - Hall of Fame for security researchers (responsible disclosure recognition)
+  - Standard for production-ready open source projects (especially security-focused tools)
 - **GitHub issue and PR templates** for better contributor experience (2026-03-21)
   - Bug report template (YAML form) with structured fields for package, tool, environment, etc.
   - Feature request template (YAML form) with data source details, priority, willingness to contribute

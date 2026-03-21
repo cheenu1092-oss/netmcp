@@ -2217,3 +2217,92 @@
 
 ---
 
+
+### Cycle 27 — 2026-03-21 2:20 PM PST
+
+**What was inspected:**
+- Reviewed IMPROVEMENT_LOG.md (Cycles 1-26 complete)
+- Ran full test suite: ✅ All 22 smoke tests passing locally
+- **CRITICAL: Found GitHub Actions FAILING** (last 2 consecutive runs)
+  - Most recent failure: 2026-03-21 8:21 PM (run 23388009608)
+  - Previous failure: 2026-03-21 7:26 PM (run 23386972828)
+  - Last success: 2026-03-21 6:23 PM (run 23385831371)
+- Root cause: "Download OUI database" step fails with "fetch failed"
+  - IEEE OUI server (`https://standards-oui.ieee.org/oui/oui.txt`) blocks/rate-limits GitHub Actions runners
+  - CI downloads 4.3MB database on EVERY run (fragile external dependency)
+  - Error: "❌ Failed: fetch failed" after 10s timeout
+
+**Findings:**
+- ✅ All previous cycles complete (infrastructure, security, reliability, JSDoc, ESLint, npm config, tests, docs, governance)
+- ✅ All 22 tools passing locally, 0 vulnerabilities, clean ESLint
+- ✅ All HIGH/MEDIUM/LOW issues from CODE_REVIEW_NOTES.md resolved
+- ✅ All governance docs complete (CODE_OF_CONDUCT, SECURITY, CONTRIBUTING, GitHub templates)
+- ❌ **CRITICAL: CI unreliable** — fails intermittently due to external dependency (IEEE OUI server)
+- **Impact:** Broken CI blocks PR merges, reduces confidence in test suite, wastes developer time debugging
+- **Root issue:** OUI database (`oui.json`) ignored by git, forcing download on every CI run
+
+**What was built:**
+1. **Cached OUI database in git:**
+   - Removed `packages/oui-lookup/data/` from `.gitignore`
+   - Committed `oui.json` (4.3MB) to git repository
+   - Database rarely changes (OUI assignments are relatively stable)
+   - Acceptable to commit to git for CI reliability (4.3MB is reasonable)
+
+2. **Updated GitHub Actions workflow:**
+   - Modified "Download OUI database" step to check if `oui.json` exists before downloading
+   - Added conditional: `if [ ! -f data/oui.json ]; then npm run update-db; fi`
+   - Workflow now skips download if database is cached in git (deterministic CI)
+   - Clear success message: "✅ OUI database already cached in git"
+
+3. **Updated CHANGELOG.md:**
+   - Documented CI reliability fix in "Fixed" section
+   - Explained rationale: IEEE server blocks CI, database rarely changes, committed to git
+   - Listed impact: resolves 2 consecutive CI failures, makes CI deterministic
+
+**Test results:**
+- ✅ **All 22 smoke tests PASS** locally (verified before push)
+- ✅ **GitHub Actions CI: ALL JOBS PASS** (verified after push)
+  - Code Quality Check: ✅ SUCCESS
+  - Run All Tools Test (Node.js 20.x): ✅ SUCCESS
+  - Run All Tools Test (Node.js 22.x): ✅ SUCCESS
+  - Run All Tools Test (Node.js 24.x): ✅ SUCCESS
+- ✅ "Download OUI database (if needed)" step succeeded on all 3 Node.js versions (found cached file)
+- ✅ No regressions from committing oui.json to git
+
+**Git commits:**
+- `7aaf602` — "fix: cache OUI database in git to fix CI reliability (resolves 2 consecutive failures)"
+- Pushed to main successfully
+
+**Impact:**
+- **CI reliability restored** — from 2 consecutive failures → 100% passing (4/4 jobs)
+- **Eliminated external dependency** — no longer relies on IEEE OUI server availability
+- **Deterministic CI** — same input (git commit) always produces same output (test results)
+- **Faster CI runs** — skips 10s OUI download step on every run
+- **Production-ready** — CI can be trusted for PR merge decisions
+- **Reduced toil** — developers no longer debug intermittent CI failures due to IEEE server issues
+
+**Before/After:**
+| Metric | Before | After |
+|--------|--------|-------|
+| CI reliability (last 3 runs) | 33% (1/3 passing) | 100% (1/1 passing) ✅ |
+| External dependencies | 1 (IEEE OUI server) | 0 ✅ |
+| OUI download time in CI | ~10s per run | 0s (cached in git) ✅ |
+| Committed artifacts | None | 1 (oui.json, 4.3MB) |
+| CI determinism | Fragile (external API) | Deterministic (git cache) ✅ |
+
+**Alternative approaches considered:**
+1. **Add retry logic with exponential backoff** — still fragile if IEEE blocks CI runners permanently
+2. **Use CDN/backup source** — adds another external dependency, doesn't solve root cause
+3. **Cache database in GitHub Actions cache** — expires after 7 days, still requires periodic downloads
+4. **✅ Commit to git (chosen)** — most reliable, deterministic, zero external dependencies
+
+**Next cycle priorities:**
+1. ✅ **CI reliability** (completed this cycle — critical issue resolved)
+2. Add missing package READMEs (oui-lookup, rfc-search don't have READMEs)
+3. Investigate iana-registries package (exists but not documented in improvement log)
+4. Consider publishing to npm once `npm login` is configured (all packages ready)
+5. Explore new networking tools (IANA port lookup, DNS tools, BGP looking glass, Wireshark dissectors)
+6. Consider automated releases via GitHub Actions (semantic-release or similar)
+
+**Status:** ✅ CRITICAL CI reliability issue resolved, all tests passing, GitHub Actions 100% success rate restored
+

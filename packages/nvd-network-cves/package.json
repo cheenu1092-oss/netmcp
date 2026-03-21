@@ -16,7 +16,7 @@
     "test": "node --test src/*.test.js"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.1"
+    "@modelcontextprotocol/sdk": "^1.27.1"
   },
   "keywords": ["mcp", "networking", "security", "cve", "nvd", "vulnerabilities"],
   "license": "MIT",

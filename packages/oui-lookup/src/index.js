@@ -20,10 +20,65 @@ import { z } from 'zod';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DB_PATH = join(__dirname, '..', 'data', 'oui.json');
 
+// ── Type Definitions ───────────────────────────────────────────
+
+/**
+ * @typedef {Object} DatabaseEntry
+ * @property {string} vendor - Manufacturer/vendor name
+ * @property {string} [address] - Manufacturer address (optional)
+ */
+
+/**
+ * @typedef {Object} OUILookupResult
+ * @property {string} prefix - 6-character OUI prefix (hex)
+ * @property {boolean} found - Whether vendor was found in database
+ * @property {string} [vendor] - Vendor name (if found)
+ * @property {string} [address] - Vendor address (if available)
+ * @property {string} [mac_input] - Original MAC address input
+ * @property {string} [message] - Error/info message (if not found)
+ */
+
+/**
+ * @typedef {Object} SearchResultEntry
+ * @property {string} prefix - 6-character OUI prefix (hex)
+ * @property {string} vendor - Vendor name
+ * @property {string|null} address - Vendor address (if available)
+ */
+
+/**
+ * @typedef {Object} SearchResult
+ * @property {string} query - Original search query
+ * @property {number} count - Number of results returned
+ * @property {boolean} truncated - Whether results were truncated
+ * @property {SearchResultEntry[]} results - Matching OUI entries
+ */
+
+/**
+ * @typedef {Object} VendorCount
+ * @property {string} vendor - Vendor name
+ * @property {number} oui_count - Number of OUI prefixes owned by this vendor
+ */
+
+/**
+ * @typedef {Object} StatsResult
+ * @property {number} total_entries - Total OUI entries in database
+ * @property {number} unique_vendors - Number of unique vendors
+ * @property {string} source - Data source information
+ * @property {VendorCount[]} top_vendors - Top vendors by OUI count
+ */
+
 // ── Load database ──────────────────────────────────────────────
 
+/**
+ * @type {Record<string, DatabaseEntry>}
+ */
 let db = {};
 
+/**
+ * Load the OUI database from disk.
+ * Reads oui.json and parses it into memory.
+ * Logs error if database file doesn't exist.
+ */
 function loadDb() {
   if (!existsSync(DB_PATH)) {
     console.error(`OUI database not found at ${DB_PATH}. Run: npm run update-db`);
@@ -40,8 +95,11 @@ loadDb();
 
 /**
  * Normalize a MAC address or OUI prefix to uppercase hex (no separators).
- * Accepts: AA:BB:CC:DD:EE:FF, AA-BB-CC-DD-EE-FF, AABB.CCDD.EEFF, AABBCC, etc.
- * Throws an error if input contains non-hex characters.
+ * Accepts formats: AA:BB:CC:DD:EE:FF, AA-BB-CC-DD-EE-FF, AABB.CCDD.EEFF, AABBCC, etc.
+ * 
+ * @param {string} input - MAC address or OUI prefix in any common format
+ * @returns {string} Normalized uppercase hex string without separators
+ * @throws {Error} If input contains non-hex characters
  */
 function normalizeMAC(input) {
   const normalized = input.replace(/[:\-.\s]/g, '').toUpperCase();
@@ -55,7 +113,10 @@ function normalizeMAC(input) {
 }
 
 /**
- * Extract the 6-char OUI prefix from a normalized MAC string.
+ * Extract the 6-character OUI prefix from a normalized MAC string.
+ * 
+ * @param {string} normalized - Normalized MAC address (uppercase hex, no separators)
+ * @returns {string} 6-character OUI prefix
  */
 function extractOUI(normalized) {
   return normalized.slice(0, 6);

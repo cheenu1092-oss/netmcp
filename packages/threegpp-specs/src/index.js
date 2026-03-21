@@ -12,6 +12,51 @@
  *
  * Spec numbers follow the format: SS.NNN (e.g. 23.501, 38.300)
  * Series map to technology areas (21-series = Requirements, 23 = Architecture, etc.)
+ *
+ * @typedef {Object} SeriesInfo
+ * @property {string} area - Technology area name (e.g., "Architecture", "Security")
+ * @property {string} group - Responsible working group (e.g., "SA2", "RAN", "CT1")
+ * @property {string} description - Detailed description of the series
+ *
+ * @typedef {Object} SpecInfo
+ * @property {string} number - Spec number in SS.NNN format (e.g., "23.501", "38.300")
+ * @property {string} title - Full specification title
+ * @property {string} type - Specification type ("TS" for Technical Specification, "TR" for Technical Report)
+ * @property {string} series - Series number (first two digits of spec number)
+ * @property {number[]} releases - List of 3GPP releases where this spec exists (e.g., [15, 16, 17, 18])
+ * @property {string} group - Responsible working group
+ * @property {string} area - Technology area or domain
+ *
+ * @typedef {Object} ReleaseInfo
+ * @property {string} name - Release name (e.g., "Release 15")
+ * @property {string} year - Year of release freeze
+ * @property {string} tech - Technology introduced/enhanced (e.g., "5G Phase 1", "LTE-Advanced")
+ * @property {string} status - Release status ("Frozen", "Under change control", "Open")
+ *
+ * @typedef {Object} FormattedSpec
+ * @property {string} number - Spec number (e.g., "23.501")
+ * @property {string} title - Specification title
+ * @property {string} type - "TS" or "TR"
+ * @property {string} series - Series number
+ * @property {string|null} series_name - Series area name
+ * @property {string|null} responsible_group - Working group responsible for the spec
+ * @property {string|null} area - Technology area or description
+ * @property {number[]} releases - List of applicable 3GPP releases
+ * @property {string} status - "Active" or "Frozen"
+ * @property {string} archive_url - URL to the 3GPP archive for this spec
+ *
+ * @typedef {Object} SpecSearchResult
+ * @property {string} query - Original search query
+ * @property {number} returned - Number of results returned
+ * @property {FormattedSpec[]} results - Array of matching specifications
+ *
+ * @typedef {Object} SpecReleaseResult
+ * @property {ReleaseInfo} release - Release metadata
+ * @property {number} release_number - Release number (e.g., 15, 16, 17, 18)
+ * @property {number} curated_specs_count - Number of curated specs in this release
+ * @property {FormattedSpec[]} curated_specs - Array of specifications
+ * @property {string[]|undefined} ftp_series_available - List of series available on FTP (e.g., ["23_series", "38_series"])
+ * @property {string} ftp_url - URL to the 3GPP FTP for this release
  */
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -23,6 +68,9 @@ const LATEST_BASE = 'https://www.3gpp.org/ftp/Specs/latest';
 
 // ── 3GPP Series Metadata ──────────────────────────────────────
 
+/**
+ * @type {Record<string, SeriesInfo>}
+ */
 const SERIES_INFO = {
   '21': { area: 'Requirements', group: 'SA', description: 'Requirements specifications' },
   '22': { area: 'Service & System Aspects', group: 'SA1', description: 'Service requirements' },
@@ -46,6 +94,7 @@ const SERIES_INFO = {
 /**
  * Well-known key specifications with titles and descriptions.
  * This serves as a curated index for the most commonly referenced specs.
+ * @type {SpecInfo[]}
  */
 const KEY_SPECS = [
   // 5G Core & Architecture
@@ -112,6 +161,7 @@ const KEY_SPECS = [
 
 /**
  * 3GPP Release information.
+ * @type {Record<number, ReleaseInfo>}
  */
 const RELEASES = {
   8:  { name: 'Release 8',  year: '2008', tech: 'LTE (4G)', status: 'Frozen' },
@@ -132,6 +182,10 @@ const RELEASES = {
 
 /**
  * Scrape a 3GPP FTP directory listing for spec folders.
+ * Fetches HTML from 3GPP archive FTP server and extracts spec numbers via regex.
+ * @param {string} seriesPath - FTP path to series directory (e.g., "23_series", "38_series")
+ * @returns {Promise<string[]>} Array of spec numbers found (e.g., ["23.501", "23.502"])
+ * @throws {Error} If HTTP request fails or times out
  */
 async function fetchSpecList(seriesPath) {
   const url = `${ARCHIVE_BASE}/${seriesPath}/`;
@@ -156,6 +210,12 @@ async function fetchSpecList(seriesPath) {
   }
 }
 
+/**
+ * Format a SpecInfo object into a standardized FormattedSpec with all metadata.
+ * Enriches spec with series information and determines status based on releases.
+ * @param {SpecInfo} spec - Raw specification object
+ * @returns {FormattedSpec} Formatted specification with full metadata
+ */
 function formatSpec(spec) {
   const seriesNum = spec.number.split('.')[0];
   const seriesInfo = SERIES_INFO[seriesNum] || {};

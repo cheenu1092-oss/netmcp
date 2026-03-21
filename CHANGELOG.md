@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Package documentation:** Added comprehensive README.md files for oui-lookup and rfc-search packages
+  - oui-lookup README: MAC address lookup examples, OUI explanation, IEEE database details
+  - rfc-search README: RFC search examples, famous RFCs section, IETF Datatracker API info
+  - All 5 production packages now have READMEs (fcc-devices, nvd-network-cves, threegpp-specs already had them)
+  - Improves npm discoverability and user onboarding (READMEs shown on npmjs.com)
 - **Performance monitoring tools** across all packages (2026-03-21)
   - `rfc_stats` tool: Total queries, rate limiter activations, queue depth, rate limit config
   - `fcc_stats` tool: Total queries, rate limiter activations, queue depth, rate limit config

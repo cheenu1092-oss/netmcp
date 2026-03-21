@@ -2218,6 +2218,102 @@
 ---
 
 
+### Cycle 28 — 2026-03-21 3:20 PM PST
+
+**What was inspected:**
+- Reviewed IMPROVEMENT_LOG.md (Cycles 1-27 complete)
+- Ran full test suite: ✅ All 22 smoke tests passing
+- Verified GitHub Actions CI: ✅ Last run 100% successful (all 4 jobs passed)
+- Checked packages/ directory for missing documentation
+- Found **2 packages without READMEs:** oui-lookup and rfc-search
+- Also discovered **iana-registries package** (empty skeleton, no code/tests)
+
+**Findings:**
+- ✅ All previous cycles complete (infrastructure, security, reliability, JSDoc, ESLint, npm config, tests, docs, governance)
+- ✅ All 22 tools passing, 0 vulnerabilities, clean ESLint (0 errors, 0 warnings)
+- ✅ All governance docs complete (CODE_OF_CONDUCT, SECURITY, CONTRIBUTING, GitHub templates)
+- ✅ 3 of 5 packages have READMEs (fcc-devices, nvd-network-cves, threegpp-specs)
+- ❌ **2 packages missing READMEs:** oui-lookup and rfc-search
+- ❌ iana-registries is an empty skeleton (no package.json, no code, just empty directories)
+- **Priority:** Package READMEs are critical for npm discoverability (shown on npmjs.com)
+- **Pattern:** Follow existing README structure from fcc-devices (features, quick start, usage examples, data source)
+
+**What was built:**
+1. **Created comprehensive README.md for oui-lookup (1.7KB):**
+   - Features section (3 tools: lookup, search, stats)
+   - Quick start guide (install, update-db, start)
+   - MCP client config example
+   - Usage examples (4 different MAC address formats)
+   - "Understanding OUIs" section (explains 6-char prefix, device ID, vendor assignments)
+   - Data source details (IEEE database, 38K+ assignments, 4.3MB cached file)
+   - License (MIT)
+
+2. **Created comprehensive README.md for rfc-search (1.9KB):**
+   - Features section (4 tools: get, search, recent, stats)
+   - Quick start guide (install, start)
+   - MCP client config example
+   - Usage examples (get RFC 9000, search TLS, recent RFCs, stats)
+   - "Understanding RFC Numbers" section (sequential numbering, 9,600+ RFCs)
+   - Famous RFCs section (RFC 1149 IP over Avian Carriers, RFC 2324 HTCPCP, RFC 7540 HTTP/2, RFC 9293 TCP)
+   - Data source details (IETF Datatracker API, rate limiting)
+   - License (MIT)
+
+3. **README pattern consistency:**
+   - All 5 package READMEs now follow same structure (features → quick start → config → examples → data source → license)
+   - Each README explains the domain context ("Understanding OUIs", "Understanding FCC IDs", "Understanding RFC Numbers")
+   - All include data source details with links and licensing info
+   - All provide MCP client config examples
+
+**Test results:**
+- ✅ **All 22 smoke tests PASS** (no code changes, documentation only)
+- ✅ Test runtime: ~18s (consistent with previous cycles)
+- ✅ ESLint: 0 errors, 0 warnings (clean lint maintained)
+- ✅ No regressions
+- Package breakdown:
+  - oui-lookup: 4 tools ✅ (README added)
+  - rfc-search: 4 tools ✅ (README added)
+  - nvd-network-cves: 6 tools ✅
+  - fcc-devices: 4 tools ✅
+  - threegpp-specs: 4 tools ✅
+
+**Git commits:**
+- `64f5040` — "docs: add comprehensive README files for oui-lookup and rfc-search packages"
+- Pushed to main successfully
+
+**Impact:**
+- **npm discoverability improved** — all 5 production packages now have comprehensive READMEs
+- **User onboarding enhanced** — new users see clear examples, domain explanations, data source details
+- **Professional presentation** — consistent documentation quality across all packages
+- **Completes package documentation** — from 3/5 packages with READMEs → 5/5 packages (100% coverage)
+- **Ready for npm publishing** — all required metadata in place (package.json + README + files + publishConfig)
+
+**Package README coverage (COMPLETE):**
+| Package | README | Size | Key Sections |
+|---------|--------|------|--------------|
+| oui-lookup | ✅ Added | 1.7KB | MAC formats, OUI explanation, IEEE database |
+| rfc-search | ✅ Added | 1.9KB | Famous RFCs, RFC numbering, IETF API |
+| fcc-devices | ✅ Existing | 1.5KB | FCC ID structure, Socrata API, Apple example |
+| nvd-network-cves | ✅ Existing | 1.2KB | CVE format, CVSS scores, NVD API |
+| threegpp-specs | ✅ Existing | 1.7KB | 3GPP releases, spec series, FTP scraping |
+
+**iana-registries status:**
+- Empty skeleton package (no package.json, no code, no tests)
+- Created during initial repo setup but never implemented
+- Not blocking npm publishing (isolated to its own directory)
+- Future work: Either implement IANA tools (port registry, protocol numbers) or remove skeleton
+
+**Next cycle priorities:**
+1. ✅ **Package READMEs** (completed this cycle — all 5 packages documented)
+2. Consider publishing to npm once `npm login` is configured (all packages ready)
+3. Clean up iana-registries skeleton (implement or remove)
+4. Explore new networking tools (IANA port lookup, DNS tools, BGP looking glass, Wireshark dissectors)
+5. Consider automated releases via GitHub Actions (semantic-release or similar)
+6. Consider adding .github/FUNDING.yml for sponsorship (optional)
+
+**Status:** ✅ All 5 production packages have comprehensive READMEs, npm publishing documentation complete
+
+---
+
 ### Cycle 27 — 2026-03-21 2:20 PM PST
 
 **What was inspected:**

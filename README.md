@@ -78,16 +78,143 @@ No setup needed. Use via Apify Store:
 clawhub install jugaad-lab/oui-lookup
 ```
 
+## Usage Examples
+
+Once configured in your MCP client, you can ask natural language questions and the AI will use the appropriate tool:
+
+### OUI Lookup (MAC Address → Vendor)
+**Ask:** "Who makes the device with MAC address 00:1A:2B:3C:4D:5E?"  
+**Tool used:** `oui_lookup`  
+**Response:**
+```json
+{
+  "prefix": "001A2B",
+  "found": true,
+  "vendor": "Apple, Inc.",
+  "address": "1 Infinite Loop, Cupertino CA 95014, US"
+}
+```
+
+**Ask:** "Find all Cisco OUIs"  
+**Tool used:** `oui_search`  
+**Returns:** List of all MAC prefixes registered to Cisco
+
+---
+
+### RFC Search (Internet Standards)
+**Ask:** "What's RFC 9293 about?"  
+**Tool used:** `rfc_get`  
+**Response:**
+```json
+{
+  "name": "RFC9293",
+  "title": "Transmission Control Protocol (TCP)",
+  "abstract": "This document specifies the Internet Transmission Control Protocol (TCP)...",
+  "status": "INTERNET STANDARD",
+  "published": "2022-08",
+  "url": "https://www.rfc-editor.org/rfc/rfc9293.html"
+}
+```
+
+**Ask:** "Find recent RFCs about QUIC"  
+**Tool used:** `rfc_search`  
+**Returns:** List of QUIC-related RFCs with titles and links
+
+---
+
+### NVD Network CVEs (Security Vulnerabilities)
+**Ask:** "Tell me about CVE-2023-44487 (HTTP/2 Rapid Reset)"  
+**Tool used:** `cve_get`  
+**Response:**
+```json
+{
+  "cve_id": "CVE-2023-44487",
+  "description": "HTTP/2 rapid reset vulnerability allows denial of service...",
+  "cvss_score": 7.5,
+  "severity": "HIGH",
+  "published": "2023-10-10",
+  "affected_products": ["nginx", "envoy", "apache-httpd", ...],
+  "references": [...]
+}
+```
+
+**Ask:** "Find recent WiFi vulnerabilities"  
+**Tool used:** `cve_search`  
+**Returns:** List of CVEs mentioning "wifi" in description
+
+**Performance:** Includes 24-hour cache + rate limiting. Use `cve_cache_stats` to monitor.
+
+---
+
+### FCC Devices (Wireless Equipment Certifications)
+**Ask:** "What wireless devices has Apple gotten FCC approval for recently?"  
+**Tool used:** `fcc_search` (by name: "Apple")  
+**Response:**
+```json
+{
+  "query": "Apple",
+  "count": 143,
+  "results": [
+    {
+      "grantee_name": "Apple Inc.",
+      "grantee_code": "BCG",
+      "country": "United States",
+      "date_received": "2024-01-15"
+    },
+    ...
+  ]
+}
+```
+
+**Ask:** "Show me recent FCC certifications from China"  
+**Tool used:** `fcc_search` (by country: "China")  
+**Returns:** List of recent wireless device approvals
+
+---
+
+### 3GPP Specs (5G/LTE Standards)
+**Ask:** "What's 3GPP spec 23.501 about?"  
+**Tool used:** `spec_get`  
+**Response:**
+```json
+{
+  "number": "23.501",
+  "title": "System architecture for the 5G System (5GS)",
+  "series": "23_series",
+  "technology": "Core Network and Terminals",
+  "release": 16,
+  "status": "Under change control",
+  "url": "https://www.3gpp.org/ftp/Specs/archive/23_series/23.501/"
+}
+```
+
+**Ask:** "Find 3GPP specs about network slicing"  
+**Tool used:** `spec_search`  
+**Returns:** List of specs with "slicing" in title (28.801, 23.501, etc.)
+
+---
+
 ## Why these data sources?
 
 All data is **free, public, and authoritative**:
-- **IEEE OUI** — Official MAC address vendor registry
-- **IETF/RFC** — Every internet standard ever written
-- **NIST NVD** — US government vulnerability database
-- **FCC EAS** — Official US wireless equipment certifications
-- **3GPP** — Global 5G/LTE/NR standards body
+- **IEEE OUI** — Official MAC address vendor registry (38K+ manufacturers)
+- **IETF/RFC** — Every internet standard ever written (153K+ documents)
+- **NIST NVD** — US government vulnerability database (250K+ CVEs)
+- **FCC EAS** — Official US wireless equipment certifications (20K+ grantees)
+- **3GPP** — Global 5G/LTE/NR standards body (5K+ specifications)
 
-No API keys needed. No rate limit issues. No scraping gray areas.
+**No API keys needed. No rate limit issues. No scraping gray areas.**
+
+## Technical Features
+
+- ✅ **100% JSDoc type coverage** — IDE autocomplete, static analysis
+- ✅ **Thread-safe rate limiting** — prevents API throttling under concurrent load
+- ✅ **24-hour caching (NVD)** — faster responses, reduced API pressure
+- ✅ **Comprehensive test suite** — 35 tests (19 smoke + 16 integration)
+- ✅ **CI/CD with GitHub Actions** — tests on Node.js 20.x, 22.x, 24.x
+- ✅ **ESLint + type validation** — zero errors, zero warnings
+- ✅ **npm workspaces** — efficient monorepo with hoisted dependencies
+- ✅ **Production-ready** — timeouts, error handling, input sanitization
 
 ## Built by
 

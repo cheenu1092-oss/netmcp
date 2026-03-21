@@ -15,6 +15,55 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 
+// ── Type Definitions ───────────────────────────────────────────
+
+/**
+ * @typedef {Object} RFCDocument
+ * @property {string} name - Document name (e.g., "rfc791", "draft-ietf-http-semantics-19")
+ * @property {string} title - Full document title
+ * @property {number|null} rfc_number - RFC number if published, null for drafts
+ * @property {string|null} abstract - Document abstract/summary (trimmed)
+ * @property {number} pages - Number of pages
+ * @property {string} published - Publication date (ISO 8601 format)
+ * @property {string|null} status - Document status (e.g., "PROPOSED STANDARD", "INTERNET STANDARD")
+ * @property {string|null} stream - RFC stream (e.g., "IETF", "IAB", "IRTF", "INDEPENDENT")
+ * @property {string} url - Direct link to RFC or draft on rfc-editor.org or datatracker.ietf.org
+ */
+
+/**
+ * @typedef {Object} DataTrackerDocument
+ * @property {string} name - Document name from API
+ * @property {string} title - Document title
+ * @property {number} [rfc_number] - RFC number if available
+ * @property {string} [abstract] - Document abstract
+ * @property {number} pages - Page count
+ * @property {string} time - Publication timestamp
+ * @property {string} [std_level] - Standards level
+ * @property {string} [stream] - RFC stream
+ */
+
+/**
+ * @typedef {Object} DataTrackerResponse
+ * @property {DataTrackerDocument[]} [objects] - Array of matching documents
+ * @property {Object} [meta] - Response metadata
+ * @property {number} [meta.total_count] - Total number of results available
+ */
+
+/**
+ * @typedef {Object} RFCSearchResult
+ * @property {string} query - Original search query
+ * @property {number} total_available - Total number of matching documents in database
+ * @property {number} returned - Number of results returned in this response
+ * @property {RFCDocument[]} results - Array of matching RFC documents
+ */
+
+/**
+ * @typedef {Object} RFCRecentResult
+ * @property {number} count - Number of results returned
+ * @property {string} area - IETF area filter applied (or "all")
+ * @property {RFCDocument[]} results - Array of recent RFC documents
+ */
+
 const DATATRACKER_API = 'https://datatracker.ietf.org/api/v1';
 const RFC_EDITOR_API = 'https://www.rfc-editor.org/rfc';
 
@@ -25,12 +74,16 @@ const RFC_EDITOR_API = 'https://www.rfc-editor.org/rfc';
 const MAX_REQUESTS = 5;
 const REQUEST_WINDOW = 10000; // 10 seconds in milliseconds
 
+/** @type {number[]} */
 const requestTimestamps = [];
+
+/** @type {Promise<void>} */
 let rateLimitQueue = Promise.resolve();
 
 /**
  * Thread-safe rate limiter using a promise queue.
  * Ensures requests respect the 5 req/10s limit even under concurrent tool calls.
+ * @returns {Promise<void>}
  */
 async function rateLimitWait() {
   // Serialize all rate limit checks via a promise queue
@@ -58,6 +111,13 @@ async function rateLimitWait() {
 
 // ── Helpers ────────────────────────────────────────────────────
 
+/**
+ * Fetch JSON data from a URL with rate limiting and timeout protection.
+ * @param {string} url - URL to fetch
+ * @param {number} [timeoutMs=10000] - Request timeout in milliseconds
+ * @returns {Promise<DataTrackerResponse>} - Parsed JSON response
+ * @throws {Error} - If request fails, times out, or returns non-OK status
+ */
 async function fetchJSON(url, timeoutMs = 10000) {
   // Apply rate limiting before making request
   await rateLimitWait();
@@ -81,6 +141,11 @@ async function fetchJSON(url, timeoutMs = 10000) {
   }
 }
 
+/**
+ * Format a Datatracker document object into a standardized RFC document.
+ * @param {DataTrackerDocument} doc - Raw document from IETF Datatracker API
+ * @returns {RFCDocument} - Formatted RFC document with consistent structure
+ */
 function formatRFC(doc) {
   return {
     name: doc.name,

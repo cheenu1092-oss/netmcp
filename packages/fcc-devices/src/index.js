@@ -19,6 +19,44 @@ import { z } from 'zod';
 const FCC_OPENDATA_API = 'https://opendata.fcc.gov/resource/3b3k-34jp.json';
 const FCC_SEARCH_URL = 'https://apps.fcc.gov/oetcf/eas/reports/GenericSearchResult.cfm';
 
+// ── Rate Limiting ──────────────────────────────────────────────
+
+// FCC Socrata API rate limit: 10 requests per 10 seconds (conservative)
+// Socrata limits are typically 1000 req/day, but we're being extra cautious
+const MAX_REQUESTS = 10;
+const REQUEST_WINDOW = 10000; // 10 seconds in milliseconds
+
+const requestTimestamps = [];
+let rateLimitQueue = Promise.resolve();
+
+/**
+ * Thread-safe rate limiter using a promise queue.
+ * Ensures requests respect the 10 req/10s limit even under concurrent tool calls.
+ */
+async function rateLimitWait() {
+  // Serialize all rate limit checks via a promise queue
+  return new Promise((resolve) => {
+    rateLimitQueue = rateLimitQueue.then(async () => {
+      const now = Date.now();
+      
+      // Remove timestamps outside the current window
+      while (requestTimestamps.length && requestTimestamps[0] < now - REQUEST_WINDOW) {
+        requestTimestamps.shift();
+      }
+      
+      // If at limit, wait until oldest request expires
+      if (requestTimestamps.length >= MAX_REQUESTS) {
+        const waitMs = requestTimestamps[0] + REQUEST_WINDOW - now + 100; // +100ms buffer
+        await new Promise(r => setTimeout(r, waitMs));
+      }
+      
+      // Record this request
+      requestTimestamps.push(Date.now());
+      resolve();
+    });
+  });
+}
+
 // ── Helpers ────────────────────────────────────────────────────
 
 /**
@@ -32,6 +70,9 @@ function sanitizeInput(input) {
 }
 
 async function fetchJSON(url, timeoutMs = 15000) {
+  // Apply rate limiting before making request
+  await rateLimitWait();
+  
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
 

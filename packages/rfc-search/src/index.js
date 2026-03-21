@@ -18,9 +18,49 @@ import { z } from 'zod';
 const DATATRACKER_API = 'https://datatracker.ietf.org/api/v1';
 const RFC_EDITOR_API = 'https://www.rfc-editor.org/rfc';
 
+// ── Rate Limiting ──────────────────────────────────────────────
+
+// IETF Datatracker API rate limit: Be conservative with 5 requests per 10 seconds
+// to avoid triggering any throttling or blocks
+const MAX_REQUESTS = 5;
+const REQUEST_WINDOW = 10000; // 10 seconds in milliseconds
+
+const requestTimestamps = [];
+let rateLimitQueue = Promise.resolve();
+
+/**
+ * Thread-safe rate limiter using a promise queue.
+ * Ensures requests respect the 5 req/10s limit even under concurrent tool calls.
+ */
+async function rateLimitWait() {
+  // Serialize all rate limit checks via a promise queue
+  return new Promise((resolve) => {
+    rateLimitQueue = rateLimitQueue.then(async () => {
+      const now = Date.now();
+      
+      // Remove timestamps outside the current window
+      while (requestTimestamps.length && requestTimestamps[0] < now - REQUEST_WINDOW) {
+        requestTimestamps.shift();
+      }
+      
+      // If at limit, wait until oldest request expires
+      if (requestTimestamps.length >= MAX_REQUESTS) {
+        const waitMs = requestTimestamps[0] + REQUEST_WINDOW - now + 100; // +100ms buffer
+        await new Promise(r => setTimeout(r, waitMs));
+      }
+      
+      // Record this request
+      requestTimestamps.push(Date.now());
+      resolve();
+    });
+  });
+}
+
 // ── Helpers ────────────────────────────────────────────────────
 
 async function fetchJSON(url, timeoutMs = 10000) {
+  // Apply rate limiting before making request
+  await rateLimitWait();
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   

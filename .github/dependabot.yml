@@ -1,0 +1,53 @@
+# Dependabot configuration for automated dependency updates
+# See: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # Root package.json (npm workspaces)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "nagaconda"
+    assignees:
+      - "nagaconda"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "automated"
+    groups:
+      # Group @modelcontextprotocol updates together
+      mcp-sdk:
+        patterns:
+          - "@modelcontextprotocol/*"
+      # Group development dependencies
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # GitHub Actions workflow dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "nagaconda"
+    assignees:
+      - "nagaconda"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "ci/cd"
+      - "automated"

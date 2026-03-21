@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Dependabot configuration** for automated dependency updates (2026-03-21)
+  - Weekly npm dependency updates (Mondays 9 AM)
+  - Monthly GitHub Actions workflow updates
+  - Groups MCP SDK updates and dev dependencies together
+  - Auto-assigns to @nagaconda with reviewers
+  - Limits open PRs (5 for npm, 3 for GitHub Actions)
+  - Conventional commit messages (chore(deps), ci)
+  - Labels: dependencies, automated, ci/cd
+  - Standard for production-ready open source projects (reduces maintenance burden)
 - **Package documentation:** Added comprehensive README.md files for oui-lookup and rfc-search packages
   - oui-lookup README: MAC address lookup examples, OUI explanation, IEEE database details
   - rfc-search README: RFC search examples, famous RFCs section, IETF Datatracker API info

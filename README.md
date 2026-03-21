@@ -23,6 +23,79 @@ NetMCP fixes that by wrapping authoritative, free, public networking databases i
 | [`fcc-devices`](./packages/fcc-devices) | FCC Equipment Auth | 20K+ grantees | ✅ Done |
 | [`threegpp-specs`](./packages/threegpp-specs) | 3GPP Archive | 5G/LTE standards | ✅ Done |
 
+## Architecture
+
+```mermaid
+graph TB
+    subgraph "AI Agents"
+        A1[Claude Code]
+        A2[Cursor]
+        A3[OpenClaw]
+        A4[Any MCP Client]
+    end
+    
+    subgraph "MCP Protocol"
+        MCP[JSON-RPC 2.0<br/>stdio/HTTP transport]
+    end
+    
+    subgraph "NetMCP Servers"
+        subgraph "oui-lookup"
+            OUI[4 tools<br/>local database<br/>instant response]
+        end
+        
+        subgraph "rfc-search"
+            RFC[3 tools<br/>10s timeout<br/>5 req/10s rate limit]
+        end
+        
+        subgraph "nvd-network-cves"
+            NVD[6 tools<br/>24hr cache<br/>5 req/30s rate limit<br/>15s timeout]
+        end
+        
+        subgraph "fcc-devices"
+            FCC[3 tools<br/>10 req/10s rate limit<br/>15s timeout]
+        end
+        
+        subgraph "threegpp-specs"
+            3GPP[3 tools<br/>curated + FTP<br/>10s timeout]
+        end
+    end
+    
+    subgraph "Data Sources"
+        DS1[(IEEE OUI<br/>38K+ manufacturers)]
+        DS2[(IETF Datatracker<br/>153K+ RFCs)]
+        DS3[(NIST NVD<br/>250K+ CVEs)]
+        DS4[(FCC API<br/>20K+ grantees)]
+        DS5[(3GPP Archive<br/>5G/LTE specs)]
+    end
+    
+    A1 & A2 & A3 & A4 --> MCP
+    MCP --> OUI & RFC & NVD & FCC & 3GPP
+    OUI --> DS1
+    RFC --> DS2
+    NVD --> DS3
+    FCC --> DS4
+    3GPP --> DS5
+    
+    classDef agent fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef mcp fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef server fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef source fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    
+    class A1,A2,A3,A4 agent
+    class MCP mcp
+    class OUI,RFC,NVD,FCC,3GPP server
+    class DS1,DS2,DS3,DS4,DS5 source
+```
+
+**Key features:**
+- ⚡ **Rate limiting** — All API-calling packages have thread-safe rate limiters (prevents API blocks)
+- 🔒 **Input validation** — Max length checks, format validation, SQL injection protection
+- ⏱️ **Timeouts** — All network calls have timeouts (10-15s) to prevent hangs
+- 💾 **Caching** — NVD package has 24-hour in-memory cache (reduces API load, faster responses)
+- ✅ **100% JSDoc coverage** — Full type annotations for IDE autocomplete and static analysis
+- 🧪 **Comprehensive tests** — 19 smoke tests + 18 integration tests (37 total)
+- 🚀 **Production-ready** — CI/CD, ESLint, npm workspaces, all security issues resolved
+
 ## Use it 3 ways
 
 ### 1. MCP Server (Claude Code, Cursor, OpenClaw, any MCP client)

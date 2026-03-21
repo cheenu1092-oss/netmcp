@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Architecture diagram** added to README (2026-03-21)
+  - Mermaid diagram showing AI agents → MCP protocol → NetMCP servers → data sources
+  - Highlights key features: rate limiting, caching, timeouts, input validation, JSDoc, tests
+  - Improves documentation and onboarding for new users/contributors
+  - Visualizes monorepo structure and data flow
 - **Input validation improvements** (2026-03-21)
   - Max string length validation (1000 chars) across all packages to prevent DoS attacks
   - 3GPP spec number format validation (SS.NNN format like 23.501, 38.300)

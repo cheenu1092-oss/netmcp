@@ -12,7 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Single `npm install` at root installs all package dependencies
   - Hoisted shared dependencies (@modelcontextprotocol/sdk)
   - Workspace-aware scripts for testing and running individual packages
-- GitHub Actions CI/CD workflow for automated testing across Node.js 18.x, 20.x, 22.x
+- GitHub Actions CI/CD workflow for automated testing across Node.js 20.x, 22.x, 24.x
+  - Upgraded to Node.js 24.x LTS (dropped end-of-life 18.x)
+  - Enabled npm dependency caching for faster CI runs
+  - Tests run on every push and pull request
 - **24-hour in-memory cache for nvd-network-cves** with automatic expiration
   - Separate caches for CVE lookups and keyword/vendor searches
   - New `cve_cache_stats` tool for monitoring cache performance

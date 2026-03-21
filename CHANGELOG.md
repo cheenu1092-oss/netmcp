@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Integration test suite** with 16 comprehensive tests (2026-03-21)
+  - Thread-safe rate limiting verification (concurrent API calls)
+  - NVD cache behavior validation (hits, misses, stats tool)
+  - Error handling tests (invalid CVE format, short MAC, non-existent RFC, etc.)
+  - Boundary case tests (max limits, zero limits, empty queries, special characters)
+  - Rate limiter enforcement verification (RFC 5 req/10s, FCC 10 req/10s)
+  - Data integrity tests (MAC normalization, CVSS extraction, 3GPP spec format)
 - **npm publishing configuration** for all 5 packages
   - Added `files` field to control which files are published to npm
   - Added `publishConfig` with `access: "public"` for scoped packages

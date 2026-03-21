@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Code of Conduct (CODE_OF_CONDUCT.md)** for community guidelines (2026-03-21)
+  - Contributor Covenant 2.1 (industry-standard open source code of conduct)
+  - Clear standards for behavior: welcoming, respectful, constructive, inclusive
+  - Enforcement guidelines with 4-level consequence system (correction → warning → temp ban → permanent ban)
+  - Reporting process for unacceptable behavior (private email to maintainers)
+  - Scope covers all community spaces (GitHub, issues, PRs, discussions, communication channels)
+  - Standard for mature open source projects (completes governance documentation)
+  - References SECURITY.md for vulnerability reporting (separate process)
+  - Completes open source project governance package alongside CONTRIBUTING.md, SECURITY.md, GitHub templates
 - **Security policy (SECURITY.md)** for vulnerability reporting and security best practices (2026-03-21)
   - Comprehensive vulnerability reporting guidelines (responsible disclosure process)
   - Supported versions table (semver policy)

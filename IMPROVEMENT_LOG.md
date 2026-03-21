@@ -789,3 +789,86 @@
 
 ---
 
+### Cycle 12 — 2026-03-20 9:20 PM PST
+
+**What was inspected:**
+- Reviewed IMPROVEMENT_LOG.md (Cycles 1-11 complete)
+- Verified GitHub Actions CI status: ✅ All previous runs successful
+- Checked CODE_REVIEW_NOTES.md for remaining priorities
+- Confirmed SQL injection in fcc-devices ALREADY FIXED (sanitizeInput used in all queries)
+- Identified next priority: Continue JSDoc rollout to fcc-devices package
+
+**Findings:**
+- ✅ All previous cycles complete (infrastructure, security, reliability all addressed)
+- ✅ All 19 tools passing, 0 vulnerabilities
+- ✅ oui-lookup (Cycle 10) and rfc-search (Cycle 11) have full JSDoc
+- **Next logical step:** Add JSDoc to fcc-devices (~220 lines, 3rd smallest package)
+- Pattern established in Cycles 10-11 makes this straightforward
+
+**What was built:**
+1. **Added comprehensive JSDoc type annotations to fcc-devices:**
+   - @typedef for all data structures:
+     - `SocrataGrantee` (raw API response from FCC Open Data)
+     - `FCCGrantee` (formatted grantee object)
+     - `FCCSearchResult` (search results with metadata)
+     - `FCCRecentResult` (recent grantee registrations)
+   - @param and @returns for all functions:
+     - `rateLimitWait()` — thread-safe rate limiter (returns Promise<void>)
+     - `sanitizeInput(input)` — SQL injection prevention
+     - `fetchJSON(url, timeoutMs)` — HTTP fetcher with rate limiting and timeout
+     - `queryOpenData(params)` — Socrata API wrapper
+     - `formatGrantee(g)` — formats raw API data into clean FCCGrantee object
+   - Type annotations for module-level variables:
+     - `requestTimestamps: number[]`
+     - `rateLimitQueue: Promise<void>`
+
+2. **Created jsconfig.json for static type checking:**
+   - Enabled strict mode (checkJs, noImplicitAny, strictNullChecks, etc.)
+   - Configured for ES2022 modules (matches package.json)
+   - Includes src/ files, excludes node_modules
+   - Enables VSCode IntelliSense and type-aware refactoring
+
+**Test results:**
+- ✅ **All 19 tools PASS** (no regressions from type annotations)
+- ✅ Test runtime: ~18s (consistent with previous cycles)
+- Package breakdown:
+  - oui-lookup: 4 tools ✅ (JSDoc complete)
+  - rfc-search: 3 tools ✅ (JSDoc complete)
+  - fcc-devices: 3 tools ✅ (JSDoc complete)
+  - nvd-network-cves: 6 tools ✅
+  - threegpp-specs: 3 tools ✅
+
+**Git commits:**
+- `8535c7a` — "docs: add comprehensive JSDoc type annotations to fcc-devices"
+- Pushed to main successfully
+
+**Impact:**
+- **Developer experience improved** — IDE autocomplete for all fcc-devices functions
+- **3 of 5 packages fully type-annotated** (60% complete)
+- **Static analysis enabled** — catches type errors at development time
+- **Documentation inline** — JSDoc serves as reference for all data structures
+- **Pattern consistency** — same approach as oui-lookup and rfc-search
+
+**JSDoc rollout progress:**
+| Package | Lines | Status | Cycle |
+|---------|-------|--------|-------|
+| oui-lookup | ~180 | ✅ Complete | 10 |
+| rfc-search | ~150 | ✅ Complete | 11 |
+| fcc-devices | ~220 | ✅ Complete | 12 |
+| nvd-network-cves | ~350 | ⏳ Pending | Next |
+| threegpp-specs | ~600 | ⏳ Pending | - |
+
+**Next cycle priorities:**
+1. ✅ **JSDoc for fcc-devices** (completed this cycle)
+2. Add JSDoc to nvd-network-cves (~350 lines, most complex with caching)
+3. Add JSDoc to threegpp-specs (~600 lines, largest package)
+4. Once all packages have JSDoc, consider:
+   - Adding ESLint with type-aware rules
+   - Integration tests beyond basic smoke tests
+   - Performance monitoring across all packages
+   - New networking tools (IANA port lookup, DNS tools, BGP looking glass)
+
+**Status:** ✅ 3/5 packages fully type-annotated (60% complete), all tests passing, ready for next package
+
+---
+

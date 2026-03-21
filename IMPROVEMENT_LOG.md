@@ -1532,3 +1532,92 @@
 
 ---
 
+### Cycle 20 — 2026-03-21 5:20 AM PST
+
+**What was inspected:**
+- Reviewed IMPROVEMENT_LOG.md (Cycles 1-19 complete)
+- Checked CODE_REVIEW_NOTES.md for remaining priorities
+- Verified validation implementations across all 5 packages
+- Found **"Must Fix (Before Production)"** item: Input length validation (DoS prevention)
+
+**Findings:**
+- ✅ All previous cycles complete (infrastructure, JSDoc, ESLint, npm config, tests, README)
+- ✅ All 19 smoke + 16 integration tests passing
+- ✅ Most input validations already implemented:
+  - MAC hex validation (oui-lookup) — already has hex validation in normalizeMAC
+  - RFC number validation (rfc-search) — already validates range 1-15000
+  - FCC grantee code validation (fcc-devices) — already validates 3-5 alphanumeric
+  - CVE ID validation (nvd-network-cves) — already validates CVE-YYYY-NNNNN format
+- ❌ **MISSING: Max string length validation** (all packages) — **"Must Fix (Before Production)"**
+- ❌ **MISSING: 3GPP spec number format validation** (threegpp-specs) — LOW priority
+
+**What was built:**
+1. **Max string length validation (1000 chars) added to all packages:**
+   - oui-lookup: `oui_lookup` and `oui_search` tools
+   - rfc-search: `rfc_search` tool
+   - nvd-network-cves: `cve_search` and `cve_by_vendor` tools
+   - fcc-devices: `fcc_search` tool
+   - threegpp-specs: `spec_get` and `spec_search` tools
+   - Validation occurs before any processing or API calls
+   - Clear error message: "Input too long. Maximum 1000 characters."
+
+2. **3GPP spec number format validation added to spec_get:**
+   - Validates format matches SS.NNN or SS.NNNN (e.g., 23.501, 38.300)
+   - Regex: `/^\d{2}\.\d{3,4}/`
+   - Clear error message with example format
+   - Hint: "Use spec_search to find specifications by keyword."
+
+3. **Added 2 integration tests for validation features:**
+   - `test_max_length_validation` — validates all packages reject 1001-char input
+   - `test_spec_format_validation` — validates spec_get rejects invalid format (e.g., "invalid")
+   - Tests use Python to generate long string (avoids bash printf issues)
+   - Tests use proper JSON-RPC 2.0 message format via mcp_call helper
+
+**Test results:**
+- ✅ **All 19 smoke tests PASS** (no regressions)
+- ✅ **All 18 integration tests PASS** (16 existing + 2 new)
+- ✅ **Total: 37 tests passing**
+- ✅ ESLint: 0 errors, 0 warnings (clean lint)
+- Test runtime: ~18s smoke + ~60s integration = ~78s total
+
+**Git commits:**
+- `f7f685e` — "feat: add input validation (max length 1000 chars, spec format) to prevent DoS"
+- Pushed to main successfully
+
+**Impact:**
+- **Security posture improved** — prevents DoS via excessively long inputs
+- **Addresses "Must Fix (Before Production)" item** from CODE_REVIEW_NOTES.md
+- **All LOW priority input validations complete** — MAC hex, RFC range, FCC grantee, CVE ID, spec format
+- **Production-ready** — all recommended security improvements implemented
+- **Better user experience** — clear error messages for invalid inputs
+- **Foundation complete** — all critical infrastructure, security, and quality improvements done
+
+**Input validation coverage (COMPLETE):**
+| Package | Tool | Validation | Status |
+|---------|------|------------|--------|
+| oui-lookup | oui_lookup | Max 1000 chars | ✅ Added |
+| oui-lookup | oui_lookup | Hex characters only | ✅ Existing |
+| oui-lookup | oui_search | Max 1000 chars | ✅ Added |
+| rfc-search | rfc_get | Range 1-15000 | ✅ Existing |
+| rfc-search | rfc_search | Max 1000 chars | ✅ Added |
+| nvd-network-cves | cve_get | CVE-YYYY-NNNNN format | ✅ Existing |
+| nvd-network-cves | cve_search | Max 1000 chars | ✅ Added |
+| nvd-network-cves | cve_by_vendor | Max 1000 chars | ✅ Added |
+| fcc-devices | fcc_get | 3-5 alphanumeric | ✅ Existing |
+| fcc-devices | fcc_search | Max 1000 chars | ✅ Added |
+| threegpp-specs | spec_get | Max 1000 chars | ✅ Added |
+| threegpp-specs | spec_get | SS.NNN format | ✅ Added |
+| threegpp-specs | spec_search | Max 1000 chars | ✅ Added |
+
+**Next cycle priorities:**
+1. ✅ **Input validation & DoS prevention** (completed this cycle)
+2. Consider adding architecture diagram to README
+3. Consider publishing to npm (all packages ready with proper configuration)
+4. Consider automated releases via GitHub Actions (semantic-release or similar)
+5. Explore new networking tools (IANA port lookup, DNS tools, BGP looking glass, Wireshark dissectors)
+6. Consider performance monitoring across all packages (cache stats pattern from nvd)
+
+**Status:** ✅ All "Must Fix (Before Production)" items complete, 37/37 tests passing, production-ready
+
+---
+

@@ -2185,7 +2185,8 @@
   - threegpp-specs: 4 tools ✅ (includes spec_stats — NEW)
 
 **Git commits:**
-- Pending: Will commit after log update
+- `4b8cdd3` — "feat: add performance monitoring tools to rfc-search, fcc-devices, and threegpp-specs"
+- Pushed to main successfully
 
 **Impact:**
 - **Production observability improved** — all 5 packages now have stats/metrics tools

@@ -66,15 +66,15 @@ jobs:
           node-version: '20.x'
           cache: 'npm'
       
-      - name: Check for common issues
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Run ESLint
+        run: npm run lint
+        
+      - name: Check for TODO/FIXME comments
         run: |
           echo "Checking for TODO/FIXME comments..."
           grep -r "TODO\|FIXME" packages/*/src/ || echo "No TODOs found"
-          
-          echo "Checking for console.log in production code..."
-          ! grep -r "console\\.log" packages/*/src/*.js | grep -v "// " || {
-            echo "WARNING: Found console.log statements in production code"
-            exit 1
-          }
           
           echo "Code quality checks passed!"

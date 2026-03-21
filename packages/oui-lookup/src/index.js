@@ -23,13 +23,13 @@ const DB_PATH = join(__dirname, '..', 'data', 'oui.json');
 // ── Type Definitions ───────────────────────────────────────────
 
 /**
- * @typedef {Object} DatabaseEntry
+ * @typedef {object} DatabaseEntry
  * @property {string} vendor - Manufacturer/vendor name
  * @property {string} [address] - Manufacturer address (optional)
  */
 
 /**
- * @typedef {Object} OUILookupResult
+ * @typedef {object} OUILookupResult
  * @property {string} prefix - 6-character OUI prefix (hex)
  * @property {boolean} found - Whether vendor was found in database
  * @property {string} [vendor] - Vendor name (if found)
@@ -39,14 +39,14 @@ const DB_PATH = join(__dirname, '..', 'data', 'oui.json');
  */
 
 /**
- * @typedef {Object} SearchResultEntry
+ * @typedef {object} SearchResultEntry
  * @property {string} prefix - 6-character OUI prefix (hex)
  * @property {string} vendor - Vendor name
  * @property {string|null} address - Vendor address (if available)
  */
 
 /**
- * @typedef {Object} SearchResult
+ * @typedef {object} SearchResult
  * @property {string} query - Original search query
  * @property {number} count - Number of results returned
  * @property {boolean} truncated - Whether results were truncated
@@ -54,13 +54,13 @@ const DB_PATH = join(__dirname, '..', 'data', 'oui.json');
  */
 
 /**
- * @typedef {Object} VendorCount
+ * @typedef {object} VendorCount
  * @property {string} vendor - Vendor name
  * @property {number} oui_count - Number of OUI prefixes owned by this vendor
  */
 
 /**
- * @typedef {Object} StatsResult
+ * @typedef {object} StatsResult
  * @property {number} total_entries - Total OUI entries in database
  * @property {number} unique_vendors - Number of unique vendors
  * @property {string} source - Data source information
@@ -96,7 +96,6 @@ loadDb();
 /**
  * Normalize a MAC address or OUI prefix to uppercase hex (no separators).
  * Accepts formats: AA:BB:CC:DD:EE:FF, AA-BB-CC-DD-EE-FF, AABB.CCDD.EEFF, AABBCC, etc.
- * 
  * @param {string} input - MAC address or OUI prefix in any common format
  * @returns {string} Normalized uppercase hex string without separators
  * @throws {Error} If input contains non-hex characters
@@ -114,7 +113,6 @@ function normalizeMAC(input) {
 
 /**
  * Extract the 6-character OUI prefix from a normalized MAC string.
- * 
  * @param {string} normalized - Normalized MAC address (uppercase hex, no separators)
  * @returns {string} 6-character OUI prefix
  */
@@ -200,7 +198,7 @@ server.tool(
   },
   async ({ query, limit }) => {
     // Sanitize query: allow only alphanumeric, spaces, hyphens, dots, and common punctuation
-    const sanitized = query.replace(/[^\w\s\-\.,&()]/g, '').trim();
+    const sanitized = query.replace(/[^\w\s.,&()-]/g, '').trim();
     if (sanitized.length === 0) {
       return {
         content: [{

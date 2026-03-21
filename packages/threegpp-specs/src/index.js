@@ -12,13 +12,11 @@
  *
  * Spec numbers follow the format: SS.NNN (e.g. 23.501, 38.300)
  * Series map to technology areas (21-series = Requirements, 23 = Architecture, etc.)
- *
- * @typedef {Object} SeriesInfo
+ * @typedef {object} SeriesInfo
  * @property {string} area - Technology area name (e.g., "Architecture", "Security")
  * @property {string} group - Responsible working group (e.g., "SA2", "RAN", "CT1")
  * @property {string} description - Detailed description of the series
- *
- * @typedef {Object} SpecInfo
+ * @typedef {object} SpecInfo
  * @property {string} number - Spec number in SS.NNN format (e.g., "23.501", "38.300")
  * @property {string} title - Full specification title
  * @property {string} type - Specification type ("TS" for Technical Specification, "TR" for Technical Report)
@@ -26,14 +24,12 @@
  * @property {number[]} releases - List of 3GPP releases where this spec exists (e.g., [15, 16, 17, 18])
  * @property {string} group - Responsible working group
  * @property {string} area - Technology area or domain
- *
- * @typedef {Object} ReleaseInfo
+ * @typedef {object} ReleaseInfo
  * @property {string} name - Release name (e.g., "Release 15")
  * @property {string} year - Year of release freeze
  * @property {string} tech - Technology introduced/enhanced (e.g., "5G Phase 1", "LTE-Advanced")
  * @property {string} status - Release status ("Frozen", "Under change control", "Open")
- *
- * @typedef {Object} FormattedSpec
+ * @typedef {object} FormattedSpec
  * @property {string} number - Spec number (e.g., "23.501")
  * @property {string} title - Specification title
  * @property {string} type - "TS" or "TR"
@@ -44,12 +40,10 @@
  * @property {number[]} releases - List of applicable 3GPP releases
  * @property {string} status - "Active" or "Frozen"
  * @property {string} archive_url - URL to the 3GPP archive for this spec
- *
- * @typedef {Object} SpecSearchResult
+ * @typedef {object} SpecSearchResult
  * @property {string} query - Original search query
  * @property {number} returned - Number of results returned
  * @property {FormattedSpec[]} results - Array of matching specifications
- *
  * @typedef {Object} SpecReleaseResult
  * @property {ReleaseInfo} release - Release metadata
  * @property {number} release_number - Release number (e.g., 15, 16, 17, 18)
@@ -198,7 +192,7 @@ async function fetchSpecList(seriesPath) {
     const html = await res.text();
 
     // Extract spec folder names like "23.501", "38.300" from href links
-    const regex = /href="[^"]*?(\d{2}\.\d{3}[a-zA-Z0-9\-]*)"/g;
+    const regex = /href="[^"]*?(\d{2}\.\d{3}[a-zA-Z0-9-]*)"/g;
     const specs = [];
     let match;
     while ((match = regex.exec(html)) !== null) {
@@ -435,7 +429,7 @@ server.tool(
         .map(formatSpec);
 
       // Try to get the FTP listing for this release
-      let ftpSeriesList = [];
+      const ftpSeriesList = [];
       try {
         const url = `${LATEST_BASE}/Rel-${release}/`;
         const controller = new AbortController();

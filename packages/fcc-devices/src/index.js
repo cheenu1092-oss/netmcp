@@ -17,12 +17,12 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod';
 
 const FCC_OPENDATA_API = 'https://opendata.fcc.gov/resource/3b3k-34jp.json';
-const FCC_SEARCH_URL = 'https://apps.fcc.gov/oetcf/eas/reports/GenericSearchResult.cfm';
+const _FCC_SEARCH_URL = 'https://apps.fcc.gov/oetcf/eas/reports/GenericSearchResult.cfm'; // Reserved for future use
 
 // ── Type Definitions ───────────────────────────────────────────
 
 /**
- * @typedef {Object} SocrataGrantee
+ * @typedef {object} SocrataGrantee
  * @property {string} [grantee_code] - FCC grantee code (3-5 alphanumeric)
  * @property {string} [grantee_name] - Company name
  * @property {string} [mailing_address] - Mailing address
@@ -35,7 +35,7 @@ const FCC_SEARCH_URL = 'https://apps.fcc.gov/oetcf/eas/reports/GenericSearchResu
  */
 
 /**
- * @typedef {Object} FCCGrantee
+ * @typedef {object} FCCGrantee
  * @property {string|null} grantee_code - FCC grantee code
  * @property {string|null} grantee_name - Company name
  * @property {string|null} address - Mailing address
@@ -49,7 +49,7 @@ const FCC_SEARCH_URL = 'https://apps.fcc.gov/oetcf/eas/reports/GenericSearchResu
  */
 
 /**
- * @typedef {Object} FCCSearchResult
+ * @typedef {object} FCCSearchResult
  * @property {string} query - Search query
  * @property {string} search_type - Type of search ("name", "code", "country")
  * @property {number} returned - Number of results returned
@@ -57,7 +57,7 @@ const FCC_SEARCH_URL = 'https://apps.fcc.gov/oetcf/eas/reports/GenericSearchResu
  */
 
 /**
- * @typedef {Object} FCCRecentResult
+ * @typedef {object} FCCRecentResult
  * @property {number} count - Number of results
  * @property {string} country_filter - Country filter applied (or "all")
  * @property {FCCGrantee[]} results - Array of recent grantee registrations
@@ -116,13 +116,13 @@ async function rateLimitWait() {
 function sanitizeInput(input) {
   // Allow only: alphanumeric, spaces, hyphens, dots, commas, parentheses
   // Remove: SQL wildcards (%), operators, quotes, semicolons, etc.
-  return input.replace(/[^\w\s\-\.,()]/g, '').trim();
+  return input.replace(/[^\w\s.,()-]/g, '').trim();
 }
 
 /**
  * Fetch JSON from a URL with rate limiting and timeout.
  * @param {string} url - URL to fetch
- * @param {number} [timeoutMs=15000] - Timeout in milliseconds
+ * @param {number} [timeoutMs] - Timeout in milliseconds
  * @returns {Promise<any>} Parsed JSON response
  * @throws {Error} HTTP errors or timeout
  */

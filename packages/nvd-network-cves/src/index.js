@@ -23,14 +23,14 @@ const NVD_API = 'https://services.nvd.nist.gov/rest/json/cves/2.0';
 
 /**
  * Cache entry with data and timestamp for TTL tracking.
- * @typedef {Object} CacheEntry
+ * @typedef {object} CacheEntry
  * @property {any} data - Cached data
  * @property {number} timestamp - Timestamp when data was cached (ms)
  */
 
 /**
  * CVSS scoring information extracted from CVE metrics.
- * @typedef {Object} CVSSMetric
+ * @typedef {object} CVSSMetric
  * @property {number|null} score - CVSS base score (0-10)
  * @property {string|null} severity - Severity rating (CRITICAL, HIGH, MEDIUM, LOW)
  * @property {string|null} version - CVSS version (2.0, 3.0, 3.1, 4.0)
@@ -38,7 +38,7 @@ const NVD_API = 'https://services.nvd.nist.gov/rest/json/cves/2.0';
 
 /**
  * Affected products extracted from CPE configurations.
- * @typedef {Object} AffectedProductsInfo
+ * @typedef {object} AffectedProductsInfo
  * @property {string[]} products - Array of vendor/product strings (max 20)
  * @property {boolean} truncated - True if more than 20 products affected
  * @property {number} total_count - Total number of affected products
@@ -46,14 +46,14 @@ const NVD_API = 'https://services.nvd.nist.gov/rest/json/cves/2.0';
 
 /**
  * CVE reference link with metadata.
- * @typedef {Object} CVEReference
+ * @typedef {object} CVEReference
  * @property {string} url - Reference URL
  * @property {string[]} tags - Reference tags (e.g., "Patch", "Vendor Advisory")
  */
 
 /**
  * Formatted CVE vulnerability data.
- * @typedef {Object} FormattedCVE
+ * @typedef {object} FormattedCVE
  * @property {string} id - CVE identifier (e.g., CVE-2024-12345)
  * @property {string|null} description - English description
  * @property {string} published - Publication date (ISO 8601)
@@ -71,7 +71,7 @@ const NVD_API = 'https://services.nvd.nist.gov/rest/json/cves/2.0';
 
 /**
  * CVE search result response.
- * @typedef {Object} CVESearchResult
+ * @typedef {object} CVESearchResult
  * @property {string} keyword - Search keyword used
  * @property {number} total_results - Total results available in NVD
  * @property {number} returned - Number of results returned
@@ -81,7 +81,7 @@ const NVD_API = 'https://services.nvd.nist.gov/rest/json/cves/2.0';
 
 /**
  * CVE vendor search result response.
- * @typedef {Object} CVEVendorResult
+ * @typedef {object} CVEVendorResult
  * @property {string} vendor - Vendor name searched
  * @property {string|null} product - Product name (if specified)
  * @property {number} total_results - Total results available in NVD
@@ -92,7 +92,7 @@ const NVD_API = 'https://services.nvd.nist.gov/rest/json/cves/2.0';
 
 /**
  * Cache statistics response.
- * @typedef {Object} CacheStatsResult
+ * @typedef {object} CacheStatsResult
  * @property {number} cache_hits - Number of cache hits
  * @property {number} cache_misses - Number of cache misses
  * @property {number} total_requests - Total requests (hits + misses)
@@ -185,9 +185,9 @@ async function rateLimitWait() {
 
 /**
  * Fetch data from NVD API 2.0 with rate limiting and timeout.
- * @param {Object} params - NVD API query parameters (cveId, keywordSearch, etc.)
- * @param {number} [timeoutMs=15000] - Request timeout in milliseconds
- * @returns {Promise<Object>} - NVD API response JSON
+ * @param {object} params - NVD API query parameters (cveId, keywordSearch, etc.)
+ * @param {number} [timeoutMs] - Request timeout in milliseconds
+ * @returns {Promise<object>} - NVD API response JSON
  * @throws {Error} - On rate limit exceeded, timeout, or HTTP errors
  */
 async function fetchNVD(params, timeoutMs = 15000) {
@@ -228,7 +228,7 @@ async function fetchNVD(params, timeoutMs = 15000) {
 /**
  * Extract the most relevant CVSS score from a CVE's metrics.
  * Prefers v3.1 > v4.0 > v3.0 > v2.
- * @param {Object} metrics - CVE metrics object from NVD API
+ * @param {object} metrics - CVE metrics object from NVD API
  * @returns {CVSSMetric} - CVSS score, severity, and version
  */
 function extractCVSS(metrics) {
@@ -280,7 +280,7 @@ function extractCVSS(metrics) {
 /**
  * Extract affected products from CPE configurations.
  * Returns an object with products array, truncation flag, and total count.
- * @param {Object[]} configurations - CPE configuration nodes from NVD API
+ * @param {object[]} configurations - CPE configuration nodes from NVD API
  * @returns {AffectedProductsInfo} - Affected products info (max 20 products, truncation flag, total count)
  */
 function extractAffectedProducts(configurations) {
@@ -325,7 +325,7 @@ function extractAffectedProducts(configurations) {
 
 /**
  * Format raw NVD vulnerability data into standardized CVE object.
- * @param {Object} vuln - Raw vulnerability object from NVD API
+ * @param {object} vuln - Raw vulnerability object from NVD API
  * @returns {FormattedCVE} - Formatted CVE with CVSS, description, affected products, references
  */
 function formatCVE(vuln) {

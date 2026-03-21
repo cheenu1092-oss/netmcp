@@ -18,7 +18,7 @@ import { z } from 'zod';
 // ── Type Definitions ───────────────────────────────────────────
 
 /**
- * @typedef {Object} RFCDocument
+ * @typedef {object} RFCDocument
  * @property {string} name - Document name (e.g., "rfc791", "draft-ietf-http-semantics-19")
  * @property {string} title - Full document title
  * @property {number|null} rfc_number - RFC number if published, null for drafts
@@ -31,7 +31,7 @@ import { z } from 'zod';
  */
 
 /**
- * @typedef {Object} DataTrackerDocument
+ * @typedef {object} DataTrackerDocument
  * @property {string} name - Document name from API
  * @property {string} title - Document title
  * @property {number} [rfc_number] - RFC number if available
@@ -43,14 +43,14 @@ import { z } from 'zod';
  */
 
 /**
- * @typedef {Object} DataTrackerResponse
+ * @typedef {object} DataTrackerResponse
  * @property {DataTrackerDocument[]} [objects] - Array of matching documents
- * @property {Object} [meta] - Response metadata
+ * @property {object} [meta] - Response metadata
  * @property {number} [meta.total_count] - Total number of results available
  */
 
 /**
- * @typedef {Object} RFCSearchResult
+ * @typedef {object} RFCSearchResult
  * @property {string} query - Original search query
  * @property {number} total_available - Total number of matching documents in database
  * @property {number} returned - Number of results returned in this response
@@ -58,14 +58,14 @@ import { z } from 'zod';
  */
 
 /**
- * @typedef {Object} RFCRecentResult
+ * @typedef {object} RFCRecentResult
  * @property {number} count - Number of results returned
  * @property {string} area - IETF area filter applied (or "all")
  * @property {RFCDocument[]} results - Array of recent RFC documents
  */
 
 const DATATRACKER_API = 'https://datatracker.ietf.org/api/v1';
-const RFC_EDITOR_API = 'https://www.rfc-editor.org/rfc';
+const _RFC_EDITOR_API = 'https://www.rfc-editor.org/rfc'; // Reserved for future use
 
 // ── Rate Limiting ──────────────────────────────────────────────
 
@@ -114,7 +114,7 @@ async function rateLimitWait() {
 /**
  * Fetch JSON data from a URL with rate limiting and timeout protection.
  * @param {string} url - URL to fetch
- * @param {number} [timeoutMs=10000] - Request timeout in milliseconds
+ * @param {number} [timeoutMs] - Request timeout in milliseconds
  * @returns {Promise<DataTrackerResponse>} - Parsed JSON response
  * @throws {Error} - If request fails, times out, or returns non-OK status
  */
@@ -289,7 +289,7 @@ server.tool(
       // Query specific 4-digit ranges descending to find the most recent ones.
       const ranges = [];
       for (let i = 9999; i >= 9000; i -= 100) {
-        const prefix = String(i).slice(0, 2); // not useful for 4-digit
+        const _prefix = String(i).slice(0, 2); // not used but kept for potential future logic
         ranges.push(i);
         if (ranges.length >= 10) break;
       }
@@ -301,7 +301,7 @@ server.tool(
       }
 
       const data = await fetchJSON(url);
-      let allResults = data.objects || [];
+      const allResults = data.objects || [];
 
       // Sort by RFC number descending (highest = most recent)
       allResults.sort((a, b) => {

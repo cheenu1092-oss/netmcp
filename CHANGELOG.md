@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **ESLint with JSDoc type validation** for automated code quality checks
+  - Modern flat config format (eslint.config.js)
+  - Type-aware linting leveraging comprehensive JSDoc annotations
+  - Catches common mistakes (unused vars, undefined globals, regex errors)
+  - Integrated into GitHub Actions CI/CD pipeline
+  - npm scripts: `npm run lint`, `npm run lint:fix`
 - **npm workspaces configuration** for proper monorepo tooling
   - Single `npm install` at root installs all package dependencies
   - Hoisted shared dependencies (@modelcontextprotocol/sdk)
@@ -36,6 +42,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Grantee code format validation in `fcc-devices`
 - GitHub Actions workflow cache configuration for monorepo structure
 - Race condition in NVD rate limiter under concurrent load
+- Unnecessary escape characters in regex patterns across all packages
+- Unused variable warnings by prefixing reserved constants with underscore
 
 ### Security
 - **Fixed 5 dependency vulnerabilities** (1 low, 1 moderate, 3 high)

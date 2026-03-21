@@ -123,7 +123,7 @@ function sanitizeInput(input) {
  * Fetch JSON from a URL with rate limiting and timeout.
  * @param {string} url - URL to fetch
  * @param {number} [timeoutMs] - Timeout in milliseconds
- * @returns {Promise<any>} Parsed JSON response
+ * @returns {Promise<SocrataGrantee[]>} Parsed JSON response
  * @throws {Error} HTTP errors or timeout
  */
 async function fetchJSON(url, timeoutMs = 15000) {
@@ -147,7 +147,7 @@ async function fetchJSON(url, timeoutMs = 15000) {
 
 /**
  * Query the FCC Open Data (Socrata) API for grantee registrations.
- * @param {Object<string, string|number>} params - Query parameters
+ * @param {Record<string, string|number>} params - Query parameters
  * @returns {Promise<SocrataGrantee[]>} Array of grantee records
  */
 async function queryOpenData(params) {

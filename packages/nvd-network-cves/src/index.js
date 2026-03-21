@@ -24,7 +24,7 @@ const NVD_API = 'https://services.nvd.nist.gov/rest/json/cves/2.0';
 /**
  * Cache entry with data and timestamp for TTL tracking.
  * @typedef {object} CacheEntry
- * @property {any} data - Cached data
+ * @property {unknown} data - Cached data (type varies: FormattedCVE, CVESearchResult, etc.)
  * @property {number} timestamp - Timestamp when data was cached (ms)
  */
 
@@ -119,7 +119,7 @@ let cacheMisses = 0;
  * Get cached data if still valid.
  * @param {Map} cache - Cache map to query
  * @param {string} key - Cache key
- * @returns {any|null} - Cached data or null if expired/missing
+ * @returns {unknown|null} - Cached data or null if expired/missing
  */
 function getCached(cache, key) {
   const entry = cache.get(key);
@@ -141,7 +141,7 @@ function getCached(cache, key) {
  * Store data in cache with current timestamp.
  * @param {Map} cache - Cache map to update
  * @param {string} key - Cache key
- * @param {any} data - Data to cache
+ * @param {unknown} data - Data to cache (type varies: FormattedCVE, CVESearchResult, etc.)
  */
 function setCache(cache, key, data) {
   cache.set(key, { data, timestamp: Date.now() });

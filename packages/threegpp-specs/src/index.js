@@ -44,7 +44,7 @@
  * @property {string} query - Original search query
  * @property {number} returned - Number of results returned
  * @property {FormattedSpec[]} results - Array of matching specifications
- * @typedef {Object} SpecReleaseResult
+ * @typedef {object} SpecReleaseResult
  * @property {ReleaseInfo} release - Release metadata
  * @property {number} release_number - Release number (e.g., 15, 16, 17, 18)
  * @property {number} curated_specs_count - Number of curated specs in this release

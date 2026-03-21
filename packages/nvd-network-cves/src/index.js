@@ -19,12 +19,100 @@ import { z } from 'zod';
 
 const NVD_API = 'https://services.nvd.nist.gov/rest/json/cves/2.0';
 
+// ── Type Definitions ───────────────────────────────────────────
+
+/**
+ * Cache entry with data and timestamp for TTL tracking.
+ * @typedef {Object} CacheEntry
+ * @property {any} data - Cached data
+ * @property {number} timestamp - Timestamp when data was cached (ms)
+ */
+
+/**
+ * CVSS scoring information extracted from CVE metrics.
+ * @typedef {Object} CVSSMetric
+ * @property {number|null} score - CVSS base score (0-10)
+ * @property {string|null} severity - Severity rating (CRITICAL, HIGH, MEDIUM, LOW)
+ * @property {string|null} version - CVSS version (2.0, 3.0, 3.1, 4.0)
+ */
+
+/**
+ * Affected products extracted from CPE configurations.
+ * @typedef {Object} AffectedProductsInfo
+ * @property {string[]} products - Array of vendor/product strings (max 20)
+ * @property {boolean} truncated - True if more than 20 products affected
+ * @property {number} total_count - Total number of affected products
+ */
+
+/**
+ * CVE reference link with metadata.
+ * @typedef {Object} CVEReference
+ * @property {string} url - Reference URL
+ * @property {string[]} tags - Reference tags (e.g., "Patch", "Vendor Advisory")
+ */
+
+/**
+ * Formatted CVE vulnerability data.
+ * @typedef {Object} FormattedCVE
+ * @property {string} id - CVE identifier (e.g., CVE-2024-12345)
+ * @property {string|null} description - English description
+ * @property {string} published - Publication date (ISO 8601)
+ * @property {string} lastModified - Last modified date (ISO 8601)
+ * @property {string} status - Vulnerability status (e.g., "Analyzed", "Modified")
+ * @property {number|null} cvss_score - CVSS base score
+ * @property {string|null} cvss_severity - CVSS severity rating
+ * @property {string|null} cvss_version - CVSS version used
+ * @property {string[]} affected_products - Array of affected vendor/product strings
+ * @property {number} affected_products_count - Total affected products count
+ * @property {boolean} affected_products_truncated - True if product list truncated
+ * @property {CVEReference[]} references - Reference URLs (max 5)
+ * @property {string[]} weaknesses - CWE weakness descriptions
+ */
+
+/**
+ * CVE search result response.
+ * @typedef {Object} CVESearchResult
+ * @property {string} keyword - Search keyword used
+ * @property {number} total_results - Total results available in NVD
+ * @property {number} returned - Number of results returned
+ * @property {FormattedCVE[]} results - Array of formatted CVEs
+ * @property {boolean} [cached] - True if result came from cache
+ */
+
+/**
+ * CVE vendor search result response.
+ * @typedef {Object} CVEVendorResult
+ * @property {string} vendor - Vendor name searched
+ * @property {string|null} product - Product name (if specified)
+ * @property {number} total_results - Total results available in NVD
+ * @property {number} returned - Number of results returned
+ * @property {FormattedCVE[]} results - Array of formatted CVEs
+ * @property {boolean} [cached] - True if result came from cache
+ */
+
+/**
+ * Cache statistics response.
+ * @typedef {Object} CacheStatsResult
+ * @property {number} cache_hits - Number of cache hits
+ * @property {number} cache_misses - Number of cache misses
+ * @property {number} total_requests - Total requests (hits + misses)
+ * @property {number} hit_rate_percent - Cache hit rate percentage
+ * @property {number} cve_cache_size - Number of CVE cache entries
+ * @property {number} search_cache_size - Number of search cache entries
+ * @property {number} total_cache_entries - Total cache entries
+ * @property {number} cache_ttl_hours - Cache TTL in hours
+ */
+
 // ── Caching ────────────────────────────────────────────────────
 
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours (CVE data is relatively static)
+/** @type {Map<string, CacheEntry>} */
 const cveCache = new Map(); // Cache for CVE lookups by ID
+/** @type {Map<string, CacheEntry>} */
 const searchCache = new Map(); // Cache for keyword/vendor searches
+/** @type {number} */
 let cacheHits = 0;
+/** @type {number} */
 let cacheMisses = 0;
 
 /**
@@ -63,12 +151,15 @@ function setCache(cache, key, data) {
 
 const REQUEST_WINDOW = 30_000; // 30 seconds
 const MAX_REQUESTS = 5;
+/** @type {number[]} */
 const requestTimestamps = [];
+/** @type {Promise<void>} */
 let rateLimitQueue = Promise.resolve();
 
 /**
  * Thread-safe rate limiter using a promise queue.
  * Prevents race conditions when multiple tools are called concurrently.
+ * @returns {Promise<void>}
  */
 async function rateLimitWait() {
   // Queue this request to execute sequentially
@@ -92,6 +183,13 @@ async function rateLimitWait() {
 
 // ── Helpers ────────────────────────────────────────────────────
 
+/**
+ * Fetch data from NVD API 2.0 with rate limiting and timeout.
+ * @param {Object} params - NVD API query parameters (cveId, keywordSearch, etc.)
+ * @param {number} [timeoutMs=15000] - Request timeout in milliseconds
+ * @returns {Promise<Object>} - NVD API response JSON
+ * @throws {Error} - On rate limit exceeded, timeout, or HTTP errors
+ */
 async function fetchNVD(params, timeoutMs = 15000) {
   await rateLimitWait();
 
@@ -130,6 +228,8 @@ async function fetchNVD(params, timeoutMs = 15000) {
 /**
  * Extract the most relevant CVSS score from a CVE's metrics.
  * Prefers v3.1 > v4.0 > v3.0 > v2.
+ * @param {Object} metrics - CVE metrics object from NVD API
+ * @returns {CVSSMetric} - CVSS score, severity, and version
  */
 function extractCVSS(metrics) {
   if (!metrics) return { score: null, severity: null, version: null };
@@ -180,6 +280,8 @@ function extractCVSS(metrics) {
 /**
  * Extract affected products from CPE configurations.
  * Returns an object with products array, truncation flag, and total count.
+ * @param {Object[]} configurations - CPE configuration nodes from NVD API
+ * @returns {AffectedProductsInfo} - Affected products info (max 20 products, truncation flag, total count)
  */
 function extractAffectedProducts(configurations) {
   if (!configurations?.length) {
@@ -221,6 +323,11 @@ function extractAffectedProducts(configurations) {
   };
 }
 
+/**
+ * Format raw NVD vulnerability data into standardized CVE object.
+ * @param {Object} vuln - Raw vulnerability object from NVD API
+ * @returns {FormattedCVE} - Formatted CVE with CVSS, description, affected products, references
+ */
 function formatCVE(vuln) {
   const cve = vuln.cve;
   const cvss = extractCVSS(cve.metrics);

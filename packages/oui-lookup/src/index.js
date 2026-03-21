@@ -136,6 +136,16 @@ server.tool(
     mac: z.string().describe('MAC address or OUI prefix (any common format)'),
   },
   async ({ mac }) => {
+    // Validate input length (DoS prevention)
+    if (mac.length > 1000) {
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify({ error: 'Input too long. Maximum 1000 characters.' }),
+        }],
+      };
+    }
+    
     let normalized;
     try {
       normalized = normalizeMAC(mac);
@@ -197,6 +207,16 @@ server.tool(
     limit: z.number().optional().default(20).describe('Max results to return (default 20)'),
   },
   async ({ query, limit }) => {
+    // Validate input length (DoS prevention)
+    if (query.length > 1000) {
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify({ error: 'Input too long. Maximum 1000 characters.' }),
+        }],
+      };
+    }
+    
     // Sanitize query: allow only alphanumeric, spaces, hyphens, dots, and common punctuation
     const sanitized = query.replace(/[^\w\s.,&()-]/g, '').trim();
     if (sanitized.length === 0) {

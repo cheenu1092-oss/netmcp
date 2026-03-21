@@ -373,6 +373,16 @@ server.tool(
     limit: z.number().optional().default(10).describe('Max results to return (default 10, max 50)'),
   },
   async ({ keyword, limit }) => {
+    // Validate input length (DoS prevention)
+    if (keyword.length > 1000) {
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify({ error: 'Input too long. Maximum 1000 characters.' }),
+        }],
+      };
+    }
+    
     try {
       const cap = Math.min(limit, 50);
       const cacheKey = `search:${keyword.toLowerCase()}:${cap}`;
@@ -504,6 +514,16 @@ server.tool(
     limit: z.number().optional().default(10).describe('Max results to return (default 10, max 50)'),
   },
   async ({ vendor, product, limit }) => {
+    // Validate input length (DoS prevention)
+    if (vendor.length > 1000 || (product && product.length > 1000)) {
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify({ error: 'Input too long. Maximum 1000 characters.' }),
+        }],
+      };
+    }
+    
     try {
       const cap = Math.min(limit, 50);
 

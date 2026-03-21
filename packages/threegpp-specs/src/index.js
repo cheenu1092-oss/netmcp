@@ -245,6 +245,16 @@ server.tool(
     limit: z.number().optional().default(20).describe('Max results (default 20)'),
   },
   async ({ query, limit }) => {
+    // Validate input length (DoS prevention)
+    if (query.length > 1000) {
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify({ error: 'Input too long. Maximum 1000 characters.' }),
+        }],
+      };
+    }
+    
     try {
       const q = query.toLowerCase().trim();
       const cap = Math.min(limit, 100);
@@ -322,9 +332,32 @@ server.tool(
     spec_number: z.string().describe('3GPP spec number (e.g. "23.501", "TS 38.300", "33.501")'),
   },
   async ({ spec_number }) => {
+    // Validate input length (DoS prevention)
+    if (spec_number.length > 1000) {
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify({ error: 'Input too long. Maximum 1000 characters.' }),
+        }],
+      };
+    }
+    
     try {
       // Normalize: strip TS/TR prefix, trim
       const cleaned = spec_number.replace(/^(TS|TR)\s*/i, '').trim();
+      
+      // Validate spec number format (must be SS.NNN or SS.NNNN where S=digit, N=digit)
+      if (!/^\d{2}\.\d{3,4}/.test(cleaned)) {
+        return {
+          content: [{
+            type: 'text',
+            text: JSON.stringify({ 
+              error: `Invalid spec number format: "${spec_number}". Expected format: SS.NNN (e.g., 23.501, 38.300).`,
+              hint: 'Use spec_search to find specifications by keyword.'
+            }),
+          }],
+        };
+      }
 
       // Find in our curated database
       const spec = KEY_SPECS.find(s => s.number === cleaned);

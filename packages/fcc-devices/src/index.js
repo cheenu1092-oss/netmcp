@@ -198,6 +198,16 @@ server.tool(
     limit: z.number().optional().default(20).describe('Max results (default 20, max 100)'),
   },
   async ({ query, search_type, limit }) => {
+    // Validate input length (DoS prevention)
+    if (query.length > 1000) {
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify({ error: 'Input too long. Maximum 1000 characters.' }),
+        }],
+      };
+    }
+    
     try {
       const cap = Math.min(limit, 100);
       let data;

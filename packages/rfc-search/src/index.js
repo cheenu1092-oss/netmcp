@@ -236,6 +236,16 @@ server.tool(
     rfc_only: z.boolean().optional().default(false).describe('If true, only return published RFCs (exclude drafts)'),
   },
   async ({ query, limit, rfc_only }) => {
+    // Validate input length (DoS prevention)
+    if (query.length > 1000) {
+      return {
+        content: [{
+          type: 'text',
+          text: JSON.stringify({ error: 'Input too long. Maximum 1000 characters.' }),
+        }],
+      };
+    }
+    
     try {
       const cap = Math.min(limit, 50);
       let url = `${DATATRACKER_API}/doc/document/?format=json&limit=${cap}&title__icontains=${encodeURIComponent(query)}`;

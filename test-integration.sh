@@ -316,6 +316,46 @@ test_spec_number_normalization() {
 
 test_integration "3GPP spec number normalization (TS prefix)" test_spec_number_normalization
 
+# ═══════════════════════════════════════════════════════════════
+# 7. Input Validation & DoS Prevention
+# ═══════════════════════════════════════════════════════════════
+
+echo ""
+echo "7. Input Validation & DoS Prevention"
+
+# Test max string length validation (1000 chars)
+test_max_length_validation() {
+  # Generate a 1001-character string using Python
+  local long_input=$(python3 -c "print('a'*1001)")
+  
+  # Test oui-lookup (representative test - validates the pattern works)
+  local result=$(mcp_call "oui-lookup" "oui_lookup" \
+    "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"oui_lookup\",\"arguments\":{\"mac\":\"$long_input\"}}}")
+  
+  # Check if it returns "Input too long" error
+  if echo "$result" | grep -q "Input too long"; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+test_integration "Max string length validation (1000 chars)" test_max_length_validation
+
+# Test spec number format validation (3GPP only)
+test_spec_format_validation() {
+  local result=$(mcp_call "threegpp-specs" "spec_get" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"spec_get","arguments":{"spec_number":"invalid"}}}')
+  
+  if echo "$result" | grep -q "Invalid spec number format"; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+test_integration "3GPP spec number format validation" test_spec_format_validation
+
 echo ""
 echo "========================================="
 echo "SUMMARY: ✅ $PASS passed, ❌ $FAIL failed"

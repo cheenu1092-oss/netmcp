@@ -1,0 +1,25 @@
+# Test files
+test/
+*.test.js
+*.spec.js
+
+# Development files
+.actor/
+.env
+.env.*
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build artifacts
+*.log
+npm-debug.log*
+
+# Type checking config (not needed by consumers)
+jsconfig.json
+tsconfig.json

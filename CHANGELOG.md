@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **New package: dns-records** — IANA DNS resource record type lookups (2026-03-21)
+  - 4 new tools: record_by_type, record_by_name, record_search, dns_stats
+  - Curated database of 48 DNS resource record types from IANA DNS parameters registry
+  - Core data records: A, AAAA, CNAME, NS, PTR, TXT, SRV, etc.
+  - DNSSEC records: DNSKEY, RRSIG, NSEC, DS, NSEC3, etc.
+  - Modern records: SVCB, HTTPS (HTTP/3, QUIC service binding)
+  - Security records: CAA, TLSA, SSHFP, etc.
+  - Input validation (max 1000 chars, type range 0-65535)
+  - Performance metrics (query count, curated hit rate, category breakdown)
+  - No external API calls (curated local database for speed)
+  - Comprehensive README with DNS record type explanations
+  - **Total tools: 31 (was 27) — 7 packages across NetMCP monorepo**
 - **New package: iana-services** — IANA service/port/protocol registry lookups (2026-03-21)
   - 5 new tools: service_by_port, service_by_name, protocol_by_number, protocol_search, iana_stats
   - Curated database of 40+ well-known services and ports (HTTP, HTTPS, SSH, FTP, DNS, SMTP, etc.)

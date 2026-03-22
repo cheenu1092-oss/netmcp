@@ -164,6 +164,25 @@ test_tool "iana-services" "iana_stats" \
     "stats"
 
 echo ""
+echo "7. dns-records (4 tools)"
+
+test_tool "dns-records" "record_by_type" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"record_by_type","arguments":{"type":1}}}' \
+    "type 1 (A record)"
+
+test_tool "dns-records" "record_by_name" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"record_by_name","arguments":{"name":"AAAA"}}}' \
+    "name AAAA"
+
+test_tool "dns-records" "record_search" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"record_search","arguments":{"query":"dnssec","limit":5}}}' \
+    "search dnssec"
+
+test_tool "dns-records" "dns_stats" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"dns_stats","arguments":{}}}' \
+    "stats"
+
+echo ""
 echo "========================================="
 echo "SUMMARY: ✅ $PASS passed, ❌ $FAIL failed"
 echo "========================================="

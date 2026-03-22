@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Updated root README.md to reflect all 8 packages** (2026-03-22)
+  - Updated packages table: 5 → 8 packages (added iana-services, dns-records, iana-media-types)
+  - Updated architecture diagram: 5 → 8 server boxes + data sources
+  - Updated MCP client config: included all 8 packages
+  - Updated tool counts throughout: 19 → 36 smoke tests, 37 → 66 total tests
+  - Added usage examples for 3 new packages (iana-services, dns-records, iana-media-types)
+  - Updated "Why these data sources?" section with IANA registries
+  - Apify Store section notes new packages coming soon
+  - **Total documentation update: +60% content** covering all monorepo packages
+
 ### Added
 - **Integration tests for iana-media-types** (4 new tests, 30 total integration tests) — 2026-03-21
   - Max length validation (>1000 chars rejects input)

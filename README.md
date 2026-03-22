@@ -22,6 +22,9 @@ NetMCP fixes that by wrapping authoritative, free, public networking databases i
 | [`nvd-network-cves`](./packages/nvd-network-cves) | NIST NVD | 250K+ CVEs | ✅ Done |
 | [`fcc-devices`](./packages/fcc-devices) | FCC Equipment Auth | 20K+ grantees | ✅ Done |
 | [`threegpp-specs`](./packages/threegpp-specs) | 3GPP Archive | 5G/LTE standards | ✅ Done |
+| [`iana-services`](./packages/iana-services) | IANA Service Registry | 40+ services/ports | ✅ Done |
+| [`dns-records`](./packages/dns-records) | IANA DNS RR Types | 48 record types | ✅ Done |
+| [`iana-media-types`](./packages/iana-media-types) | IANA Media Types | 80+ MIME types | ✅ Done |
 
 ## Architecture
 
@@ -44,7 +47,7 @@ graph TB
         end
         
         subgraph "rfc-search"
-            RFC[3 tools<br/>10s timeout<br/>5 req/10s rate limit]
+            RFC[4 tools<br/>10s timeout<br/>5 req/10s rate limit]
         end
         
         subgraph "nvd-network-cves"
@@ -52,11 +55,23 @@ graph TB
         end
         
         subgraph "fcc-devices"
-            FCC[3 tools<br/>10 req/10s rate limit<br/>15s timeout]
+            FCC[4 tools<br/>10 req/10s rate limit<br/>15s timeout]
         end
         
         subgraph "threegpp-specs"
-            3GPP[3 tools<br/>curated + FTP<br/>10s timeout]
+            3GPP[4 tools<br/>curated + FTP<br/>10s timeout]
+        end
+        
+        subgraph "iana-services"
+            IANA[5 tools<br/>local database<br/>instant response]
+        end
+        
+        subgraph "dns-records"
+            DNS[4 tools<br/>local database<br/>instant response]
+        end
+        
+        subgraph "iana-media-types"
+            MEDIA[5 tools<br/>local database<br/>instant response]
         end
     end
     
@@ -66,15 +81,21 @@ graph TB
         DS3[(NIST NVD<br/>250K+ CVEs)]
         DS4[(FCC API<br/>20K+ grantees)]
         DS5[(3GPP Archive<br/>5G/LTE specs)]
+        DS6[(IANA Services<br/>40+ ports/protocols)]
+        DS7[(IANA DNS RR<br/>48 record types)]
+        DS8[(IANA Media Types<br/>80+ MIME types)]
     end
     
     A1 & A2 & A3 & A4 --> MCP
-    MCP --> OUI & RFC & NVD & FCC & 3GPP
+    MCP --> OUI & RFC & NVD & FCC & 3GPP & IANA & DNS & MEDIA
     OUI --> DS1
     RFC --> DS2
     NVD --> DS3
     FCC --> DS4
     3GPP --> DS5
+    IANA --> DS6
+    DNS --> DS7
+    MEDIA --> DS8
     
     classDef agent fill:#e1f5fe,stroke:#01579b,stroke-width:2px
     classDef mcp fill:#fff3e0,stroke:#e65100,stroke-width:2px
@@ -83,8 +104,8 @@ graph TB
     
     class A1,A2,A3,A4 agent
     class MCP mcp
-    class OUI,RFC,NVD,FCC,3GPP server
-    class DS1,DS2,DS3,DS4,DS5 source
+    class OUI,RFC,NVD,FCC,3GPP,IANA,DNS,MEDIA server
+    class DS1,DS2,DS3,DS4,DS5,DS6,DS7,DS8 source
 ```
 
 **Key features:**
@@ -93,7 +114,7 @@ graph TB
 - ⏱️ **Timeouts** — All network calls have timeouts (10-15s) to prevent hangs
 - 💾 **Caching** — NVD package has 24-hour in-memory cache (reduces API load, faster responses)
 - ✅ **100% JSDoc coverage** — Full type annotations for IDE autocomplete and static analysis
-- 🧪 **Comprehensive tests** — 19 smoke tests + 18 integration tests (37 total)
+- 🧪 **Comprehensive tests** — 36 smoke tests + 30 integration tests (66 total)
 - 🚀 **Production-ready** — CI/CD, ESLint, npm workspaces, all security issues resolved
 
 ## Use it 3 ways
@@ -130,6 +151,18 @@ Add to your MCP client config:
     "threegpp-specs": {
       "command": "node",
       "args": ["packages/threegpp-specs/src/index.js"]
+    },
+    "iana-services": {
+      "command": "node",
+      "args": ["packages/iana-services/src/index.js"]
+    },
+    "dns-records": {
+      "command": "node",
+      "args": ["packages/dns-records/src/index.js"]
+    },
+    "iana-media-types": {
+      "command": "node",
+      "args": ["packages/iana-media-types/src/index.js"]
     }
   }
 }
@@ -143,6 +176,7 @@ No setup needed. Use via Apify Store:
 - [NVD Network CVEs →](https://apify.com/jugaad-lab/nvd-network-cves)
 - [FCC Devices →](https://apify.com/jugaad-lab/fcc-devices)
 - [3GPP Specs →](https://apify.com/jugaad-lab/threegpp-specs)
+- IANA Services, DNS Records, and Media Types (coming soon to Apify Store)
 
 ### 3. OpenClaw / Claude Code Skill
 
@@ -267,6 +301,71 @@ Once configured in your MCP client, you can ask natural language questions and t
 
 ---
 
+### IANA Services (Port & Protocol Lookup)
+**Ask:** "What service runs on port 443?"  
+**Tool used:** `service_by_port`  
+**Response:**
+```json
+{
+  "port": 443,
+  "services": [
+    {
+      "name": "https",
+      "protocol": "tcp",
+      "description": "HTTP over TLS/SSL",
+      "assignee": "IETF",
+      "rfc": "RFC 2818"
+    }
+  ]
+}
+```
+
+**Ask:** "Search for VPN services"  
+**Tool used:** `service_search`  
+**Returns:** List of VPN/tunneling services (IPsec, OpenVPN, L2TP)
+
+---
+
+### DNS Records (Resource Record Types)
+**Ask:** "What's a DNS AAAA record?"  
+**Tool used:** `record_by_name`  
+**Response:**
+```json
+{
+  "type": 28,
+  "name": "AAAA",
+  "description": "IPv6 address record",
+  "rfc": "RFC 3596",
+  "category": "Data"
+}
+```
+
+**Ask:** "Find DNS security record types"  
+**Tool used:** `record_search` (keyword: "dnssec")  
+**Returns:** DNSKEY, RRSIG, NSEC, DS, NSEC3, TLSA, and more
+
+---
+
+### IANA Media Types (MIME Type Lookup)
+**Ask:** "What's the MIME type for .webp files?"  
+**Tool used:** `media_by_extension`  
+**Response:**
+```json
+{
+  "extension": ".webp",
+  "media_type": "image/webp",
+  "description": "WebP image format",
+  "rfc": "WebP Specification",
+  "category": "image"
+}
+```
+
+**Ask:** "Show me all video formats"  
+**Tool used:** `media_by_category` (category: "video")  
+**Returns:** video/mp4, video/webm, video/ogg, video/quicktime, etc.
+
+---
+
 ## Why these data sources?
 
 All data is **free, public, and authoritative**:
@@ -275,6 +374,9 @@ All data is **free, public, and authoritative**:
 - **NIST NVD** — US government vulnerability database (250K+ CVEs)
 - **FCC EAS** — Official US wireless equipment certifications (20K+ grantees)
 - **3GPP** — Global 5G/LTE/NR standards body (5K+ specifications)
+- **IANA Services** — Official port and protocol number registry (40+ common services)
+- **IANA DNS RR Types** — Official DNS resource record type registry (48 record types)
+- **IANA Media Types** — Official MIME type registry (80+ common types)
 
 **No API keys needed. No rate limit issues. No scraping gray areas.**
 
@@ -283,7 +385,7 @@ All data is **free, public, and authoritative**:
 - ✅ **100% JSDoc type coverage** — IDE autocomplete, static analysis
 - ✅ **Thread-safe rate limiting** — prevents API throttling under concurrent load
 - ✅ **24-hour caching (NVD)** — faster responses, reduced API pressure
-- ✅ **Comprehensive test suite** — 35 tests (19 smoke + 16 integration)
+- ✅ **Comprehensive test suite** — 66 tests (36 smoke + 30 integration)
 - ✅ **CI/CD with GitHub Actions** — tests on Node.js 20.x, 22.x, 24.x
 - ✅ **ESLint + type validation** — zero errors, zero warnings
 - ✅ **npm workspaces** — efficient monorepo with hoisted dependencies

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Test artifact generation for GitHub Actions** (Cycle 49, 2026-03-22 12:20 PM PST)
+  - Modified `test-all.sh` to generate `test-smoke-results.txt` log file
+  - Modified `test-integration.sh` to generate `test-integration-results.txt` log file
+  - Both test scripts now use `tee` to output to both stdout and log files
+  - Added timestamps (Started/Completed) and log file location to test output
+  - Updated GitHub Actions workflow to upload correct artifact paths
+  - **Impact:** Resolves artifact upload failure present since Cycle 3 (45 cycles ago!)
+  - **Benefit:** Test logs now available as downloadable artifacts in GitHub Actions for debugging
+
 ### Added
 
 - **Updated root README to include whois-lookup package** (Cycle 47, 2026-03-22 10:20 AM PST)

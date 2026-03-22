@@ -1,0 +1,70 @@
+=========================================
+NetMCP Comprehensive Test Suite (Smoke Tests)
+Started: 2026-03-22 12:23:21
+=========================================
+
+1. oui-lookup (4 tools)
+  oui_lookup (valid MAC)... ✅ PASS
+  oui_lookup (short MAC - should return error message in result)... ✅ PASS
+  oui_search (search Apple)... ✅ PASS
+  oui_stats (stats)... ✅ PASS
+
+2. rfc-search (4 tools)
+  rfc_get (RFC 8446)... ✅ PASS
+  rfc_search (search BGP)... ✅ PASS
+  rfc_recent (recent RFCs)... ✅ PASS
+  rfc_stats (stats)... ✅ PASS
+
+3. nvd-network-cves (6 tools)
+   Note: NVD API has rate limits (5 req/30s), but caching reduces load
+  cve_get (CVE-2023-44487)... ✅ PASS
+  cve_get (invalid CVE format)... ✅ PASS
+  cve_get (CVE-2023-44487 (cached))... ✅ PASS
+  cve_search (search wifi)... ✅ PASS
+  cve_by_vendor (Cisco CVEs)... ✅ PASS
+  cve_cache_stats (cache stats)... ✅ PASS
+
+4. fcc-devices (4 tools)
+  fcc_search (search Apple)... ✅ PASS
+  fcc_get (BCG grantee)... ✅ PASS
+  fcc_recent (recent grantees)... ✅ PASS
+  fcc_stats (stats)... ✅ PASS
+
+5. threegpp-specs (4 tools)
+  spec_get (TS 23.501)... ✅ PASS
+  spec_search (search 5G)... ✅ PASS
+  spec_releases (Release 18)... ✅ PASS
+  spec_stats (stats)... ✅ PASS
+
+6. iana-services (5 tools)
+  service_by_port (port 443)... ✅ PASS
+  service_by_name (search http)... ✅ PASS
+  protocol_by_number (protocol 6 (TCP))... ✅ PASS
+  protocol_search (search control)... ✅ PASS
+  iana_stats (stats)... ✅ PASS
+
+7. dns-records (4 tools)
+  record_by_type (type 1 (A record))... ✅ PASS
+  record_by_name (name AAAA)... ✅ PASS
+  record_search (search dnssec)... ✅ PASS
+  dns_stats (stats)... ✅ PASS
+
+8. iana-media-types (5 tools)
+  media_by_extension (extension .json)... ✅ PASS
+  media_by_type (type image/webp)... ✅ PASS
+  media_search (search video)... ✅ PASS
+  media_by_category (category audio)... ✅ PASS
+  media_stats (stats)... ✅ PASS
+
+9. whois-lookup (5 tools)
+  whois_lookup (universal lookup - domain)... ✅ PASS
+  whois_domain (domain lookup)... ✅ PASS
+  whois_ip (IP lookup)... ✅ PASS
+  whois_asn (ASN lookup)... ✅ PASS
+  whois_stats (stats)... ✅ PASS
+
+=========================================
+SUMMARY: ✅ 41 passed, ❌ 0 failed
+Completed: 2026-03-22 12:23:53
+Log saved to: /Users/cheenu/clawd/projects/netmcp/test-smoke-results.txt
+=========================================

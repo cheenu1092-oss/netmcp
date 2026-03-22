@@ -1,0 +1,66 @@
+=========================================
+NetMCP Integration Test Suite
+Started: 2026-03-22 12:23:58
+=========================================
+
+1. Thread-Safe Rate Limiting (nvd-network-cves)
+  Concurrent API calls with thread-safe rate limiter... ✅ PASS
+
+2. NVD Cache Behavior
+  Cache hit for repeated CVE lookup... ✅ PASS
+  Cache stats tool returns metrics... ✅ PASS
+
+3. Error Handling & Edge Cases
+  Invalid CVE format returns error... ✅ PASS
+  Short MAC address returns error... ✅ PASS
+  Non-existent RFC number handled gracefully... ✅ PASS
+  Invalid FCC grantee code handled gracefully... ✅ PASS
+
+4. Boundary Cases & Limits
+  OUI search respects 100-result limit cap... ✅ PASS
+  Zero limit returns empty results... ✅ PASS
+  Empty search query handled gracefully... ✅ PASS
+  Special characters in search query... ✅ PASS
+
+5. Rate Limiting Verification
+  RFC search rate limiter enforces 5 req/10s... ✅ PASS
+  FCC devices rate limiter enforces 10 req/10s... ✅ PASS
+
+6. Data Integrity & Format Validation
+  MAC address normalization across formats... ✅ PASS
+  CVSS score extraction from NVD data... ✅ PASS
+  3GPP spec number normalization (TS prefix)... ✅ PASS
+
+7. Input Validation & DoS Prevention
+  Max string length validation (1000 chars)... ✅ PASS
+  3GPP spec number format validation... ✅ PASS
+
+8. DNS Records (dns-records)
+  Invalid TYPE number returns error... ✅ PASS
+  Boundary TYPE numbers (0, 65535) handled correctly... ✅ PASS
+  DNSSEC search returns security records... ✅ PASS
+  Case-insensitive name lookup (AAAA vs aaaa)... ✅ PASS
+
+9. IANA Services (iana-services)
+  Invalid port number returns error... ✅ PASS
+  Boundary ports (0, 1, 65535) handled correctly... ✅ PASS
+  Protocol search matches correct protocol (ICMP)... ✅ PASS
+  Stats tool returns performance metrics... ✅ PASS
+
+10. IANA Media Types (iana-media-types)
+  Max length validation (>1000 chars) rejects input... ✅ PASS
+  Case-insensitive extension lookup (.JSON vs .json)... ✅ PASS
+  Category filter returns multiple types (video/mp4, video/webm)... ✅ PASS
+  Stats tool returns database metrics... ✅ PASS
+
+11. WHOIS Lookup (whois-lookup)
+  Max length validation (1001 chars rejects)... ✅ PASS
+  Type detection (domain, IPv4, ASN)... ✅ PASS
+  Invalid query format handled gracefully... ✅ PASS
+  Stats tool returns performance metrics... ✅ PASS
+
+=========================================
+SUMMARY: ✅ 34 passed, ❌ 0 failed
+Completed: 2026-03-22 12:24:29
+Log saved to: /Users/cheenu/clawd/projects/netmcp/test-integration-results.txt
+=========================================

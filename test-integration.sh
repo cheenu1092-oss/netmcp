@@ -2,15 +2,22 @@
 # Integration tests for NetMCP packages
 # Tests: concurrency, caching, rate limiting, error handling, boundary cases
 
+# Setup logging to file for GitHub Actions artifacts
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+LOG_FILE="$SCRIPT_DIR/test-integration-results.txt"
+rm -f "$LOG_FILE"
+
+# Redirect all output to both stdout and log file
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 echo "========================================="
 echo "NetMCP Integration Test Suite"
+echo "Started: $(date '+%Y-%m-%d %H:%M:%S')"
 echo "========================================="
 echo ""
 
 PASS=0
 FAIL=0
-
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 test_integration() {
     local desc=$1
@@ -691,6 +698,8 @@ test_integration "Stats tool returns performance metrics" test_whois_stats
 echo ""
 echo "========================================="
 echo "SUMMARY: ✅ $PASS passed, ❌ $FAIL failed"
+echo "Completed: $(date '+%Y-%m-%d %H:%M:%S')"
+echo "Log saved to: $LOG_FILE"
 echo "========================================="
 
 [ $FAIL -eq 0 ] && exit 0 || exit 1

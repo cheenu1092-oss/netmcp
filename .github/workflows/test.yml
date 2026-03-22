@@ -63,8 +63,8 @@ jobs:
         with:
           name: test-results-node-${{ matrix.node-version }}
           path: |
-            test-results.txt
-            test-*.log
+            test-smoke-results.txt
+            test-integration-results.txt
           retention-days: 7
 
   lint:

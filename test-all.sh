@@ -1,15 +1,22 @@
 #!/bin/bash
 # Comprehensive test script for all NetMCP packages
 
+# Setup logging to file for GitHub Actions artifacts
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+LOG_FILE="$SCRIPT_DIR/test-smoke-results.txt"
+rm -f "$LOG_FILE"
+
+# Redirect all output to both stdout and log file
+exec > >(tee -a "$LOG_FILE") 2>&1
+
 echo "========================================="
-echo "NetMCP Comprehensive Test Suite"
+echo "NetMCP Comprehensive Test Suite (Smoke Tests)"
+echo "Started: $(date '+%Y-%m-%d %H:%M:%S')"
 echo "========================================="
 echo ""
 
 PASS=0
 FAIL=0
-
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 test_tool() {
     local pkg=$1
@@ -230,6 +237,8 @@ test_tool "whois-lookup" "whois_stats" \
 echo ""
 echo "========================================="
 echo "SUMMARY: ✅ $PASS passed, ❌ $FAIL failed"
+echo "Completed: $(date '+%Y-%m-%d %H:%M:%S')"
+echo "Log saved to: $LOG_FILE"
 echo "========================================="
 
 [ $FAIL -eq 0 ] && exit 0 || exit 1

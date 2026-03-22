@@ -8,6 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Integration tests for dns-records and iana-services packages** (2026-03-21)
+  - Added Test Suite 8: DNS Records (4 integration tests)
+    - Invalid TYPE number validation (70000 > 65535)
+    - Boundary TYPE numbers (0, 65535) handled correctly
+    - DNSSEC search returns security records (category filter)
+    - Case-insensitive name lookup (AAAA vs aaaa)
+  - Added Test Suite 9: IANA Services (4 integration tests)
+    - Invalid port number validation (70000 > 65535)
+    - Boundary ports (0, 1, 65535) handled correctly
+    - Protocol search matches correct protocol (ICMP for "control")
+    - Stats tool returns performance metrics
+  - **Total integration tests: 26 (was 18) — 100% package coverage (all 7 packages)**
+  - **Total test suite: 57 tests** (31 smoke + 26 integration)
+  - Tests follow established patterns from Cycle 17 (mcp_call helper, JSON-RPC envelope parsing)
+  - Proper handling of escaped JSON with whitespace-tolerant grep patterns
 - **New package: dns-records** — IANA DNS resource record type lookups (2026-03-21)
   - 4 new tools: record_by_type, record_by_name, record_search, dns_stats
   - Curated database of 48 DNS resource record types from IANA DNS parameters registry

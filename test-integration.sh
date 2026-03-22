@@ -356,6 +356,165 @@ test_spec_format_validation() {
 
 test_integration "3GPP spec number format validation" test_spec_format_validation
 
+# ═══════════════════════════════════════════════════════════════
+# 8. DNS Records (dns-records)
+# ═══════════════════════════════════════════════════════════════
+
+echo ""
+echo "8. DNS Records (dns-records)"
+
+# Test invalid TYPE number (> 65535)
+test_dns_invalid_type() {
+  local result=$(mcp_call "dns-records" "record_by_type" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"record_by_type","arguments":{"type":70000}}}')
+  
+  # Should return MCP validation error with "too_big" or "Type number must be between"
+  if echo "$result" | grep -q "too_big" || echo "$result" | grep -q "Type number must be between"; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+test_integration "Invalid TYPE number returns error" test_dns_invalid_type
+
+# Test boundary TYPE numbers (0 and 65535)
+test_dns_boundary_types() {
+  # TYPE 0 should not exist in database (but should validate correctly)
+  local result0=$(mcp_call "dns-records" "record_by_type" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"record_by_type","arguments":{"type":0}}}')
+  
+  # TYPE 65535 (reserved, should not exist)
+  local result65535=$(mcp_call "dns-records" "record_by_type" \
+    '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"record_by_type","arguments":{"type":65535}}}')
+  
+  # Both should return valid JSON with "found":false (nested in result.content[0].text)
+  if echo "$result0" | grep -q '\\"found\\":false'; then
+    if echo "$result65535" | grep -q '\\"found\\":false'; then
+      return 0
+    fi
+  fi
+  return 1
+}
+
+test_integration "Boundary TYPE numbers (0, 65535) handled correctly" test_dns_boundary_types
+
+# Test DNSSEC search returns only security records
+test_dns_dnssec_search() {
+  local result=$(mcp_call "dns-records" "record_search" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"record_search","arguments":{"query":"dnssec"}}}')
+  
+  # Should return multiple DNSSEC-related records (DNSKEY, RRSIG, DS, NSEC, etc.)  # Check for escaped quotes in nested JSON
+  if echo "$result" | grep -q '\\"category\\":\\"security\\"'; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+test_integration "DNSSEC search returns security records" test_dns_dnssec_search
+
+# Test case-insensitive name lookup (A vs a)
+test_dns_case_insensitive() {
+  local result_upper=$(mcp_call "dns-records" "record_by_name" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"record_by_name","arguments":{"name":"AAAA"}}}')
+  
+  local result_lower=$(mcp_call "dns-records" "record_by_name" \
+    '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"record_by_name","arguments":{"name":"aaaa"}}}')
+  
+  # Both should return same record (type 28) — check escaped JSON
+  if echo "$result_upper" | grep -q '\\"type\\":28' && echo "$result_lower" | grep -q '\\"type\\":28'; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+test_integration "Case-insensitive name lookup (AAAA vs aaaa)" test_dns_case_insensitive
+
+# ═══════════════════════════════════════════════════════════════
+# 9. IANA Services (iana-services)
+# ═══════════════════════════════════════════════════════════════
+
+echo ""
+echo "9. IANA Services (iana-services)"
+
+# Test invalid port number (> 65535)
+test_iana_invalid_port() {
+  local result=$(mcp_call "iana-services" "service_by_port" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"service_by_port","arguments":{"port":70000}}}')
+  
+  # Should return MCP validation error with "too_big" or "<=65535"
+  if echo "$result" | grep -q "too_big" || echo "$result" | grep -q "<=65535"; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+test_integration "Invalid port number returns error" test_iana_invalid_port
+
+# Test boundary ports (0, 1, 65535)
+test_iana_boundary_ports() {
+  # Port 0 (reserved, but should validate)
+  local result0=$(mcp_call "iana-services" "service_by_port" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"service_by_port","arguments":{"port":0}}}')
+  
+  # Port 1 (not in curated db)
+  local result1=$(mcp_call "iana-services" "service_by_port" \
+    '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"service_by_port","arguments":{"port":1}}}')
+  
+  # Port 65535 (reserved, edge case)
+  local result65535=$(mcp_call "iana-services" "service_by_port" \
+    '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"service_by_port","arguments":{"port":65535}}}')
+  
+  # All should return valid JSON with "port" field (check escaped JSON with whitespace)
+  if echo "$result0" | grep -q '\\"port\\":[[:space:]]*0'; then
+    if echo "$result1" | grep -q '\\"port\\":[[:space:]]*1'; then
+      if echo "$result65535" | grep -q '\\"port\\":[[:space:]]*65535'; then
+        return 0
+      fi
+    fi
+  fi
+  return 1
+}
+
+test_integration "Boundary ports (0, 1, 65535) handled correctly" test_iana_boundary_ports
+
+# Test protocol search matches correct category
+test_iana_protocol_category() {
+  # Search for "control" should return ICMP (IP protocol 1)
+  local result=$(mcp_call "iana-services" "protocol_search" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"protocol_search","arguments":{"query":"control"}}}')
+  
+  # Should return ICMP (number 1) which has "Internet Control Message" in description
+  # Check for escaped JSON with whitespace
+  if echo "$result" | grep -q '\\"number\\":[[:space:]]*1'; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+test_integration "Protocol search matches correct protocol (ICMP)" test_iana_protocol_category
+
+# Test stats tool returns metrics
+test_iana_stats() {
+  local result=$(mcp_call "iana-services" "iana_stats" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"iana_stats","arguments":{}}}')
+  
+  # Should return total_queries, curated_hits, services_database_size, protocols_database_size  # Check for escaped JSON
+  if echo "$result" | grep -q '\\"total_queries\\"' && \
+     echo "$result" | grep -q '\\"services_database_size\\"' && \
+     echo "$result" | grep -q '\\"protocols_database_size\\"'; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+test_integration "Stats tool returns performance metrics" test_iana_stats
+
 echo ""
 echo "========================================="
 echo "SUMMARY: ✅ $PASS passed, ❌ $FAIL failed"

@@ -8,6 +8,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Automated release workflow via GitHub Actions** (2026-03-22)
+  - Manual workflow_dispatch trigger for releases (patch/minor/major)
+  - Can release single package or all packages at once
+  - Automated version bumping in package.json files
+  - Git tag creation for each package (@netmcp/<package>@<version>)
+  - GitHub release creation with auto-generated notes
+  - npm publishing with duplicate version checks
+  - CHANGELOG.md automatic updates after successful releases
+  - Integrated with existing test suite (runs all 66 tests before releasing)
+  - Uses conventional commit messages (chore(release): bump versions)
+  - Configures git identity as github-actions[bot]
+  - Requires NPM_TOKEN secret for npm publishing
+  - Benefits:
+    - One-click releases (manual approval required via workflow_dispatch)
+    - Eliminates human error in version bumping/tagging
+    - Consistent release process across all 8 packages
+    - Automated documentation updates (CHANGELOG)
+    - Safe: tests must pass before any publishing
+    - Ready for npm publishing once NPM_TOKEN is configured
+    - Professional standard for mature open source projects
 - **PR auto-labeling via GitHub Actions** (2026-03-22)
   - Automatically labels pull requests based on files changed
   - Package-specific labels: package:oui-lookup, package:rfc-search, etc. (8 packages)

@@ -1,0 +1,193 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Package to release (leave empty for all packages)'
+        required: false
+        type: string
+      release-type:
+        description: 'Release type'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+        default: patch
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  release:
+    name: Release packages
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Configure git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Run tests
+        run: |
+          echo "Running smoke tests..."
+          bash test-all.sh
+          echo "✅ All smoke tests passed"
+      
+      - name: Determine packages to release
+        id: packages
+        run: |
+          if [ -n "${{ github.event.inputs.package }}" ]; then
+            echo "packages=${{ github.event.inputs.package }}" >> $GITHUB_OUTPUT
+          else
+            # Release all packages
+            packages=$(ls packages/ | grep -v node_modules | tr '\n' ' ')
+            echo "packages=$packages" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Bump versions and create tags
+        id: version
+        run: |
+          RELEASE_TYPE="${{ github.event.inputs.release-type }}"
+          PACKAGES="${{ steps.packages.outputs.packages }}"
+          
+          echo "📦 Releasing packages: $PACKAGES"
+          echo "🔼 Release type: $RELEASE_TYPE"
+          
+          TAGS=""
+          for pkg in $PACKAGES; do
+            if [ ! -d "packages/$pkg" ]; then
+              echo "⚠️  Package $pkg not found, skipping"
+              continue
+            fi
+            
+            cd "packages/$pkg"
+            
+            # Get current version
+            CURRENT_VERSION=$(node -p "require('./package.json').version")
+            
+            # Bump version
+            npm version $RELEASE_TYPE --no-git-tag-version
+            NEW_VERSION=$(node -p "require('./package.json').version")
+            
+            echo "✅ $pkg: $CURRENT_VERSION → $NEW_VERSION"
+            
+            # Create git tag
+            TAG="$pkg@$NEW_VERSION"
+            TAGS="$TAGS $TAG"
+            
+            cd ../..
+          done
+          
+          # Commit all package.json changes
+          git add packages/*/package.json
+          git commit -m "chore(release): bump versions for $RELEASE_TYPE release"
+          
+          # Create tags
+          for tag in $TAGS; do
+            git tag -a "$tag" -m "Release $tag"
+          done
+          
+          # Push commits and tags
+          git push origin main
+          git push origin --tags
+          
+          echo "tags=$TAGS" >> $GITHUB_OUTPUT
+      
+      - name: Create GitHub releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAGS="${{ steps.version.outputs.tags }}"
+          
+          for tag in $TAGS; do
+            PKG_NAME=$(echo "$tag" | cut -d'@' -f1)
+            VERSION=$(echo "$tag" | cut -d'@' -f2)
+            
+            # Generate release notes from CHANGELOG
+            NOTES="Release of @netmcp/$PKG_NAME version $VERSION"
+            
+            # Check if package has README
+            if [ -f "packages/$PKG_NAME/README.md" ]; then
+              NOTES="$NOTES\n\nSee [README](https://github.com/cheenu1092-oss/netmcp/tree/main/packages/$PKG_NAME/README.md) for usage details."
+            fi
+            
+            # Create GitHub release
+            gh release create "$tag" \
+              --title "$tag" \
+              --notes "$NOTES" \
+              --verify-tag
+            
+            echo "✅ Created GitHub release for $tag"
+          done
+      
+      - name: Publish to npm
+        if: success()
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          PACKAGES="${{ steps.packages.outputs.packages }}"
+          
+          echo "📤 Publishing to npm..."
+          
+          for pkg in $PACKAGES; do
+            if [ ! -d "packages/$pkg" ]; then
+              continue
+            fi
+            
+            cd "packages/$pkg"
+            
+            # Check if already published
+            PACKAGE_NAME="@netmcp/$pkg"
+            VERSION=$(node -p "require('./package.json').version")
+            
+            if npm view "$PACKAGE_NAME@$VERSION" version >/dev/null 2>&1; then
+              echo "⚠️  $PACKAGE_NAME@$VERSION already published, skipping"
+            else
+              npm publish --access public
+              echo "✅ Published $PACKAGE_NAME@$VERSION"
+            fi
+            
+            cd ../..
+          done
+      
+      - name: Update CHANGELOG.md
+        if: success()
+        run: |
+          TAGS="${{ steps.version.outputs.tags }}"
+          DATE=$(date +%Y-%m-%d)
+          
+          # Create changelog entry
+          ENTRY="## Released - $DATE\n\n"
+          for tag in $TAGS; do
+            ENTRY="$ENTRY- **$tag** — Published to npm\n"
+          done
+          
+          # Prepend to CHANGELOG (after "# Changelog" header)
+          if [ -f CHANGELOG.md ]; then
+            sed -i "/^# Changelog/a\\\\n$ENTRY" CHANGELOG.md
+            git add CHANGELOG.md
+            git commit -m "docs: update CHANGELOG for release $DATE"
+            git push origin main
+          fi

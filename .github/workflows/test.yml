@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies (workspaces)
         run: npm install
       
+      - name: Install system dependencies (whois CLI)
+        run: sudo apt-get update && sudo apt-get install -y whois
+      
       - name: Download OUI database (if needed)
         run: |
           cd packages/oui-lookup

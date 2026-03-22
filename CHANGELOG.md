@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Integration tests for iana-media-types** (4 new tests, 30 total integration tests) — 2026-03-21
+  - Max length validation (>1000 chars rejects input)
+  - Case-insensitive extension lookup (.JSON vs .json)
+  - Category filter returns multiple types (video/mp4, video/webm)
+  - Stats tool returns database metrics (total_media_types, by_category)
+  - **Total test coverage: 66 tests** (36 smoke + 30 integration)
 - **New package: iana-media-types** — IANA Media Types (MIME types) lookup MCP server (2026-03-21)
   - 5 new tools: media_by_extension, media_by_type, media_search, media_by_category, media_stats
   - 80+ curated media types across 9 categories (text, image, audio, video, application, font, multipart, model, message)

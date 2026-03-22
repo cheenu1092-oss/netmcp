@@ -515,6 +515,85 @@ test_iana_stats() {
 
 test_integration "Stats tool returns performance metrics" test_iana_stats
 
+# ==========================================
+# Test Suite 10: IANA Media Types (iana-media-types)
+# ==========================================
+echo ""
+echo "10. IANA Media Types (iana-media-types)"
+
+# Test max length validation (> 1000 chars)
+test_media_max_length() {
+  # Generate 1001-char string using Python
+  local long_ext=$(python3 -c "print('x' * 1001)")
+  
+  local result=$(mcp_call "iana-media-types" "media_by_extension" \
+    "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"media_by_extension\",\"arguments\":{\"extension\":\"$long_ext\"}}}")
+  
+  # Should return MCP validation error with isError: true
+  # Format: {"result":{"content":[...],"isError":true},...}
+  if echo "$result" | grep -q '"isError":[[:space:]]*true'; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+test_integration "Max length validation (>1000 chars) rejects input" test_media_max_length
+
+# Test case-insensitive extension lookup
+test_media_case_insensitive() {
+  # Test .JSON (uppercase) should return same as .json
+  local result_upper=$(mcp_call "iana-media-types" "media_by_extension" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"media_by_extension","arguments":{"extension":".JSON"}}}')
+  
+  local result_lower=$(mcp_call "iana-media-types" "media_by_extension" \
+    '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"media_by_extension","arguments":{"extension":".json"}}}')
+  
+  # Both should return application/json
+  if echo "$result_upper" | grep -q '\\"type\\":[[:space:]]*\\"application/json\\"'; then
+    if echo "$result_lower" | grep -q '\\"type\\":[[:space:]]*\\"application/json\\"'; then
+      return 0
+    fi
+  fi
+  return 1
+}
+
+test_integration "Case-insensitive extension lookup (.JSON vs .json)" test_media_case_insensitive
+
+# Test category filtering
+test_media_category_filter() {
+  # Get all video types (should return multiple: mp4, webm, etc.)
+  local result=$(mcp_call "iana-media-types" "media_by_category" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"media_by_category","arguments":{"category":"video"}}}')
+  
+  # Should return array with multiple video types (check for mp4 and webm)
+  if echo "$result" | grep -q '\\"type\\":[[:space:]]*\\"video/mp4\\"'; then
+    if echo "$result" | grep -q '\\"type\\":[[:space:]]*\\"video/webm\\"'; then
+      return 0
+    fi
+  fi
+  return 1
+}
+
+test_integration "Category filter returns multiple types (video/mp4, video/webm)" test_media_category_filter
+
+# Test stats tool returns database metrics
+test_media_stats() {
+  local result=$(mcp_call "iana-media-types" "media_stats" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"media_stats","arguments":{}}}')
+  
+  # Should return total_queries, curated_hits, total_media_types, by_category
+  if echo "$result" | grep -q '\\"total_queries\\"' && \
+     echo "$result" | grep -q '\\"total_media_types\\"' && \
+     echo "$result" | grep -q '\\"by_category\\"'; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+test_integration "Stats tool returns database metrics" test_media_stats
+
 echo ""
 echo "========================================="
 echo "SUMMARY: ✅ $PASS passed, ❌ $FAIL failed"

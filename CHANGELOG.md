@@ -128,6 +128,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This CHANGELOG.md file to track project changes
 
 ### Fixed
+- **All ESLint JSDoc warnings in dns-records and iana-services** (2026-03-21)
+  - Fixed 20 JSDoc stylistic warnings (0 errors → 0 warnings, 100% reduction)
+  - Changed `@typedef {Object}` → `@typedef {object}` (lowercase preferred, 5 instances)
+  - Changed `Object<string, number>` → `Record<string, number>` (modern syntax, 2 instances)
+  - Added @returns descriptions to all helper functions (5 functions)
+  - Removed blank lines after block descriptions (tag-lines rule, 7 instances)
+  - Changed `@fileoverview` → `@file` (ESLint preference)
+  - Added JSDoc comment to main() function (missing JSDoc)
+  - Removed default value from @param (changed `[limit=20]` → `[limit]`)
+  - **Clean lint achieved:** All 7 packages now have 0 errors, 0 warnings
+  - Consistent JSDoc style across all packages (best practices enforced)
 - **CI reliability: OUI database caching** (2026-03-21)
   - Commit OUI database (`oui.json`, 4.3MB) to git instead of downloading on every CI run
   - IEEE OUI server frequently blocks/rate-limits GitHub Actions runners  

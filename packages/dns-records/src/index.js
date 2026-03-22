@@ -5,7 +5,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod';
 
 /**
- * @typedef {Object} DNSRecordType
+ * @typedef {object} DNSRecordType
  * @property {number} type - DNS TYPE value (0-65535)
  * @property {string} name - Record type name (e.g., "A", "AAAA", "MX")
  * @property {string} description - What this record type does
@@ -14,7 +14,7 @@ import { z } from 'zod';
  */
 
 /**
- * @typedef {Object} DNSSearchResult
+ * @typedef {object} DNSSearchResult
  * @property {string} query - Search query
  * @property {number} count - Number of results
  * @property {boolean} truncated - Whether results were truncated
@@ -22,19 +22,18 @@ import { z } from 'zod';
  */
 
 /**
- * @typedef {Object} DNSStatsResult
+ * @typedef {object} DNSStatsResult
  * @property {number} total_record_types - Total curated record types
  * @property {number} total_queries - Total queries since startup
  * @property {number} curated_hits - Queries satisfied by curated database
  * @property {string} curated_hit_rate - Percentage of queries satisfied (formatted)
- * @property {Object<string, number>} by_category - Count of record types by category
+ * @property {Record<string, number>} by_category - Count of record types by category
  * @property {string} data_source - Source of DNS data
  */
 
 /**
  * Curated DNS resource record types from IANA DNS parameters registry.
  * Source: https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml
- * 
  * @type {DNSRecordType[]}
  */
 const DNS_RECORDS = [
@@ -111,9 +110,8 @@ let curatedHits = 0;
 
 /**
  * Look up DNS record type by type number.
- * 
  * @param {number} typeNumber - DNS TYPE value (0-65535)
- * @returns {DNSRecordType|null}
+ * @returns {DNSRecordType|null} Record type if found, null otherwise
  */
 function getRecordByType(typeNumber) {
   return DNS_RECORDS.find(r => r.type === typeNumber) || null;
@@ -121,9 +119,8 @@ function getRecordByType(typeNumber) {
 
 /**
  * Look up DNS record type by name (case-insensitive).
- * 
  * @param {string} name - Record type name (e.g., "A", "AAAA", "MX")
- * @returns {DNSRecordType|null}
+ * @returns {DNSRecordType|null} Record type if found, null otherwise
  */
 function getRecordByName(name) {
   const normalized = name.toUpperCase();
@@ -132,10 +129,9 @@ function getRecordByName(name) {
 
 /**
  * Search DNS record types by keyword or description (case-insensitive).
- * 
  * @param {string} query - Search query
- * @param {number} [limit=20] - Max results to return
- * @returns {DNSSearchResult}
+ * @param {number} [limit] - Max results to return (default 20)
+ * @returns {DNSSearchResult} Search results with matching record types
  */
 function searchRecords(query, limit = 20) {
   const q = query.toLowerCase();
@@ -156,14 +152,13 @@ function searchRecords(query, limit = 20) {
 
 /**
  * Get DNS record statistics.
- * 
- * @returns {DNSStatsResult}
+ * @returns {DNSStatsResult} Statistics about DNS record database and usage
  */
 function getStats() {
   const byCategory = DNS_RECORDS.reduce((acc, r) => {
     acc[r.category] = (acc[r.category] || 0) + 1;
     return acc;
-  }, /** @type {Object<string, number>} */ ({}));
+  }, /** @type {Record<string, number>} */ ({}));
   
   const hitRate = totalQueries > 0 ? ((curatedHits / totalQueries) * 100).toFixed(1) : '0.0';
   
@@ -382,7 +377,10 @@ server.tool(
   }
 );
 
-// Start server
+/**
+ * Start the MCP server.
+ * @returns {Promise<void>}
+ */
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);

@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * @fileoverview IANA Service/Port/Protocol Registry MCP Server
- * 
+ * @file IANA Service/Port/Protocol Registry MCP Server
  * Provides tools for looking up IANA-registered services, ports, and protocols.
  * Data source: IANA Service Name and Transport Protocol Port Number Registry
- * 
  * @see https://www.iana.org/assignments/service-names-port-numbers/
  */
 
@@ -18,7 +16,7 @@ import { z } from 'zod';
 // ============================================================================
 
 /**
- * @typedef {Object} ServiceEntry
+ * @typedef {object} ServiceEntry
  * @property {string} name - Service name
  * @property {number|string} port - Port number or range
  * @property {string} protocol - Transport protocol (tcp, udp, sctp, dccp)
@@ -28,7 +26,7 @@ import { z } from 'zod';
  */
 
 /**
- * @typedef {Object} ProtocolEntry
+ * @typedef {object} ProtocolEntry
  * @property {number} number - Protocol number
  * @property {string} name - Protocol keyword
  * @property {string} description - Protocol description

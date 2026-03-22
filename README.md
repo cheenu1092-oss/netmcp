@@ -25,6 +25,7 @@ NetMCP fixes that by wrapping authoritative, free, public networking databases i
 | [`iana-services`](./packages/iana-services) | IANA Service Registry | 40+ services/ports | ✅ Done |
 | [`dns-records`](./packages/dns-records) | IANA DNS RR Types | 48 record types | ✅ Done |
 | [`iana-media-types`](./packages/iana-media-types) | IANA Media Types | 80+ MIME types | ✅ Done |
+| [`whois-lookup`](./packages/whois-lookup) | WHOIS Protocol | Domain/IP/ASN queries | ✅ Done |
 
 ## Architecture
 
@@ -73,6 +74,10 @@ graph TB
         subgraph "iana-media-types"
             MEDIA[5 tools<br/>local database<br/>instant response]
         end
+        
+        subgraph "whois-lookup"
+            WHOIS[5 tools<br/>domain/IP/ASN<br/>10s timeout]
+        end
     end
     
     subgraph "Data Sources"
@@ -84,10 +89,11 @@ graph TB
         DS6[(IANA Services<br/>40+ ports/protocols)]
         DS7[(IANA DNS RR<br/>48 record types)]
         DS8[(IANA Media Types<br/>80+ MIME types)]
+        DS9[(WHOIS Servers<br/>Domain registrars)]
     end
     
     A1 & A2 & A3 & A4 --> MCP
-    MCP --> OUI & RFC & NVD & FCC & 3GPP & IANA & DNS & MEDIA
+    MCP --> OUI & RFC & NVD & FCC & 3GPP & IANA & DNS & MEDIA & WHOIS
     OUI --> DS1
     RFC --> DS2
     NVD --> DS3
@@ -96,6 +102,7 @@ graph TB
     IANA --> DS6
     DNS --> DS7
     MEDIA --> DS8
+    WHOIS --> DS9
     
     classDef agent fill:#e1f5fe,stroke:#01579b,stroke-width:2px
     classDef mcp fill:#fff3e0,stroke:#e65100,stroke-width:2px
@@ -104,8 +111,8 @@ graph TB
     
     class A1,A2,A3,A4 agent
     class MCP mcp
-    class OUI,RFC,NVD,FCC,3GPP,IANA,DNS,MEDIA server
-    class DS1,DS2,DS3,DS4,DS5,DS6,DS7,DS8 source
+    class OUI,RFC,NVD,FCC,3GPP,IANA,DNS,MEDIA,WHOIS server
+    class DS1,DS2,DS3,DS4,DS5,DS6,DS7,DS8,DS9 source
 ```
 
 **Key features:**
@@ -114,7 +121,7 @@ graph TB
 - ⏱️ **Timeouts** — All network calls have timeouts (10-15s) to prevent hangs
 - 💾 **Caching** — NVD package has 24-hour in-memory cache (reduces API load, faster responses)
 - ✅ **100% JSDoc coverage** — Full type annotations for IDE autocomplete and static analysis
-- 🧪 **Comprehensive tests** — 36 smoke tests + 30 integration tests (66 total)
+- 🧪 **Comprehensive tests** — 41 smoke tests + 34 integration tests (75 total)
 - 🚀 **Production-ready** — CI/CD, ESLint, npm workspaces, all security issues resolved
 
 ## Use it 3 ways
@@ -163,6 +170,10 @@ Add to your MCP client config:
     "iana-media-types": {
       "command": "node",
       "args": ["packages/iana-media-types/src/index.js"]
+    },
+    "whois-lookup": {
+      "command": "node",
+      "args": ["packages/whois-lookup/src/index.js"]
     }
   }
 }
@@ -366,6 +377,31 @@ Once configured in your MCP client, you can ask natural language questions and t
 
 ---
 
+### WHOIS Lookup (Domain/IP/ASN Intelligence)
+**Ask:** "Look up example.com via WHOIS"  
+**Tool used:** `whois_lookup` (universal lookup, auto-detects type)  
+**Response:**
+```json
+{
+  "query": "example.com",
+  "type": "domain",
+  "raw_output": "Domain Name: EXAMPLE.COM\nRegistrar: IANA\nCreation Date: 1995-08-14...",
+  "message": "WHOIS query successful"
+}
+```
+
+**Ask:** "What's the WHOIS info for 8.8.8.8?"  
+**Tool used:** `whois_ip`  
+**Returns:** IP allocation details, network range, organization (Google LLC)
+
+**Ask:** "Look up ASN 15169"  
+**Tool used:** `whois_asn`  
+**Returns:** Autonomous System details (Google LLC, network blocks, contact info)
+
+**Performance:** Queries public WHOIS servers with 10s timeout. Use `whois_stats` to monitor query types and success rate.
+
+---
+
 ## Why these data sources?
 
 All data is **free, public, and authoritative**:
@@ -377,6 +413,7 @@ All data is **free, public, and authoritative**:
 - **IANA Services** — Official port and protocol number registry (40+ common services)
 - **IANA DNS RR Types** — Official DNS resource record type registry (48 record types)
 - **IANA Media Types** — Official MIME type registry (80+ common types)
+- **WHOIS Protocol** — Distributed domain/IP/ASN registration database (RFC 3912)
 
 **No API keys needed. No rate limit issues. No scraping gray areas.**
 
@@ -385,7 +422,7 @@ All data is **free, public, and authoritative**:
 - ✅ **100% JSDoc type coverage** — IDE autocomplete, static analysis
 - ✅ **Thread-safe rate limiting** — prevents API throttling under concurrent load
 - ✅ **24-hour caching (NVD)** — faster responses, reduced API pressure
-- ✅ **Comprehensive test suite** — 66 tests (36 smoke + 30 integration)
+- ✅ **Comprehensive test suite** — 75 tests (41 smoke + 34 integration)
 - ✅ **CI/CD with GitHub Actions** — tests on Node.js 20.x, 22.x, 24.x
 - ✅ **ESLint + type validation** — zero errors, zero warnings
 - ✅ **npm workspaces** — efficient monorepo with hoisted dependencies

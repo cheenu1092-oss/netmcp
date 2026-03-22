@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Updated root README to include whois-lookup package** (Cycle 47, 2026-03-22 10:20 AM PST)
+  - Added whois-lookup to package table (9 packages total now)
+  - Updated architecture diagram (added WHOIS server node + DS9 data source)
+  - Updated tool counts (36 → 41 tools)
+  - Updated test counts (66 → 75 tests: 41 smoke + 34 integration)
+  - Added whois-lookup to MCP client config example
+  - Added comprehensive WHOIS usage examples (domain, IP, ASN lookups)
+  - Updated "Why these data sources?" to include WHOIS Protocol (RFC 3912)
+  - Updated Technical Features section with correct test metrics
+  - **Impact:** Root README now accurately reflects all 9 packages and 41 tools
+
 - **Integration tests for whois-lookup package** (Cycle 46, 2026-03-22)
   - Test Suite 11: WHOIS Lookup with 4 comprehensive integration tests
   - Max length validation (1001 chars rejects input)

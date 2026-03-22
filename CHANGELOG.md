@@ -8,6 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **PR auto-labeling via GitHub Actions** (2026-03-22)
+  - Automatically labels pull requests based on files changed
+  - Package-specific labels: package:oui-lookup, package:rfc-search, etc. (8 packages)
+  - Type-based labels: documentation, tests, ci/cd, dependencies, github-templates, root-config
+  - Uses actions/labeler@v5 with custom .github/labeler.yml configuration
+  - sync-labels: true (removes outdated labels when files change)
+  - Runs on pull_request_target event (secure for external contributors)
+  - Benefits:
+    - Helps maintainers triage PRs quickly (clear package/type indicators)
+    - Standard practice for mature open source projects (used by thousands of repos)
+    - Reduces manual labeling burden (automated via GitHub Actions)
+    - Improves contributor experience (clear labels show which areas are affected)
+    - Foundation for automated PR routing/reviews (labels enable conditional workflows)
 - **Cycle 40:** Automated stale issue/PR management via GitHub Actions
   - Daily stale workflow runs at 1:00 AM UTC
   - Issues: marked stale after 60 days, closed after 14 more days

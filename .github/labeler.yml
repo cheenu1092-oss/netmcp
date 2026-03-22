@@ -1,0 +1,84 @@
+# GitHub PR Auto-Labeler Configuration
+# https://github.com/actions/labeler
+
+# Package-specific labels
+"package:oui-lookup":
+  - changed-files:
+    - any-glob-to-any-file: "packages/oui-lookup/**/*"
+
+"package:rfc-search":
+  - changed-files:
+    - any-glob-to-any-file: "packages/rfc-search/**/*"
+
+"package:nvd-network-cves":
+  - changed-files:
+    - any-glob-to-any-file: "packages/nvd-network-cves/**/*"
+
+"package:fcc-devices":
+  - changed-files:
+    - any-glob-to-any-file: "packages/fcc-devices/**/*"
+
+"package:threegpp-specs":
+  - changed-files:
+    - any-glob-to-any-file: "packages/threegpp-specs/**/*"
+
+"package:iana-services":
+  - changed-files:
+    - any-glob-to-any-file: "packages/iana-services/**/*"
+
+"package:dns-records":
+  - changed-files:
+    - any-glob-to-any-file: "packages/dns-records/**/*"
+
+"package:iana-media-types":
+  - changed-files:
+    - any-glob-to-any-file: "packages/iana-media-types/**/*"
+
+# Type-based labels
+"documentation":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "**/*.md"
+      - "docs/**/*"
+      - "CONTRIBUTING.md"
+      - "SECURITY.md"
+      - "CODE_OF_CONDUCT.md"
+      - "RELEASE.md"
+      - "COVERAGE.md"
+
+"tests":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "test-all.sh"
+      - "test-integration.sh"
+      - "**/*.test.js"
+      - "**/*.spec.js"
+
+"ci/cd":
+  - changed-files:
+    - any-glob-to-any-file:
+      - ".github/workflows/**/*"
+      - ".github/dependabot.yml"
+      - ".github/labeler.yml"
+
+"dependencies":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "package.json"
+      - "package-lock.json"
+      - "packages/*/package.json"
+      - "packages/*/package-lock.json"
+
+"github-templates":
+  - changed-files:
+    - any-glob-to-any-file:
+      - ".github/ISSUE_TEMPLATE/**/*"
+      - ".github/pull_request_template.md"
+
+"root-config":
+  - changed-files:
+    - any-glob-to-any-file:
+      - ".gitignore"
+      - ".nycrc.json"
+      - "eslint.config.js"
+      - ".editorconfig"

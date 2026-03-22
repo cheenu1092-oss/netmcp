@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Release process documentation (RELEASE.md)** — comprehensive npm publishing guide (2026-03-22)
+  - Prerequisites: Test requirements, ESLint validation, CI checks, CHANGELOG updates, npm login
+  - Publishing process: Pre-publish validation, version bumping (semver), commit/tag workflow
+  - Package-specific notes: Size, rate limiting, caching, data sources for all 8 packages
+  - Post-publish verification: Registry checks, installation testing, GitHub releases, README badges
+  - Troubleshooting section: Common errors (402 Payment Required, ENEEDAUTH, EPUBLISHCONFLICT)
+  - Automated releases: semantic-release setup guide for future CI/CD automation
+  - Release checklist: 14-item checklist covering all pre-publish and post-publish steps
+  - **Unblocks npm publishing** — team now has clear, step-by-step instructions for releases
+  - **Professional governance** — completes open source project documentation package
+
 ### Changed
 - **Updated root README.md to reflect all 8 packages** (2026-03-22)
   - Updated packages table: 5 → 8 packages (added iana-services, dns-records, iana-media-types)

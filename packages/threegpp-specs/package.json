@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "MCP server for searching 3GPP specifications (5G/LTE/NR standards)",
   "main": "src/index.js",
+  "bin": {
+    "threegpp-specs": "src/index.js"
+  },
   "type": "module",
   "files": [
     "src/",

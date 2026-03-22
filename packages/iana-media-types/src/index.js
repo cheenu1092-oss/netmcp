@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * @file IANA Media Types MCP Server
  * Provides IANA media type (MIME type) lookup tools for content types, file extensions, and encoding.

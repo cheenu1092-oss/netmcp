@@ -4,6 +4,9 @@
   "description": "MCP server for IANA media type (MIME type) lookups - content types, file extensions, and encoding information",
   "type": "module",
   "main": "src/index.js",
+  "bin": {
+    "iana-media-types": "src/index.js"
+  },
   "scripts": {
     "start": "node src/index.js"
   },

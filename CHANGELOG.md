@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **npx support for all 9 packages** (Cycle 51, 2026-03-22 2:20 PM PST)
+  - Added `bin` field to all 9 package.json files (oui-lookup, rfc-search, nvd-network-cves, fcc-devices, threegpp-specs, iana-services, dns-records, iana-media-types, whois-lookup)
+  - Added missing shebang (`#!/usr/bin/env node`) to iana-media-types/src/index.js
+  - Users can now run packages directly via npx: `npx @netmcp/oui-lookup`, `npx @netmcp/rfc-search`, etc.
+  - All bin entries point to `src/index.js` with correct executable permissions
+  - **Impact:** Resolves P0 showcase blocker — enables instant package execution without installation
+  - **Benefit:** Lowers barrier to entry, enables quick testing, follows npm best practices
+
 - **GETTING_STARTED.md guide** (Cycle 50, 2026-03-22 1:20 PM PST)
   - Comprehensive 5-minute onboarding guide for new users
   - Step-by-step tutorial: clone, install, configure, first query

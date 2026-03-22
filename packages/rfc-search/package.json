@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "MCP server for searching IETF RFCs and Internet Standards",
   "main": "src/index.js",
+  "bin": {
+    "rfc-search": "src/index.js"
+  },
   "type": "module",
   "files": [
     "src/"

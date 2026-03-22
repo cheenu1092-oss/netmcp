@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "MCP server for IEEE OUI MAC address vendor lookup",
   "main": "src/index.js",
+  "bin": {
+    "oui-lookup": "src/index.js"
+  },
   "type": "module",
   "files": [
     "src/",

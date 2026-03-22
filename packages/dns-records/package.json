@@ -4,6 +4,9 @@
   "description": "MCP server for DNS resource record type lookups (IANA DNS parameters registry)",
   "type": "module",
   "main": "src/index.js",
+  "bin": {
+    "dns-records": "src/index.js"
+  },
   "scripts": {
     "start": "node src/index.js"
   },

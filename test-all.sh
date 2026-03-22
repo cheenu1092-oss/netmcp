@@ -141,6 +141,29 @@ test_tool "threegpp-specs" "spec_stats" \
     "stats"
 
 echo ""
+echo "6. iana-services (5 tools)"
+
+test_tool "iana-services" "service_by_port" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"service_by_port","arguments":{"port":443}}}' \
+    "port 443"
+
+test_tool "iana-services" "service_by_name" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"service_by_name","arguments":{"query":"http","limit":3}}}' \
+    "search http"
+
+test_tool "iana-services" "protocol_by_number" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"protocol_by_number","arguments":{"number":6}}}' \
+    "protocol 6 (TCP)"
+
+test_tool "iana-services" "protocol_search" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"protocol_search","arguments":{"query":"control","limit":3}}}' \
+    "search control"
+
+test_tool "iana-services" "iana_stats" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"iana_stats","arguments":{}}}' \
+    "stats"
+
+echo ""
 echo "========================================="
 echo "SUMMARY: ✅ $PASS passed, ❌ $FAIL failed"
 echo "========================================="

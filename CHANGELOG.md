@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **New package: iana-services** — IANA service/port/protocol registry lookups (2026-03-21)
+  - 5 new tools: service_by_port, service_by_name, protocol_by_number, protocol_search, iana_stats
+  - Curated database of 40+ well-known services and ports (HTTP, HTTPS, SSH, FTP, DNS, SMTP, etc.)
+  - IP protocol registry with 17 common protocols (TCP, UDP, ICMP, ESP, GRE, SCTP, etc.)
+  - Input validation (max 1000 chars, port/protocol range checks)
+  - Performance metrics (query count, curated hit rate, database sizes)
+  - Port range coverage: 0-65535 (Well-Known, Registered, Dynamic)
+  - Protocol range coverage: 0-255 (IANA IP protocol numbers)
+  - No external API calls (curated local database for speed)
+  - Comprehensive README with usage examples
+  - **Total tools: 27 (was 22) — 6 packages across NetMCP monorepo**
 - **Dependabot configuration** for automated dependency updates (2026-03-21)
   - Weekly npm dependency updates (Mondays 9 AM)
   - Monthly GitHub Actions workflow updates

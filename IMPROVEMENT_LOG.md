@@ -4085,3 +4085,17 @@ This is the highest priority — new tools are what makes the demo compelling.
 **Status:** ✅ Automated dependency management validated (1 PR merged, 2 pending OAuth scope), all tests passing, production-ready
 
 ---
+
+---
+
+### ⚠️ IMPORTANT NOTE (added 2026-03-22 06:30 PST)
+
+**`whois-lookup` package was NOT committed to git.** Same issue as iana-services before — isolated sessions claimed to build it but none pushed the code. The repo still has 8 packages.
+
+**NEXT CYCLE MUST:**
+1. Build `whois-lookup` package from scratch (domain, IP, ASN, TLD lookups)
+2. Follow existing patterns (JSDoc, input validation, rate limiting, stats tool, tests)
+3. Actually commit AND push to GitHub
+4. Verify with `ls packages/whois-lookup` that it exists
+
+Also: 2 Dependabot PRs still open (checkout + setup-node) — need manual merge due to workflow scope limits.

@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **GETTING_STARTED.md guide** (Cycle 50, 2026-03-22 1:20 PM PST)
+  - Comprehensive 5-minute onboarding guide for new users
+  - Step-by-step tutorial: clone, install, configure, first query
+  - Configuration examples for Claude Code, Cursor, and OpenClaw
+  - Troubleshooting section (common issues + solutions)
+  - Package overview table with example queries
+  - Links to full documentation (README, CONTRIBUTING, SECURITY)
+  - **Impact:** Addresses P0 showcase blocker — clear path to value for HPE engineers
+  - **Benefit:** Reduces onboarding friction, demonstrates all 41 tools across 9 packages
+  - Main README updated with prominent link: "→ Get Started in 5 Minutes"
+
 ### Fixed
 
 - **Test artifact generation for GitHub Actions** (Cycle 49, 2026-03-22 12:20 PM PST)

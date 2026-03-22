@@ -7,6 +7,8 @@
 [![Test Suite](https://github.com/cheenu1092-oss/netmcp/actions/workflows/test.yml/badge.svg)](https://github.com/cheenu1092-oss/netmcp/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
+**→ [Get Started in 5 Minutes](GETTING_STARTED.md)**
+
 ## What is this?
 
 AI agents helping network engineers constantly need to look up protocol specs, device info, and security vulnerabilities. Right now they hallucinate RFC numbers, guess at port assignments, and miss critical CVEs.

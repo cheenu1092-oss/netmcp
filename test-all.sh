@@ -183,6 +183,29 @@ test_tool "dns-records" "dns_stats" \
     "stats"
 
 echo ""
+echo "8. iana-media-types (5 tools)"
+
+test_tool "iana-media-types" "media_by_extension" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"media_by_extension","arguments":{"extension":".json"}}}' \
+    "extension .json"
+
+test_tool "iana-media-types" "media_by_type" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"media_by_type","arguments":{"type":"image/webp"}}}' \
+    "type image/webp"
+
+test_tool "iana-media-types" "media_search" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"media_search","arguments":{"query":"video","limit":5}}}' \
+    "search video"
+
+test_tool "iana-media-types" "media_by_category" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"media_by_category","arguments":{"category":"audio"}}}' \
+    "category audio"
+
+test_tool "iana-media-types" "media_stats" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"media_stats","arguments":{}}}' \
+    "stats"
+
+echo ""
 echo "========================================="
 echo "SUMMARY: ✅ $PASS passed, ❌ $FAIL failed"
 echo "========================================="

@@ -1,0 +1,36 @@
+{
+  "name": "@netmcp/iana-media-types",
+  "version": "1.0.0",
+  "description": "MCP server for IANA media type (MIME type) lookups - content types, file extensions, and encoding information",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": [
+    "mcp",
+    "iana",
+    "mime",
+    "media-types",
+    "content-type",
+    "file-extension",
+    "http",
+    "api",
+    "networking"
+  ],
+  "author": "NetMCP Contributors",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "src/",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

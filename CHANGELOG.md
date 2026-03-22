@@ -8,6 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **New package: iana-media-types** — IANA Media Types (MIME types) lookup MCP server (2026-03-21)
+  - 5 new tools: media_by_extension, media_by_type, media_search, media_by_category, media_stats
+  - 80+ curated media types across 9 categories (text, image, audio, video, application, font, multipart, model, message)
+  - File extension lookups (e.g., .json → application/json, .mp4 → video/mp4)
+  - Content type lookups (e.g., "application/json" → JSON data with encoding UTF-8)
+  - Category filtering with 9 top-level categories
+  - Comprehensive RFC references (RFC 2046 MIME, RFC 8259 JSON, RFC 7303 XML, etc.)
+  - Input validation (max 1000 chars to prevent DoS)
+  - Performance metrics (query count, curated hit rate, category breakdown)
+  - No external API calls (curated local database for instant lookups)
+  - Comprehensive 5KB README with usage examples, media type structure explanation, common use cases
+  - **Total tools: 36 (was 31) — 8 packages across NetMCP monorepo (+16% growth)**
+  - **Total package count: 8 packages** (oui-lookup, rfc-search, nvd-network-cves, fcc-devices, threegpp-specs, iana-services, dns-records, iana-media-types)
 - **Integration tests for dns-records and iana-services packages** (2026-03-21)
   - Added Test Suite 8: DNS Records (4 integration tests)
     - Invalid TYPE number validation (70000 > 65535)

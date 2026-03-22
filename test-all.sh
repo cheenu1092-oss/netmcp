@@ -206,6 +206,28 @@ test_tool "iana-media-types" "media_stats" \
     "stats"
 
 echo ""
+echo "9. whois-lookup (5 tools)"
+test_tool "whois-lookup" "whois_lookup" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"whois_lookup","arguments":{"query":"example.com"}}}' \
+    "universal lookup - domain"
+
+test_tool "whois-lookup" "whois_domain" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"whois_domain","arguments":{"domain":"example.com"}}}' \
+    "domain lookup"
+
+test_tool "whois-lookup" "whois_ip" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"whois_ip","arguments":{"ip":"8.8.8.8"}}}' \
+    "IP lookup"
+
+test_tool "whois-lookup" "whois_asn" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"whois_asn","arguments":{"asn":"AS15169"}}}' \
+    "ASN lookup"
+
+test_tool "whois-lookup" "whois_stats" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"whois_stats","arguments":{}}}' \
+    "stats"
+
+echo ""
 echo "========================================="
 echo "SUMMARY: ✅ $PASS passed, ❌ $FAIL failed"
 echo "========================================="

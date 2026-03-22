@@ -8,6 +8,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+- **whois-lookup package** (Cycle 44, 2026-03-22)
+  - New 9th package: WHOIS domain, IP, and ASN lookups via whois CLI
+  - 5 tools total (41 tools across all packages now)
+  - Tools:
+    - `whois_lookup` — Universal lookup (auto-detects domain/IP/ASN)
+    - `whois_domain` — Domain registration info (registrar, dates, status)
+    - `whois_ip` — IP address allocation and network info
+    - `whois_asn` — Autonomous System Number info
+    - `whois_stats` — Performance and usage statistics
+  - Auto-detection of query type (domain, IPv4, IPv6, ASN)
+  - Parsed output: extracts common fields (registrar, creation date, netname, country, etc.)
+  - Returns both raw WHOIS output and parsed key-value pairs
+  - 15-second timeout prevents hanging on slow WHOIS servers
+  - Clear error handling (missing CLI, timeouts, invalid queries)
+  - Requires system `whois` CLI tool (standard on Linux/macOS)
+  - Comprehensive README with usage examples for all query types
+  - 100% JSDoc type annotation coverage
+  - Clean ESLint (0 errors, 0 warnings)
+  - All 5 tests passing (41/41 total tests now pass)
+
+### Added (Previous)
 - **Automated release workflow via GitHub Actions** (2026-03-22)
   - Manual workflow_dispatch trigger for releases (patch/minor/major)
   - Can release single package or all packages at once

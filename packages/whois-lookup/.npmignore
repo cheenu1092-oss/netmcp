@@ -1,0 +1,8 @@
+test/
+*.test.js
+.actor/
+.env
+.DS_Store
+.vscode/
+.idea/
+jsconfig.json

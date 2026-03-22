@@ -1,0 +1,36 @@
+{
+  "name": "@netmcp/whois-lookup",
+  "version": "0.1.0",
+  "description": "MCP server for WHOIS domain, IP, and ASN lookups using whois CLI",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "whois-lookup": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "whois",
+    "domain",
+    "ip",
+    "asn",
+    "networking",
+    "dns"
+  ],
+  "author": "NetMCP",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "zod": "^3.24.1"
+  },
+  "files": [
+    "src/",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

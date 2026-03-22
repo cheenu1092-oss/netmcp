@@ -4413,3 +4413,96 @@ Also: 2 Dependabot PRs still open (checkout + setup-node) — need manual merge 
 
 **Status:** ✅ All Dependabot PRs resolved, GitHub Actions dependencies current, 71/71 tests passing
 
+
+### Cycle 47 — 2026-03-22 10:20 AM PST
+
+**What was inspected:**
+- Reviewed IMPROVEMENT_LOG.md (Cycles 1-46 complete)
+- Ran full test suite: ✅ All 41 smoke tests passing, ✅ All 34 integration tests passing (75 total)
+- Verified ESLint clean (0 errors, 0 warnings)
+- Checked root README.md for completeness
+- **Found critical documentation gap:** Root README missing whois-lookup package (added Cycle 44)
+
+**Findings:**
+- ✅ All previous cycles complete (infrastructure, security, reliability, JSDoc, ESLint, npm config, tests, docs, governance)
+- ✅ All 75 tests passing (41 smoke + 34 integration), 0 vulnerabilities
+- ✅ whois-lookup package exists (Cycle 44, 5 tools)
+- ✅ Integration tests for whois-lookup complete (Cycle 46, 4 tests)
+- ❌ **Root README outdated** — shows 8 packages, should be 9
+- ❌ Package table missing whois-lookup
+- ❌ Architecture diagram missing WHOIS server node
+- ❌ Tool counts incorrect (shows 36, should be 41)
+- ❌ Test counts incorrect (shows 66, should be 75)
+- **Impact:** High — root README is first thing users see
+
+**What was built:**
+1. **Updated package table:**
+   - Added whois-lookup row (WHOIS Protocol, Domain/IP/ASN queries)
+   - Now shows all 9 packages correctly
+
+2. **Updated architecture diagram:**
+   - Added whois-lookup server node (5 tools, domain/IP/ASN, 10s timeout)
+   - Added DS9 data source (WHOIS Servers, Domain registrars)
+   - Updated MCP flow to include WHOIS
+   - Added WHOIS to server classDef styling
+
+3. **Updated metadata throughout README:**
+   - Key features: 36 smoke → 41 smoke tests, 30 integration → 34 integration tests (66 → 75 total)
+   - Technical features: same test count update
+   - MCP client config: added whois-lookup entry
+   - Usage examples: added comprehensive WHOIS section (domain, IP, ASN lookups with sample responses)
+   - Data sources: added WHOIS Protocol (RFC 3912) to authoritative sources list
+
+4. **Updated CHANGELOG.md:**
+   - Documented README update in Unreleased section (Cycle 47)
+   - Listed all changes: package table, architecture diagram, tool/test counts, config examples, usage examples
+
+**Test results:**
+- ✅ **All 41 smoke tests PASS** (no regressions from documentation changes)
+- ✅ **All 34 integration tests PASS**
+- ✅ **Total: 75/75 tests passing**
+- ✅ ESLint: 0 errors, 0 warnings (clean lint maintained)
+- ✅ No code changes, documentation only
+
+**Git commits:**
+- `858a205` — "docs: update root README to include whois-lookup (9 packages, 41 tools, 75 tests) - Cycle 47"
+- Pushed to main successfully
+
+**Impact:**
+- **Documentation accuracy restored** — README now correctly reflects all 9 packages
+- **User onboarding improved** — new users see complete package list, accurate tool counts
+- **Architecture clarity** — diagram shows all networking intelligence tools (MAC, RFC, CVE, FCC, 3GPP, IANA, DNS, MIME, WHOIS)
+- **Professional presentation** — no outdated metadata, everything in sync
+- **npm publishing readiness** — accurate package descriptions for npmjs.com listings
+- **Critical gap fixed** — whois-lookup no longer invisible in main README
+
+**Before/After:**
+| Metric | Before | After |
+|--------|--------|-------|
+| Packages shown in README | 8 | 9 ✅ |
+| Tools shown | 36 | 41 ✅ |
+| Tests shown | 66 | 75 ✅ |
+| Architecture diagram nodes | 8 | 9 ✅ |
+| MCP config examples | 8 | 9 ✅ |
+| Usage examples | 8 | 9 ✅ |
+
+**Benefits of complete README:**
+- ✅ All packages discoverable (whois-lookup no longer hidden)
+- ✅ Accurate metrics build trust (test counts match reality)
+- ✅ Complete architecture diagram (shows full system scope)
+- ✅ Comprehensive usage examples (users see WHOIS capabilities)
+- ✅ MCP config copy-paste ready (includes all 9 packages)
+- ✅ Consistent with test suite (README claims match test results)
+
+**Next cycle priorities:**
+1. ✅ **Root README completeness** (completed this cycle — critical gap fixed)
+2. Consider publishing all 9 packages to npm once `npm login` is configured
+3. Explore more networking tools (BGP looking glass, traceroute visualization, packet analysis)
+4. Consider adding automated changelog generation (conventional-changelog)
+5. Consider adding package interdependency visualization
+6. Consider adding performance benchmarks to README (queries/sec, latency percentiles)
+
+**Status:** ✅ Root README complete and accurate (9/9 packages documented), all tests passing, production-ready
+
+---
+

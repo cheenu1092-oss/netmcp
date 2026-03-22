@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Test coverage infrastructure with nyc/istanbul** (2026-03-22)
+  - Added nyc dev dependency (18.0.0) for code coverage reporting
+  - Created .nycrc.json configuration with comprehensive settings
+  - Added npm scripts: test:coverage, test:integration:coverage, coverage, coverage:check, coverage:report
+  - HTML, LCOV, text, and text-summary reporter outputs
+  - Coverage watermarks (lines 70-90%, statements 70-90%, functions 70-90%, branches 60-80%)
+  - Created COVERAGE.md explaining MCP stdio testing limitation (why 0% coverage is reported despite 66 passing tests)
+  - Documented future unit test strategy for accurate coverage metrics
+  - Added coverage/ and .nyc_output/ to .gitignore (plus other standard ignores: *.log, .DS_Store, .env, .vscode/, .idea/)
+  - **Known limitation:** Integration tests via MCP stdio protocol spawn child processes that nyc cannot instrument
+  - **Current status:** 66 comprehensive tests (36 smoke + 30 integration) provide excellent end-to-end validation
+  - **Future work:** Add unit tests (importing functions directly) for code coverage metrics
 - **Release process documentation (RELEASE.md)** — comprehensive npm publishing guide (2026-03-22)
   - Prerequisites: Test requirements, ESLint validation, CI checks, CHANGELOG updates, npm login
   - Publishing process: Pre-publish validation, version bumping (semver), commit/tag workflow

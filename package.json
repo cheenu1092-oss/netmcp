@@ -9,11 +9,17 @@
   ],
   "scripts": {
     "test": "bash test-all.sh",
+    "test:coverage": "nyc bash test-all.sh",
+    "test:integration": "bash test-integration.sh",
+    "test:integration:coverage": "nyc bash test-integration.sh",
     "test:oui": "cd packages/oui-lookup && npm test",
     "test:rfc": "cd packages/rfc-search && npm test",
     "test:nvd": "cd packages/nvd-network-cves && npm test",
     "test:fcc": "cd packages/fcc-devices && npm test",
     "test:3gpp": "cd packages/threegpp-specs && npm test",
+    "coverage": "nyc report --reporter=text --reporter=html",
+    "coverage:check": "nyc check-coverage",
+    "coverage:report": "nyc report --reporter=html && open coverage/index.html",
     "lint": "eslint packages/*/src/**/*.js",
     "lint:fix": "eslint --fix packages/*/src/**/*.js",
     "lint:workspaces": "npm run lint --workspaces --if-present",
@@ -49,6 +55,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "eslint": "^10.1.0",
-    "eslint-plugin-jsdoc": "^62.8.0"
+    "eslint-plugin-jsdoc": "^62.8.0",
+    "nyc": "^18.0.0"
   }
 }

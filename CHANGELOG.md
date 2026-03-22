@@ -8,6 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Cycle 40:** Automated stale issue/PR management via GitHub Actions
+  - Daily stale workflow runs at 1:00 AM UTC
+  - Issues: marked stale after 60 days, closed after 14 more days
+  - Pull requests: marked stale after 30 days, closed after 7 more days
+  - Exempt labels: pinned, security, bug, enhancement, documentation, WIP
+  - Exempt milestones: all milestones prevent stale marking
+  - Exempt assignees: assigned issues/PRs never marked stale
+  - Operations limited to 30 per run to prevent API rate limiting
+  - Stale label automatically removed when updated
+  - Benefits:
+    - Reduces maintenance burden (auto-closes inactive issues/PRs)
+    - Keeps issue tracker clean and focused
+    - Encourages timely responses from contributors
+    - Standard practice for active open source projects
+    - Can be manually triggered via workflow_dispatch
 - **Test coverage infrastructure with nyc/istanbul** (2026-03-22)
   - Added nyc dev dependency (18.0.0) for code coverage reporting
   - Created .nycrc.json configuration with comprehensive settings

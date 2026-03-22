@@ -1,0 +1,67 @@
+name: Close Stale Issues and PRs
+
+on:
+  schedule:
+    # Run every day at 1:00 AM UTC (cron syntax: minute hour day month weekday)
+    - cron: '0 1 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          # Issue configuration
+          days-before-issue-stale: 60
+          days-before-issue-close: 14
+          stale-issue-label: 'stale'
+          stale-issue-message: >
+            This issue has been automatically marked as stale because it has not had
+            recent activity. It will be closed in 14 days if no further activity occurs.
+            Thank you for your contributions.
+          close-issue-message: >
+            This issue was automatically closed because it has been stale for 14 days
+            with no activity.
+          close-issue-reason: 'not_planned'
+          
+          # Pull request configuration
+          days-before-pr-stale: 30
+          days-before-pr-close: 7
+          stale-pr-label: 'stale'
+          stale-pr-message: >
+            This pull request has been automatically marked as stale because it has not had
+            recent activity. It will be closed in 7 days if no further activity occurs.
+            Please rebase and address any feedback if you would like to continue working on this.
+          close-pr-message: >
+            This pull request was automatically closed because it has been stale for 7 days
+            with no activity. Feel free to reopen if you'd like to continue working on it.
+          
+          # Exempt labels (issues/PRs with these labels will never be marked stale)
+          exempt-issue-labels: 'pinned,security,bug,enhancement,documentation'
+          exempt-pr-labels: 'pinned,security,work-in-progress,WIP'
+          
+          # Exempt milestones (issues/PRs in these milestones will never be marked stale)
+          exempt-all-milestones: true
+          
+          # Exempt assignees (assigned issues/PRs will never be marked stale)
+          exempt-all-assignees: true
+          
+          # Only process issues/PRs (set to false to include both)
+          only-labels: ''
+          
+          # Operations per run (prevent API rate limiting)
+          operations-per-run: 30
+          
+          # Remove stale label when updated
+          remove-stale-when-updated: true
+          
+          # Ascending order (oldest first)
+          ascending: true
+          
+          # Enable debug output
+          debug-only: false

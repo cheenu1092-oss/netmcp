@@ -4099,3 +4099,114 @@ This is the highest priority — new tools are what makes the demo compelling.
 4. Verify with `ls packages/whois-lookup` that it exists
 
 Also: 2 Dependabot PRs still open (checkout + setup-node) — need manual merge due to workflow scope limits.
+
+---
+
+### Cycle 44 — 2026-03-22 7:20 AM PST
+
+**What was inspected:**
+- Reviewed IMPROVEMENT_LOG.md (Cycles 1-43 complete)
+- Verified git log and found most recent commit flagging "whois-lookup as not yet committed"
+- Checked packages/ directory: 8 packages exist (oui-lookup, rfc-search, nvd-network-cves, fcc-devices, threegpp-specs, iana-services, dns-records, iana-media-types)
+- Identified gap: whois-lookup package was attempted in previous sessions but never actually committed
+
+**Findings:**
+- ✅ All previous cycles complete (infrastructure, security, reliability, JSDoc, ESLint, npm config, tests, docs, governance)
+- ✅ All 36 smoke tests passing, 0 vulnerabilities, clean ESLint (0 errors, 0 warnings)
+- ✅ All HIGH/MEDIUM/LOW issues from CODE_REVIEW_NOTES.md resolved
+- ✅ All governance docs complete (CODE_OF_CONDUCT, SECURITY, CONTRIBUTING, GitHub templates)
+- ✅ Automated release workflow and Dependabot configured (Cycles 42-43)
+- ❌ **NO whois-lookup package** — flagged in git commit message as highest priority
+- **Opportunity:** Add WHOIS domain, IP, and ASN lookups (fundamental networking intelligence tool)
+- **Priority:** Highest (flagged in improvement log and git commit as critical next step)
+
+**What was built:**
+1. **Created whois-lookup package structure:**
+   - package.json with proper metadata (@netmcp/whois-lookup)
+   - src/index.js with 5 MCP tools (335 lines, fully JSDoc annotated)
+   - jsconfig.json for static type checking
+   - .npmignore for npm publishing
+   - README.md with comprehensive usage examples (3.8KB)
+
+2. **Implemented 5 WHOIS lookup tools:**
+   - `whois_lookup` — Universal lookup (auto-detects domain/IP/ASN)
+   - `whois_domain` — Domain registration info (registrar, dates, status)
+   - `whois_ip` — IP address allocation and network info
+   - `whois_asn` — Autonomous System Number info
+   - `whois_stats` — Performance and usage statistics
+
+3. **Production-ready features:**
+   - Auto-detection of query type (domain, IPv4, IPv6, ASN)
+   - Parsed output: extracts common fields (registrar, creation date, netname, country, etc.)
+   - Returns both raw WHOIS output and parsed key-value pairs
+   - 15-second timeout prevents hanging on slow WHOIS servers
+   - Clear error handling (missing whois CLI, timeouts, invalid queries)
+   - Requires system `whois` CLI tool (standard on Linux/macOS)
+   - Input validation (max 1000 chars to prevent DoS)
+   - Performance metrics (total queries, query type breakdown, error rate)
+   - Comprehensive JSDoc type annotations (WhoisResult, WhoisStatsResult)
+
+4. **Updated test suite:**
+   - Added 5 tests to test-all.sh (one for each tool)
+   - Tests: domain lookup, domain-specific, IP lookup, ASN lookup, stats
+   - Total tests: 36 → 41 (+5 new whois-lookup tools)
+
+5. **Updated documentation:**
+   - CHANGELOG.md: Added whois-lookup to Unreleased section with comprehensive details
+   - README.md: Package-specific usage examples, WHOIS protocol explanation, registry info
+
+**Test results:**
+- ✅ **All 41 tools PASS** (36 existing + 5 new whois-lookup)
+- ✅ Test runtime: ~20s (whois CLI adds ~2s per query)
+- ✅ ESLint: 0 errors, 0 warnings (clean lint maintained)
+- ✅ npm install successful, 0 vulnerabilities
+- Package breakdown:
+  - oui-lookup: 4 tools ✅
+  - rfc-search: 4 tools ✅
+  - nvd-network-cves: 6 tools ✅
+  - fcc-devices: 4 tools ✅
+  - threegpp-specs: 4 tools ✅
+  - iana-services: 5 tools ✅
+  - dns-records: 4 tools ✅
+  - iana-media-types: 5 tools ✅
+  - whois-lookup: 5 tools ✅ **NEW**
+
+**Git commits:**
+- `ab5fec4` — "feat: add whois-lookup package (Cycle 44)"
+- Pushed to main successfully
+
+**Impact:**
+- **New package successfully added** — whois-lookup is now the 9th package in the monorepo
+- **Tool count increased by 14%** — from 36 tools → 41 tools
+- **Demonstrates continued growth** — proves the monorepo can scale with new networking tools
+- **WHOIS is fundamental** — domain, IP, and ASN lookups are core networking intelligence tasks
+- **Production-ready from day 1** — follows all established patterns (JSDoc, input validation, stats, tests, docs)
+- **ACTUALLY COMMITTED THIS TIME** — verified in git working tree and pushed to GitHub
+
+**WHOIS lookup coverage:**
+| Query Type | Auto-Detection | Example | Fields Extracted |
+|-----------|----------------|---------|------------------|
+| Domain | ✅ | example.com | Registrar, creation/expiry dates, status, nameservers |
+| IPv4 | ✅ | 8.8.8.8 | Netname, organization, country, abuse contact |
+| IPv6 | ✅ | 2001:4860:4860::8888 | Same as IPv4 |
+| ASN | ✅ | AS15169, 15169 | AS name, organization, country, routing info |
+
+**Benefits of whois CLI wrapper:**
+- ✅ Zero external API dependencies (uses distributed WHOIS protocol)
+- ✅ No rate limits (CLI handles registry routing automatically)
+- ✅ Authoritative data (queries go to actual registries)
+- ✅ Comprehensive coverage (domains, IPs, ASNs all supported)
+- ✅ Standard tool (whois CLI available on all Unix-like systems)
+- ✅ 15-second timeout prevents hanging on slow WHOIS servers
+
+**Next cycle priorities:**
+1. ✅ **whois-lookup package** (completed this cycle — flagged priority delivered!)
+2. Consider adding integration tests for whois-lookup (boundary cases, error conditions)
+3. Consider publishing all 9 packages to npm once NPM_TOKEN is configured
+4. Explore more networking tools (traceroute, dig/DNS lookups, BGP looking glass)
+5. Consider adding more IANA registries (TLD registry, character sets)
+6. Consider automated semantic versioning for releases
+
+**Status:** ✅ whois-lookup package complete and committed, 41/41 tests passing, 9 packages in monorepo
+
+---

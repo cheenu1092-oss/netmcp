@@ -3173,3 +3173,100 @@ This is the highest priority — new tools are what makes the demo compelling.
 **Status:** ✅ iana-media-types package complete and committed, 36/36 tests passing, 8 packages in monorepo, production-ready
 
 ---
+
+### Cycle 36 — 2026-03-21 11:20 PM PST
+
+**What was inspected:**
+- Reviewed IMPROVEMENT_LOG.md (Cycles 1-35 complete)
+- Ran full test suite: ✅ All 36 smoke tests passing
+- Ran integration tests: ✅ All 26 integration tests passing (from Cycles 17, 20, 34)
+- Identified gap: **iana-media-types (added Cycle 35) has NO integration tests**
+- Integration tests only cover 7 of 8 packages (missing newest package)
+
+**Findings:**
+- ✅ All previous cycles complete (infrastructure, security, reliability, JSDoc, ESLint, npm config, tests, docs, governance)
+- ✅ All 36 tools passing, 0 vulnerabilities, clean ESLint (0 errors, 0 warnings)
+- ✅ All HIGH/MEDIUM/LOW issues from CODE_REVIEW_NOTES.md resolved
+- ✅ 8 packages in monorepo (iana-media-types added in Cycle 35)
+- ❌ **NO integration tests for iana-media-types** — coverage incomplete
+- **Opportunity:** Add integration tests for iana-media-types (follows Cycle 34 pattern)
+- **Priority:** Completes test coverage for all 8 packages (100% integration test coverage)
+
+**What was built:**
+1. **Added Test Suite 10: IANA Media Types (iana-media-types) — 4 integration tests:**
+   - Max length validation (>1000 chars) returns MCP validation error
+   - Case-insensitive extension lookup (.JSON vs .json both return application/json)
+   - Category filter returns multiple types (video/mp4, video/webm in video category)
+   - Stats tool returns database metrics (total_media_types, by_category, total_queries)
+
+2. **Test implementation details:**
+   - Followed existing `mcp_call` helper pattern from Cycle 17
+   - Proper JSON-RPC envelope parsing (escaped quotes: `\\"field\\"`)
+   - Whitespace-tolerant grep patterns for formatted JSON (`[[:space:]]*`)
+   - Validates both validation errors (Zod schema with `isError: true`) and business logic
+
+3. **Fixed 2 test failures during development:**
+   - **Max length validation:** Updated to check for `"isError": true` in result object (not `"error"` field)
+   - **Stats tool:** Updated field names to match actual implementation (`total_media_types`, `by_category` not `database_size`, `category_breakdown`)
+   - Both fixes based on manual testing of actual MCP server responses
+
+**Test results:**
+- ✅ **All 36 smoke tests PASS** (no regressions)
+- ✅ **All 30 integration tests PASS** (26 existing + 4 new)
+- ✅ **Total: 66 tests passing** (36 smoke + 30 integration)
+- ✅ ESLint: 0 errors, 0 warnings (clean lint maintained)
+- ✅ No regressions from any previous cycles
+- Package breakdown:
+  - oui-lookup: 4 tools ✅ (smoke + integration)
+  - rfc-search: 4 tools ✅ (smoke + integration)
+  - nvd-network-cves: 6 tools ✅ (smoke + integration)
+  - fcc-devices: 4 tools ✅ (smoke + integration)
+  - threegpp-specs: 4 tools ✅ (smoke + integration)
+  - iana-services: 5 tools ✅ (smoke + integration)
+  - dns-records: 4 tools ✅ (smoke + integration)
+  - iana-media-types: 5 tools ✅ (smoke + integration — NEW)
+
+**Git commits:**
+- `71501ab` — "test: add integration tests for iana-media-types package (4 new tests, 30 total)"
+- Pushed to main successfully
+
+**Impact:**
+- **Integration test coverage complete** — all 8 packages now have integration tests (100% coverage)
+- **Test count increased by 15%** — from 26 integration tests → 30 integration tests
+- **Total test suite: 66 tests** (36 smoke + 30 integration)
+- **Production-ready validation** — newest package tested for edge cases, errors, boundaries, data integrity
+- **Consistent testing pattern** — all packages follow same integration test structure
+- **Better confidence** — comprehensive test suite catches regressions across all 8 packages
+
+**Integration test coverage (COMPLETE):**
+| Package | Smoke Tests | Integration Tests | Total |
+|---------|------------|-------------------|-------|
+| oui-lookup | 4 | 3 (limits, errors, normalization) | 7 |
+| rfc-search | 4 | 2 (rate limiting, errors) | 6 |
+| nvd-network-cves | 6 | 5 (concurrency, cache, rate limit, errors, CVSS) | 11 |
+| fcc-devices | 4 | 2 (rate limiting, errors) | 6 |
+| threegpp-specs | 4 | 2 (normalization, format validation) | 6 |
+| iana-services | 5 | 4 (validation, boundaries, search, stats) | 9 |
+| dns-records | 4 | 4 (validation, boundaries, search, case) | 8 |
+| iana-media-types | 5 | 4 (validation, case, category, stats) | 9 ✅ NEW |
+| **TOTAL** | **36** | **30** | **66** |
+
+**Benefits of complete integration test coverage:**
+- ✅ All 8 packages have comprehensive test validation
+- ✅ Edge cases, errors, boundaries, data integrity all covered
+- ✅ Prevents regressions when adding new features
+- ✅ Demonstrates production-ready quality standards
+- ✅ Easier to onboard contributors (clear test patterns)
+- ✅ Confidence for npm publishing (all packages well-tested)
+
+**Next cycle priorities:**
+1. ✅ **Integration tests for iana-media-types** (completed this cycle)
+2. Consider publishing all 8 packages to npm once `npm login` is configured
+3. Explore more networking tools (WHOIS lookups, BGP looking glass, traceroute visualization)
+4. Consider adding IANA TLD registry (top-level domains)
+5. Consider automated releases via GitHub Actions (semantic-release or similar)
+6. Consider adding performance dashboards or monitoring
+
+**Status:** ✅ Integration test coverage complete (8/8 packages, 30/30 tests passing), total 66 tests, production-ready
+
+---

@@ -594,6 +594,95 @@ test_media_stats() {
 
 test_integration "Stats tool returns database metrics" test_media_stats
 
+# ==========================================
+# Test Suite 11: WHOIS Lookup (whois-lookup)
+# ==========================================
+echo ""
+echo "11. WHOIS Lookup (whois-lookup)"
+
+# Test invalid query exceeds max length
+test_whois_max_length() {
+  # Generate 1001-char string (exceeds 1000 limit)
+  local long_query=$(python3 -c "print('a' * 1001)")
+  local result=$(mcp_call "whois-lookup" "whois_lookup" \
+    "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"whois_lookup\",\"arguments\":{\"query\":\"$long_query\"}}}")
+  
+  # Should return MCP error (Zod validation failure)
+  # MCP SDK wraps validation errors in result.isError
+  if echo "$result" | grep -q '"error"' || \
+     echo "$result" | grep -q '"isError":[[:space:]]*true' || \
+     echo "$result" | grep -q 'MCP error'; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+test_integration "Max length validation (1001 chars rejects)" test_whois_max_length
+
+# Test type detection (domain vs IP vs ASN)
+test_whois_type_detection() {
+  # Test domain detection
+  local domain_result=$(mcp_call "whois-lookup" "whois_lookup" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"whois_lookup","arguments":{"query":"example.com"}}}')
+  
+  # Test IPv4 detection
+  local ipv4_result=$(mcp_call "whois-lookup" "whois_lookup" \
+    '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"whois_lookup","arguments":{"query":"8.8.8.8"}}}')
+  
+  # Test ASN detection
+  local asn_result=$(mcp_call "whois-lookup" "whois_lookup" \
+    '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"whois_lookup","arguments":{"query":"AS15169"}}}')
+  
+  # Verify type field in responses
+  if echo "$domain_result" | grep -q '\\"type\\":[[:space:]]*\\"domain\\"'; then
+    if echo "$ipv4_result" | grep -q '\\"type\\":[[:space:]]*\\"ipv4\\"'; then
+      if echo "$asn_result" | grep -q '\\"type\\":[[:space:]]*\\"asn\\"'; then
+        return 0
+      fi
+    fi
+  fi
+  return 1
+}
+
+test_integration "Type detection (domain, IPv4, ASN)" test_whois_type_detection
+
+# Test error handling for invalid query
+test_whois_invalid_query() {
+  # Invalid domain (no TLD)
+  local result=$(mcp_call "whois-lookup" "whois_lookup" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"whois_lookup","arguments":{"query":"invalidquery"}}}')
+  
+  # Should return error or unknown type
+  if echo "$result" | grep -q '\\"type\\":[[:space:]]*\\"unknown\\"' || \
+     echo "$result" | grep -q '"error"'; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+test_integration "Invalid query format handled gracefully" test_whois_invalid_query
+
+# Test stats tool returns performance metrics
+test_whois_stats() {
+  local result=$(mcp_call "whois-lookup" "whois_stats" \
+    '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"whois_stats","arguments":{}}}')
+  
+  # Should return total_queries, domain_queries, ip_queries, asn_queries, errors, success_rate
+  if echo "$result" | grep -q '\\"total_queries\\"' && \
+     echo "$result" | grep -q '\\"domain_queries\\"' && \
+     echo "$result" | grep -q '\\"ip_queries\\"' && \
+     echo "$result" | grep -q '\\"asn_queries\\"' && \
+     echo "$result" | grep -q '\\"success_rate\\"'; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+test_integration "Stats tool returns performance metrics" test_whois_stats
+
 echo ""
 echo "========================================="
 echo "SUMMARY: ✅ $PASS passed, ❌ $FAIL failed"

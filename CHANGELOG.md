@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Integration tests for whois-lookup package** (Cycle 46, 2026-03-22)
+  - Test Suite 11: WHOIS Lookup with 4 comprehensive integration tests
+  - Max length validation (1001 chars rejects input)
+  - Type detection validation (domain vs IPv4 vs ASN)
+  - Invalid query format error handling
+  - Stats tool performance metrics validation
+  - Fixed MCP error assertion pattern (handles both JSON-RPC errors and MCP validation errors)
+  - **Impact:** 100% integration test coverage across all 9 packages (75 total tests: 41 smoke + 34 integration)
+
 - **whois-lookup package** (Cycle 44, 2026-03-22)
   - New 9th package: WHOIS domain, IP, and ASN lookups via whois CLI
   - 5 tools total (41 tools across all packages now)

@@ -42,7 +42,7 @@ This document contains all metadata and assets needed for submitting NetMCP pack
 **Installation Methods:**
 1. **npm install** (after publishing): `npm install @netmcp/<package-name>`
 2. **npx** (instant, no install): `npx @netmcp/<package-name>`
-3. **Apify Hosted** (no self-hosting): https://apify.com/jugaad-lab
+3. **Docker**: `docker run -it netmcp:latest <package-name>`
 4. **Git clone** (development): `git clone https://github.com/cheenu1092-oss/netmcp.git`
 
 ---

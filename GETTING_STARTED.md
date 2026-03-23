@@ -289,21 +289,6 @@ The NVD package has built-in rate limiting (5 requests per 30 seconds). Wait a f
 
 ---
 
-## Alternative: Use Apify (Hosted)
-
-Don't want to self-host? Use the hosted version on Apify:
-
-- No installation required
-- Pay-per-query pricing
-- Same MCP interface
-
-Available on [Apify Store](https://apify.com/jugaad-lab):
-- [oui-lookup](https://apify.com/jugaad-lab/oui-lookup)
-- [rfc-search](https://apify.com/jugaad-lab/rfc-search)
-- [nvd-network-cves](https://apify.com/jugaad-lab/nvd-network-cves)
-- [fcc-devices](https://apify.com/jugaad-lab/fcc-devices)
-- [threegpp-specs](https://apify.com/jugaad-lab/threegpp-specs)
-
 ---
 
 ## Learn More

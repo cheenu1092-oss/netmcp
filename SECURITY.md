@@ -112,12 +112,6 @@ Check for security advisories:
 npm audit
 ```
 
-### 5. API Keys (if using Apify deployment)
-- Never commit API keys to version control
-- Use environment variables: `APIFY_API_TOKEN`, `APIFY_PROXY_PASSWORD`
-- Rotate keys regularly
-- Use separate keys for development/production
-
 ---
 
 ## Security Features
@@ -163,7 +157,7 @@ The NVD cache is in-memory only. If the server restarts, the cache is cleared. F
 Rate limiters are thread-safe for Node.js single-threaded event loop, but do not coordinate across multiple processes. For multi-process deployments (e.g., PM2 cluster mode), use a shared rate limiter (Redis-based).
 
 ### 3. No Authentication
-NetMCP servers (when run as MCP or Apify actors) do not include authentication. If exposing via HTTP, add authentication middleware:
+NetMCP servers (when run as MCP servers) do not include authentication. If exposing via HTTP, add authentication middleware:
 
 ```javascript
 // Example: API key middleware

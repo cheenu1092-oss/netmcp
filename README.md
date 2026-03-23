@@ -2,7 +2,7 @@
 
 > Open-source MCP servers that give AI agents structured access to networking standards, device databases, and security data.
 
-**Self-host for free** or use the **[hosted version on Apify →](https://apify.com/jugaad-lab)**
+**Self-host for free** — run locally, via Docker, or as an MCP server in your AI coding tool.
 
 [![Test Suite](https://github.com/cheenu1092-oss/netmcp/actions/workflows/test.yml/badge.svg)](https://github.com/cheenu1092-oss/netmcp/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -196,17 +196,7 @@ Add to your MCP client config:
 }
 ```
 
-### 3. Apify Actor (hosted, pay-per-query)
-
-No setup needed. Use via Apify Store:
-- [OUI Lookup →](https://apify.com/jugaad-lab/oui-lookup)
-- [RFC Search →](https://apify.com/jugaad-lab/rfc-search)
-- [NVD Network CVEs →](https://apify.com/jugaad-lab/nvd-network-cves)
-- [FCC Devices →](https://apify.com/jugaad-lab/fcc-devices)
-- [3GPP Specs →](https://apify.com/jugaad-lab/threegpp-specs)
-- IANA Services, DNS Records, and Media Types (coming soon to Apify Store)
-
-### 4. OpenClaw / Claude Code Skill
+### 3. OpenClaw / Claude Code Skill
 
 ```bash
 # Install as an OpenClaw skill

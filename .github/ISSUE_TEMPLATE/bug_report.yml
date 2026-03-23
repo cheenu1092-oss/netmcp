@@ -136,7 +136,7 @@ body:
       options:
         - MCP stdio mode (via Claude Desktop, Cline, etc.)
         - MCP HTTP mode (via server)
-        - Apify Actor
+        - Docker
         - Direct Node.js API
         - Other
     validations:

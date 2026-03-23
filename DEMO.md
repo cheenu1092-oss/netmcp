@@ -302,7 +302,7 @@ If you want to create a GIF for offline viewing:
 ## FAQ for Audience
 
 **Q: Do I need API keys?**  
-A: No! All data sources are public. Only exception: Apify hosted version (optional).
+A: No! All data sources are public and free to access.
 
 **Q: What about rate limits?**  
 A: Built-in rate limiting prevents API blocks. NVD: 5 req/30s, RFC: 5 req/10s, FCC: 10 req/10s.

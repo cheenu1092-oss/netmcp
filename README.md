@@ -7,7 +7,7 @@
 [![Test Suite](https://github.com/cheenu1092-oss/netmcp/actions/workflows/test.yml/badge.svg)](https://github.com/cheenu1092-oss/netmcp/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**→ [Get Started in 5 Minutes](GETTING_STARTED.md)** | **[API Rate Limits](API_RATE_LIMITS.md)** | **[Performance Guide](PERFORMANCE.md)**
+**→ [Get Started in 5 Minutes](GETTING_STARTED.md)** | **[API Rate Limits](API_RATE_LIMITS.md)** | **[Performance Guide](PERFORMANCE.md)** | **[MCP Marketplaces](MCP_MARKETPLACE.md)**
 
 ## What is this?
 

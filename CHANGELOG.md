@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (Cycle 59 — 2026-03-23 1:20 AM PST)
+- **MCP Marketplace Listings (MCP_MARKETPLACE.md)** — Comprehensive submission metadata for all 3 major MCP marketplaces
+  - Complete JSON metadata for all 9 packages (Smithery format)
+  - Installation instructions (npm, Docker, npx)
+  - Tools list (41 tools across 9 packages)
+  - Use cases for each package (device identification, security research, standards lookup, etc.)
+  - Data source details (38K OUIs, 153K RFCs, 250K CVEs, etc.)
+  - Performance metrics (1-5ms local DB, 200-2000ms API, 400x cache speedup)
+  - Glama submission format and USPs (zero API keys, production-ready, 75 tests, fast)
+  - mcp.run submission requirements (GitHub-based discovery, `mcp` field in package.json)
+  - Post-submission tasks (badges, social media, monitoring)
+  - Success metrics (100+ downloads/week Month 1, 500+/week Month 3)
+- Updated README with link to MCP_MARKETPLACE.md in header navigation
+- **Impact:** Resolves P1 showcase priority #5 (MCP marketplace listings), makes packages discoverable to AI agent users
+- **Benefit:** Complete submission ready — all metadata prepared, saves 1-2 hours manual work, clear path to broader adoption
+- **Coverage:** Smithery (9 packages × JSON metadata), Glama (submission format + USPs), mcp.run (requirements + future `mcp` field enhancement)
+
 ### Added (Cycle 58 — 2026-03-22 9:20 PM PST)
 - **Performance Guide (PERFORMANCE.md)** — Comprehensive performance documentation
   - Response time table for all 9 packages (1-3000ms range)

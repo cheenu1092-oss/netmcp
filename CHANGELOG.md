@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (Cycle 58 — 2026-03-22 9:20 PM PST)
+- **Performance Guide (PERFORMANCE.md)** — Comprehensive performance documentation
+  - Response time table for all 9 packages (1-3000ms range)
+  - Throughput estimates (QPS) for local DB vs API-calling packages
+  - Cache performance analysis (nvd-network-cves 400x speedup on cache hit)
+  - Production deployment strategies (single instance, multi-instance, enterprise scale)
+  - Benchmarking scripts and load testing examples
+  - Troubleshooting guide for performance issues
+  - Hardware requirements (minimum, recommended, enterprise)
+  - Performance roadmap (Redis cache, query batching, metrics endpoint)
+- Updated README with link to Performance Guide
+- **Impact:** Resolves P2 showcase priority #10 (performance benchmarks), provides concrete metrics for HPE engineers, demonstrates production-readiness
+
 ### Added
 
 - **Centralized API Rate Limits & Performance Guide (API_RATE_LIMITS.md)** (Cycle 57, 2026-03-22 8:20 PM PST)

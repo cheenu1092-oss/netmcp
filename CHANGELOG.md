@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Centralized API Rate Limits & Performance Guide (API_RATE_LIMITS.md)** (Cycle 57, 2026-03-22 8:20 PM PST)
+  - Created comprehensive 19KB reference documenting rate limits, timeouts, caching, and performance across all 9 packages
+  - Quick reference table with response times, rate limits, caching strategies for each package
+  - Package-by-package details: API dependencies, rate limits, timeout settings, caching behavior, performance characteristics
+  - High-volume usage patterns for common scenarios (real-time MAC lookups, security scanning, standards research, network troubleshooting)
+  - Monitoring & observability section with all `*_stats` tools and example usage
+  - Troubleshooting guide for rate limit issues, timeouts, slow responses
+  - Best practices summary (DO/DON'T) and performance benchmarks (estimated queries/minute)
+  - Future improvements roadmap (persistent cache, distributed rate limiting, API key support, circuit breakers)
+  - **Impact:** Resolves P2 showcase priority (#12: API rate limit documentation)
+  - **Benefit:** Users have centralized reference instead of digging through 9 package READMEs
+  - **Coverage:** All 9 packages documented with rate limits (5/30s NVD, 5/10s RFC, 10/10s FCC), timeouts (10-15s), caching (24hr NVD), local databases (instant response)
+  - Updated **README.md** to include link to API_RATE_LIMITS.md alongside Getting Started guide
+
 ### Changed
 
 - **CHANGELOG roadmap updated to reflect completed work** (Cycle 50, 2026-03-22 7:20 PM PST)

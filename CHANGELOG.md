@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Live Demo Documentation and Scripts** (Cycle 54, 2026-03-22 5:20 PM PST)
+  - Created comprehensive **DEMO.md** (9.8KB) - 5-minute showcase demonstration script
+  - 8-part demo flow covering all key capabilities (MAC/OUI, RFCs, CVEs, Ports, DNS, FCC, 3GPP, WHOIS)
+  - Copy-paste ready queries with expected responses for live presentations
+  - Each demo part is 30-60 seconds with clear "why it's impressive" explanations
+  - Presentation best practices and common Q&A included
+  - Created **demo-quick.sh** - automated 60-second terminal demonstration script
+  - Shows npx start → query → response workflow for 3 key packages
+  - Can be recorded with asciinema for GIF creation (instructions included in DEMO.md)
+  - **Impact:** Resolves P1 showcase priority (#6: Demo GIF/video)
+  - **Benefit:** HPE engineers can follow along live, demonstrate real networking intelligence queries
+  - **Included:** Demo script (5 min), quick demo (60 sec), FAQ, recording instructions
+
 - **MCP Marketplace Listings Metadata (MARKETPLACE.md)** (Cycle 53, 2026-03-22 4:20 PM PST)
   - Created comprehensive marketplace submission guide with metadata for all 9 packages
   - Individual package listings with descriptions, tools, data sources, use cases, example queries

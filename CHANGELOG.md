@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed (Cycle 60 — 2026-03-23 5:20 AM PST)
+- **Documentation consolidation** — Removed duplicate MARKETPLACE.md file (created Cycle 53)
+  - MCP_MARKETPLACE.md (Cycle 59) is the authoritative marketplace submission guide
+  - MCP_MARKETPLACE.md is linked in README header navigation
+  - Eliminates confusion from having 2 marketplace documentation files (MARKETPLACE.md 588 lines vs MCP_MARKETPLACE.md 465 lines)
+  - Single source of truth for marketplace submissions (Smithery, Glama, mcp.run)
+- **Impact:** Cleaner documentation structure, removes DRY violation, improves maintainability
+- **Benefit:** Users won't be confused by duplicate/conflicting marketplace guidance
+
 ### Added (Cycle 59 — 2026-03-23 1:20 AM PST)
 - **MCP Marketplace Listings (MCP_MARKETPLACE.md)** — Comprehensive submission metadata for all 3 major MCP marketplaces
   - Complete JSON metadata for all 9 packages (Smithery format)

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **CHANGELOG roadmap updated to reflect completed work** (Cycle 50, 2026-03-22 7:20 PM PST)
+  - Moved 15 completed features from "Planned" to "Completed (Since v1.0.0)" section
+  - Updated package versions table to list all 9 packages with tool counts
+  - Added "In Progress" section for npm publishing status
+  - Reorganized roadmap: Completed → In Progress → Planned → Under Consideration
+  - **Impact:** Addresses P1 showcase priority (#9: Changelog polish)
+  - **Benefit:** Clear visibility into project progress, demonstrates 50 cycles of continuous improvement
+
 ### Added
 
 - **Docker Support for Easy Deployment** (Cycle 55, 2026-03-22 6:20 PM PST)
@@ -445,30 +455,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version History
 
 ### Package Versions
-All packages currently at version 1.0.0:
-- `@netmcp/oui-lookup`: 1.0.0
-- `@netmcp/rfc-search`: 1.0.0
-- `@netmcp/nvd-network-cves`: 1.0.0
-- `@netmcp/fcc-devices`: 1.0.0
-- `@netmcp/threegpp-specs`: 1.0.0
+All packages currently at version 1.0.0 (unpublished, ready for npm):
+- `@netmcp/oui-lookup`: 1.0.0 (4 tools, 38K+ OUI entries)
+- `@netmcp/rfc-search`: 1.0.0 (4 tools, IETF Datatracker API)
+- `@netmcp/nvd-network-cves`: 1.0.0 (6 tools, NVD API with 24hr cache)
+- `@netmcp/fcc-devices`: 1.0.0 (4 tools, FCC Socrata API)
+- `@netmcp/threegpp-specs`: 1.0.0 (4 tools, curated DB + FTP scraping)
+- `@netmcp/iana-services`: 1.0.0 (5 tools, IANA port/service registry)
+- `@netmcp/dns-records`: 1.0.0 (4 tools, DNS lookups via node:dns)
+- `@netmcp/iana-media-types`: 1.0.0 (5 tools, IANA media type registry)
+- `@netmcp/whois-lookup`: 1.0.0 (5 tools, domain/IP/ASN WHOIS)
 
 ---
 
 ## Roadmap
 
+### Completed (Since v1.0.0)
+- [x] **Caching layer for NVD API calls** (Cycle 5) — 24-hour in-memory cache with stats tool
+- [x] **npm workspace configuration** (Cycles 6-7) — Monorepo tooling with hoisted dependencies
+- [x] **100% JSDoc type annotation coverage** (Cycles 10-14) — All packages fully documented
+- [x] **Integration tests** (Cycles 17, 20, 34, 39, 41, 43, 46) — 34 integration tests across all 9 packages
+- [x] **Rate limiting for all packages** (Cycles 4, 8) — Thread-safe rate limiters with promise queues
+- [x] **New networking tools** (Cycles 30-31, 35-37, 40, 42, 44) — IANA services/media-types, DNS, WHOIS added (9 packages total)
+- [x] **WHOIS lookup integration** (Cycle 44) — 5 tools (domain, IP, ASN lookups + stats)
+- [x] **Performance monitoring** (Cycle 26) — Stats tools for all 9 packages (observability)
+- [x] **ESLint with JSDoc validation** (Cycles 15, 18) — 0 errors, 0 warnings, CI integrated
+- [x] **npm publishing configuration** (Cycle 16) — All 9 packages ready for npm (files, publishConfig, .npmignore)
+- [x] **Comprehensive documentation** (Cycles 19, 21-25, 28, 50) — README, GETTING_STARTED, CONTRIBUTING, SECURITY, CODE_OF_CONDUCT, package READMEs, GitHub templates
+- [x] **Dependabot automation** (Cycle 29) — Weekly dependency updates, grouped PRs
+- [x] **Docker support** (Cycle 55) — Dockerfile, docker-compose, Kubernetes manifests, DOCKER.md
+- [x] **MCP marketplace metadata** (Cycle 53) — Ready for Smithery, Glama, mcp.run submissions
+- [x] **npx support** (Cycle 51) — All 9 packages executable via `npx @netmcp/<package>`
+
+### In Progress
+- [ ] **npm registry publishing** — All packages ready, awaiting `npm login` and manual publish step (see PUBLISHING.md)
+
 ### Planned Features
-- [ ] Caching layer for NVD API calls (reduce rate limit pressure)
-- [ ] npm workspace configuration for monorepo tooling
-- [ ] TypeScript type definitions or comprehensive JSDoc
-- [ ] Integration tests beyond smoke tests
-- [ ] Rate limiting for `rfc-search` and `fcc-devices`
-- [ ] New networking tools (IANA port lookup, DNS tools, BGP looking glass)
+- [ ] **API rate limit documentation** — Centralized reference for all rate limits and external API quotas
+- [ ] **Performance benchmarks** — Response time measurements, queries/sec metrics for each tool
+- [ ] **TypeScript migration** — Convert from JSDoc to full TypeScript (or continue with JSDoc)
+- [ ] **Automated releases** — GitHub Actions workflow for semantic versioning and npm publishing
+- [ ] **More networking tools** — BGP looking glass, traceroute visualization, packet header parser, subnet calculator
 
 ### Under Consideration
 - [ ] Fuzzy search for vendor names in `oui-lookup`
-- [ ] NVD API key support for higher rate limits
-- [ ] WHOIS lookup integration
+- [ ] NVD API key support for higher rate limits (currently using public API)
 - [ ] Wireshark dissector database integration
+- [ ] Test coverage reporting (currently 0% due to E2E stdio testing approach)
+- [ ] WHOIS result parsing/enrichment (structured fields: registrar, expiry, status)
+- [ ] gRPC transport support (in addition to stdio)
 
 ---
 

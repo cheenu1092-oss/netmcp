@@ -126,9 +126,24 @@ graph TB
 - 🧪 **Comprehensive tests** — 41 smoke tests + 34 integration tests (75 total)
 - 🚀 **Production-ready** — CI/CD, ESLint, npm workspaces, all security issues resolved
 
-## Use it 3 ways
+## Use it 4 ways
 
-### 1. MCP Server (Claude Code, Cursor, OpenClaw, any MCP client)
+### 1. Docker (Easiest — one command)
+
+```bash
+# Build the image
+docker build -t netmcp:latest .
+
+# Run any server
+docker run -it netmcp:latest oui-lookup
+
+# Or use Docker Compose
+docker-compose up oui-lookup rfc-search nvd-network-cves
+```
+
+**→ [Full Docker Guide](DOCKER.md)** — includes MCP client configs, Kubernetes, production deployment
+
+### 2. MCP Server (Claude Code, Cursor, OpenClaw, any MCP client)
 
 ```bash
 # Clone and run locally
@@ -181,7 +196,7 @@ Add to your MCP client config:
 }
 ```
 
-### 2. Apify Actor (hosted, pay-per-query)
+### 3. Apify Actor (hosted, pay-per-query)
 
 No setup needed. Use via Apify Store:
 - [OUI Lookup →](https://apify.com/jugaad-lab/oui-lookup)
@@ -191,7 +206,7 @@ No setup needed. Use via Apify Store:
 - [3GPP Specs →](https://apify.com/jugaad-lab/threegpp-specs)
 - IANA Services, DNS Records, and Media Types (coming soon to Apify Store)
 
-### 3. OpenClaw / Claude Code Skill
+### 4. OpenClaw / Claude Code Skill
 
 ```bash
 # Install as an OpenClaw skill

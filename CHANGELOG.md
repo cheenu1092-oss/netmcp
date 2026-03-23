@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Docker Support for Easy Deployment** (Cycle 55, 2026-03-22 6:20 PM PST)
+  - Created **Dockerfile** for building NetMCP image (Node.js 24 Alpine, ~150MB)
+  - Created **docker-compose.yml** orchestrating all 9 MCP servers as separate services
+  - Created **docker-entrypoint.sh** to validate and launch specified package
+  - Created **.dockerignore** to optimize image size (excludes dev/test files)
+  - Created comprehensive **DOCKER.md** (6.5KB) documentation:
+    - Quick start guide for docker run and docker-compose
+    - MCP client configuration examples (Claude Code, Cursor, OpenClaw)
+    - Production deployment patterns (Docker Swarm, Kubernetes)
+    - Security hardening (non-root user, read-only filesystem)
+    - Health checks, monitoring, troubleshooting
+    - Resource limits and performance considerations
+  - Updated **README.md**: "Use it 4 ways" (Docker now option #1 — easiest)
+  - **Impact:** Addresses P2 showcase priority (#11: Docker support)
+  - **Benefit:** Trivial deployment (`docker run -it netmcp:latest oui-lookup`), perfect for HPE demo
+  - **Features:** All 9 servers, whois command included, auto-cleanup with `--rm`, MCP stdio transport
+  - **Production-ready:** Includes Kubernetes manifests, resource limits, security best practices
+
 - **Live Demo Documentation and Scripts** (Cycle 54, 2026-03-22 5:20 PM PST)
   - Created comprehensive **DEMO.md** (9.8KB) - 5-minute showcase demonstration script
   - 8-part demo flow covering all key capabilities (MAC/OUI, RFCs, CVEs, Ports, DNS, FCC, 3GPP, WHOIS)

@@ -1,0 +1,105 @@
+# NetMCP — Docker Compose for easy multi-server orchestration
+# Usage: docker-compose up [service-name]
+# Example: docker-compose up oui-lookup
+
+version: '3.8'
+
+services:
+  # IEEE OUI (MAC address → vendor lookup)
+  oui-lookup:
+    build: .
+    image: netmcp:latest
+    container_name: netmcp-oui-lookup
+    command: oui-lookup
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+  # IETF RFC search
+  rfc-search:
+    build: .
+    image: netmcp:latest
+    container_name: netmcp-rfc-search
+    command: rfc-search
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+  # NIST NVD (CVE vulnerability database)
+  nvd-network-cves:
+    build: .
+    image: netmcp:latest
+    container_name: netmcp-nvd-network-cves
+    command: nvd-network-cves
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+  # FCC equipment authorization database
+  fcc-devices:
+    build: .
+    image: netmcp:latest
+    container_name: netmcp-fcc-devices
+    command: fcc-devices
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+  # 3GPP specifications (5G/LTE standards)
+  threegpp-specs:
+    build: .
+    image: netmcp:latest
+    container_name: netmcp-threegpp-specs
+    command: threegpp-specs
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+  # IANA service/port/protocol registry
+  iana-services:
+    build: .
+    image: netmcp:latest
+    container_name: netmcp-iana-services
+    command: iana-services
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+  # DNS record types (IANA RR registry)
+  dns-records:
+    build: .
+    image: netmcp:latest
+    container_name: netmcp-dns-records
+    command: dns-records
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+  # IANA media types (MIME types)
+  iana-media-types:
+    build: .
+    image: netmcp:latest
+    container_name: netmcp-iana-media-types
+    command: iana-media-types
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+  # WHOIS lookup (domain/IP/ASN)
+  whois-lookup:
+    build: .
+    image: netmcp:latest
+    container_name: netmcp-whois-lookup
+    command: whois-lookup
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+# Named volumes for persistent data (optional, currently not used)
+volumes:
+  netmcp-data:
+    driver: local
+
+networks:
+  default:
+    name: netmcp-network

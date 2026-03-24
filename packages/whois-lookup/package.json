@@ -1,6 +1,6 @@
 {
   "name": "@netmcp/whois-lookup",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "MCP server for WHOIS domain, IP, and ASN lookups using whois CLI",
   "type": "module",
   "main": "src/index.js",

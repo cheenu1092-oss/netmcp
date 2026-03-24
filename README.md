@@ -6,6 +6,10 @@
 
 [![Test Suite](https://github.com/cheenu1092-oss/netmcp/actions/workflows/test.yml/badge.svg)](https://github.com/cheenu1092-oss/netmcp/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)](https://nodejs.org/)
+[![MCP Protocol](https://img.shields.io/badge/MCP-1.0-orange.svg)](https://modelcontextprotocol.io/)
+[![Tools](https://img.shields.io/badge/tools-41-blue.svg)](#packages)
+[![Packages](https://img.shields.io/badge/packages-9-purple.svg)](#packages)
 
 **→ [Get Started in 5 Minutes](GETTING_STARTED.md)** | **[API Rate Limits](API_RATE_LIMITS.md)** | **[Performance Guide](PERFORMANCE.md)** | **[MCP Marketplaces](MCP_MARKETPLACE.md)**
 

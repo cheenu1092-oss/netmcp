@@ -28,7 +28,9 @@
     "start:rfc": "cd packages/rfc-search && npm start",
     "start:nvd": "cd packages/nvd-network-cves && npm start",
     "start:fcc": "cd packages/fcc-devices && npm start",
-    "start:3gpp": "cd packages/threegpp-specs && npm start"
+    "start:3gpp": "cd packages/threegpp-specs && npm start",
+    "publish-all": "bash scripts/publish-all.sh",
+    "publish-all:dry-run": "bash scripts/publish-all.sh --dry-run"
   },
   "keywords": [
     "mcp",

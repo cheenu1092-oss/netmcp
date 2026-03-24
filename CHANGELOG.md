@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (Cycle 50)
+- **npm publishing automation** — One-command publishing for all 9 packages
+  - Created `scripts/publish-all.sh` — Automated publish script with dry-run mode
+  - Added `npm run publish-all` and `npm run publish-all:dry-run` scripts
+  - Script features:
+    - ✅ Verifies npm authentication before publishing
+    - ✅ Shows npm username for confirmation
+    - ✅ Runs `npm pack --dry-run` to verify package contents
+    - ✅ Publishes each package with error handling
+    - ✅ Shows summary (success/fail counts)
+    - ✅ Provides next steps (badges, GitHub release, changelog update)
+    - ✅ Supports dry-run mode for safe testing
+  - Created **PUBLISHING.md** (8.7KB) — Comprehensive publishing guide
+    - Prerequisites (npm account, 2FA, login)
+    - Quick publish workflow (one command after login)
+    - Manual setup instructions (first-time npm login)
+    - Publishing workflow (first-time and subsequent releases)
+    - Post-publishing checklist (badges, releases, announcements)
+    - Troubleshooting (auth errors, version conflicts, rate limits)
+    - Security best practices (2FA, automation tokens, .npmignore)
+    - GitHub Actions automation (optional CI/CD publishing)
+    - Package details table (all 9 packages configured identically)
+  - Impact: **Resolves final P0 showcase blocker** — npm publishing is now "one command away" after `npm login`
+  - All 9 packages ready: ✅ publishConfig, ✅ bin fields, ✅ files fields, ✅ READMEs, ✅ keywords, ✅ MIT license
+
 ### Changed (Cycle 63 — 2026-03-24 1:20 AM PST)
 - **README navigation polish** — Added prominent link to DEMO.md in top navigation bar
   - Demo script moved from buried documentation to visible top-level link

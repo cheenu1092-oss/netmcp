@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed (Cycle 63 — 2026-03-24 1:20 AM PST)
+- **README navigation polish** — Added prominent link to DEMO.md in top navigation bar
+  - Demo script moved from buried documentation to visible top-level link
+  - Improves discoverability of 5-minute live showcase script for HPE presentations
+  - Link positioned after "Get Started" (natural demo flow: setup → demo → advanced topics)
+  - Impact: All major documentation now accessible from README header (Getting Started, Demo, Performance, API Rate Limits, Marketplaces)
+  - Benefit: HPE engineers see demo script immediately, reduces friction for live presentations
+
 ### Changed (Cycle 60 — 2026-03-23 5:20 AM PST)
 - **Documentation consolidation** — Removed duplicate MARKETPLACE.md file (created Cycle 53)
   - MCP_MARKETPLACE.md (Cycle 59) is the authoritative marketplace submission guide

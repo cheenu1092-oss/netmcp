@@ -11,7 +11,7 @@
 [![Tools](https://img.shields.io/badge/tools-41-blue.svg)](#packages)
 [![Packages](https://img.shields.io/badge/packages-9-purple.svg)](#packages)
 
-**→ [Get Started in 5 Minutes](GETTING_STARTED.md)** | **[API Rate Limits](API_RATE_LIMITS.md)** | **[Performance Guide](PERFORMANCE.md)** | **[MCP Marketplaces](MCP_MARKETPLACE.md)**
+**→ [Get Started in 5 Minutes](GETTING_STARTED.md)** | **[Live Demo Script](DEMO.md)** | **[Performance Guide](PERFORMANCE.md)** | **[API Rate Limits](API_RATE_LIMITS.md)** | **[MCP Marketplaces](MCP_MARKETPLACE.md)**
 
 ## What is this?
 

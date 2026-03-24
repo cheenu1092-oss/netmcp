@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed (Cycle 65 — 2026-03-24 1:20 PM PST)
+- **Package.json consistency polish** — Fixed 2 minor inconsistencies before npm publish
+  - **iana-services**: Changed bin field from `"mcp-iana"` → `"iana-services"` for naming consistency
+  - **rfc-search**: Added `"README.md"` to files array (was missing, now matches all 8 other packages)
+  - Impact: All 9 packages now follow identical conventions (bin name = package name without @netmcp/ prefix, all include README in tarball)
+  - Benefit: Professional consistency, easier onboarding (no special cases), complete documentation in all published packages
+  - Verified: npm pack shows both packages include correct files (5.3KB tarballs each)
+
 ### Added (Cycle 50)
 - **npm publishing automation** — One-command publishing for all 9 packages
   - Created `scripts/publish-all.sh` — Automated publish script with dry-run mode

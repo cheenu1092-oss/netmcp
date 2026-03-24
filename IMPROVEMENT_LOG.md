@@ -6586,3 +6586,90 @@ Also: 2 Dependabot PRs still open (checkout + setup-node) — need manual merge 
 5. WHOIS parsing enhancement (extract structured fields: registrar, expiry, status, DNSSEC)
 
 **Status:** ✅ **ALL SHOWCASE PRIORITIES COMPLETE (100%)** — Project ready for HPE Networking demo. Only manual step: npm login + publish.
+
+---
+
+### Cycle 65 — 2026-03-24 1:20 PM PST
+
+**What was inspected:**
+- Reviewed IMPROVEMENT_LOG.md (Cycles 1-64 complete)
+- Ran full test suite: ✅ All 41 smoke tests passing
+- Verified all P0, P1, and P2 showcase priorities complete
+- Checked package.json files for npm publishing readiness
+- Found **2 minor inconsistencies** in package.json files:
+  1. iana-services: bin field is `"mcp-iana"` instead of `"iana-services"` (inconsistent with other 8 packages)
+  2. rfc-search: Missing `"README.md"` in files array (all other packages include it)
+
+**Findings:**
+- ✅ All previous cycles complete (infrastructure, security, reliability, JSDoc, ESLint, npm config, tests, docs, governance)
+- ✅ All 41 smoke tests passing, 0 vulnerabilities, clean ESLint (0 errors, 8 stylistic warnings)
+- ✅ ALL showcase priorities complete (P0, P1, top P2 items)
+- ❌ **Package.json inconsistencies** — minor polish issue before npm publish
+- **Opportunity:** Fix bin field naming and files array for professional consistency
+- **Priority:** Polish for npm publishing (ensures all packages follow same conventions)
+
+**What was built:**
+1. **Fixed iana-services bin field:**
+   - Changed `"mcp-iana": "src/index.js"` → `"iana-services": "src/index.js"`
+   - Now consistent with all other 8 packages (bin name matches package name without @netmcp/ prefix)
+
+2. **Fixed rfc-search files array:**
+   - Added `"README.md"` to files array (was missing)
+   - Now consistent with all other 8 packages (all include README.md in published tarball)
+
+3. **Verified npm pack:**
+   - iana-services: ✅ Includes README.md, correct bin field (5.3KB tarball)
+   - rfc-search: ✅ Includes README.md (5.3KB tarball)
+
+**Test results:**
+- ✅ **All 41 smoke tests PASS** (no regressions from package.json changes)
+- ✅ Test runtime: ~18s (consistent with previous cycles)
+- ✅ ESLint: 0 errors, 8 warnings (stylistic JSDoc preferences, non-blocking)
+- ✅ npm pack verification: Both modified packages include correct files
+- Package breakdown:
+  - oui-lookup: 4 tools ✅
+  - rfc-search: 4 tools ✅ (files array fixed)
+  - nvd-network-cves: 6 tools ✅
+  - fcc-devices: 4 tools ✅
+  - threegpp-specs: 4 tools ✅
+  - iana-services: 5 tools ✅ (bin field fixed)
+  - dns-records: 4 tools ✅
+  - iana-media-types: 5 tools ✅
+  - whois-lookup: 5 tools ✅
+
+**Git commits:**
+- `5ba3415` — "fix: standardize package.json bin fields and files arrays (Cycle 65 - npm publish polish)"
+- Pushed to main successfully
+
+**Impact:**
+- **Professional consistency** — all 9 packages now follow identical conventions
+- **npx naming consistency** — users can run `npx @netmcp/iana-services` (not `npx mcp-iana`)
+- **Published package completeness** — all packages include README.md in tarball
+- **npm publishing ready** — all minor polish items resolved, 100% ready for `npm publish`
+- **Completes pre-publish checklist** — bin fields ✅, files arrays ✅, publishConfig ✅, READMEs ✅
+
+**Before/After:**
+| Package | Issue | Before | After |
+|---------|-------|--------|-------|
+| iana-services | bin field | `"mcp-iana"` (inconsistent) | `"iana-services"` ✅ |
+| rfc-search | files array | `["src/"]` (missing README) | `["src/", "README.md"]` ✅ |
+
+**Benefits of consistency:**
+- ✅ Users don't have to remember special bin names (`mcp-iana` vs `iana-services`)
+- ✅ All published packages include documentation (README.md in every tarball)
+- ✅ Professional presentation (no inconsistencies for HPE showcase)
+- ✅ Easier onboarding (consistent patterns across all 9 packages)
+
+**Next cycle priorities:**
+1. ✅ **Package.json consistency** (completed this cycle)
+2. **🎉 ALL SHOWCASE BLOCKERS COMPLETE** — 100% ready for HPE Networking demo
+3. Manual step remaining: `npm login` + `npm run publish-all` (interactive, cannot automate without NPM_TOKEN)
+4. Optional P2 enhancements:
+   - New networking tools (BGP looking glass, traceroute, packet parser, subnet calc)
+   - TypeScript migration (or continue with JSDoc 100% coverage)
+   - Automated releases (GitHub Actions semantic-release workflow)
+   - Test coverage reporting (istanbul/nyc + codecov badge)
+
+**Status:** ✅ **ALL PRE-PUBLISH POLISH COMPLETE** — Package.json consistency achieved, all 41 tests passing, professional v1.0.0 ready for npm
+
+---

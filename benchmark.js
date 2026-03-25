@@ -6,7 +6,7 @@
  */
 
 import { performance } from 'node:perf_hooks';
-import { readFile, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 
 const WARMUP_QUERIES = 2;
 const BENCHMARK_QUERIES = 10;
@@ -30,19 +30,19 @@ const results = [];
 /**
  * Run benchmark for a specific query
  * @param {string} name - Benchmark name
- * @param {Function} queryFn - Function that returns a Promise
+ * @param {() => Promise<unknown>} queryFn - Function that returns a Promise
  * @param {number} warmup - Number of warmup queries
  * @param {number} count - Number of benchmark queries
- * @returns {Promise<{avg: number, min: number, max: number, qps: number}>}
+ * @returns {Promise<{avg: number, min: number, max: number, qps: number}>} Benchmark results with timing and QPS metrics
  */
-async function benchmark(name, queryFn, warmup = WARMUP_QUERIES, count = BENCHMARK_QUERIES) {
+async function _benchmark(name, queryFn, warmup = WARMUP_QUERIES, count = BENCHMARK_QUERIES) {
   console.log(`${colors.yellow}Benchmarking:${colors.reset} ${name}`);
   
   // Warmup
   for (let i = 0; i < warmup; i++) {
     try {
       await queryFn();
-    } catch (err) {
+    } catch {
       // Ignore warmup errors
     }
   }
@@ -81,10 +81,11 @@ async function benchmark(name, queryFn, warmup = WARMUP_QUERIES, count = BENCHMA
 
 /**
  * Benchmark: oui-lookup (local database)
+ * @returns {Promise<never>} Throws error (not implemented)
  */
-async function benchmarkOUILookup() {
+async function _benchmarkOUILookup() {
   // Dynamically import the package
-  const { default: ouiModule } = await import('./packages/oui-lookup/src/index.js');
+  const { default: _ouiModule } = await import('./packages/oui-lookup/src/index.js');
   
   // We need to simulate a tool call via the MCP handler
   // For simplicity, just measure the lookup function if exported

@@ -1,6 +1,6 @@
 =========================================
 NetMCP Comprehensive Test Suite (Smoke Tests)
-Started: 2026-03-24 13:22:25
+Started: 2026-03-24 17:22:07
 =========================================
 
 1. oui-lookup (4 tools)
@@ -65,6 +65,6 @@ Started: 2026-03-24 13:22:25
 
 =========================================
 SUMMARY: ✅ 41 passed, ❌ 0 failed
-Completed: 2026-03-24 13:22:56
+Completed: 2026-03-24 17:22:40
 Log saved to: /Users/cheenu/clawd/projects/netmcp/test-smoke-results.txt
 =========================================

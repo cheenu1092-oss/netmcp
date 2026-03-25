@@ -13,6 +13,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUI_URL = 'https://standards-oui.ieee.org/oui/oui.txt';
 const OUT_PATH = join(__dirname, '..', 'data', 'oui.json');
 
+/**
+ * Fetches the IEEE OUI database and parses it into a JSON lookup file
+ * @returns {Promise<number>} Number of OUI entries parsed
+ */
 async function fetchAndParse() {
   console.log(`Fetching OUI database from ${OUI_URL}...`);
   const res = await fetch(OUI_URL);

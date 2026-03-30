@@ -22,7 +22,7 @@
   "author": "nagaconda",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.4"
+    "@modelcontextprotocol/sdk": "^1.28.0"
   },
   "files": [
     "src/",

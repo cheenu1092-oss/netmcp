@@ -24,7 +24,7 @@
   "author": "NetMCP Contributors",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.4"
+    "@modelcontextprotocol/sdk": "^1.28.0"
   },
   "engines": {
     "node": ">=18.0.0"
